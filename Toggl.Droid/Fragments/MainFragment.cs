@@ -320,7 +320,7 @@ namespace Toggl.Droid.Fragments
             }
         }
 
-        private EditTimeEntryInfo editEventInfo(LogItemViewModel item)
+        private EditTimeEntryInfo editEventInfo(TimeEntryLogItemViewModel item)
         {
             var origin = item.IsTimeEntryGroupHeader
                 ? GroupHeader
