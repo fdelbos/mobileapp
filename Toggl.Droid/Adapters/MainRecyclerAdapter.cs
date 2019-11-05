@@ -17,7 +17,7 @@ using Toggl.Core.UI.Helper;
 
 namespace Toggl.Droid.Adapters
 {
-    public class MainRecyclerAdapter : ReactiveSectionedRecyclerAdapter<LogItemViewModel, TimeEntryViewData, DaySummaryViewModel, DaySummaryViewModel, MainLogCellViewHolder, MainLogSectionViewHolder, IMainLogKey>
+    public class MainRecyclerAdapter : ReactiveSectionedRecyclerAdapter<MainLogItemViewModel, TimeEntryViewData, DaySummaryViewModel, DaySummaryViewModel, MainLogCellViewHolder, MainLogSectionViewHolder, IMainLogKey>
     {
         public const int SuggestionViewType = 2;
         public const int UserFeedbackViewType = 3;
@@ -30,20 +30,20 @@ namespace Toggl.Droid.Adapters
         public IObservable<GroupId> ToggleGroupExpansion
             => toggleGroupExpansionSubject.AsObservable();
 
-        public IObservable<LogItemViewModel> TimeEntryTaps
+        public IObservable<TimeEntryLogItemViewModel> TimeEntryTaps
             => timeEntryTappedSubject.Select(item => item.ViewModel).AsObservable();
 
         public IObservable<ContinueTimeEntryInfo> ContinueTimeEntry
             => continueTimeEntrySubject.AsObservable();
 
-        public IObservable<LogItemViewModel> DeleteTimeEntrySubject
+        public IObservable<TimeEntryLogItemViewModel> DeleteTimeEntrySubject
             => deleteTimeEntrySubject.AsObservable();
 
         public SuggestionsViewModel SuggestionsViewModel { get; set; }
         public RatingViewModel RatingViewModel { get; set; }
 
         private readonly Subject<GroupId> toggleGroupExpansionSubject = new Subject<GroupId>();
-        private readonly Subject<LogItemViewModel> deleteTimeEntrySubject = new Subject<LogItemViewModel>();
+        private readonly Subject<TimeEntryLogItemViewModel> deleteTimeEntrySubject = new Subject<TimeEntryLogItemViewModel>();
         private readonly Subject<TimeEntryViewData> timeEntryTappedSubject = new Subject<TimeEntryViewData>();
         private readonly Subject<ContinueTimeEntryInfo> continueTimeEntrySubject = new Subject<ContinueTimeEntryInfo>();
 
@@ -55,7 +55,7 @@ namespace Toggl.Droid.Adapters
 
         public void ContinueTimeEntryBySwiping(int position)
         {
-            var continuedTimeEntry = GetItemAt(position);
+            var continuedTimeEntry = GetItemAt(position) as TimeEntryLogItemViewModel;
             NotifyItemChanged(position);
 
             var continueMode = continuedTimeEntry.IsTimeEntryGroupHeader
@@ -67,7 +67,7 @@ namespace Toggl.Droid.Adapters
 
         public void DeleteTimeEntry(int position)
         {
-            var deletedTimeEntry = GetItemAt(position);
+            var deletedTimeEntry = GetItemAt(position) as TimeEntryLogItemViewModel;
             deleteTimeEntrySubject.OnNext(deletedTimeEntry);
         }
 
@@ -134,26 +134,26 @@ namespace Toggl.Droid.Adapters
             return mainLogCellViewHolder;
         }
 
-        protected override IMainLogKey IdFor(LogItemViewModel item)
+        protected override IMainLogKey IdFor(MainLogItemViewModel item)
             => item.Identity;
 
         protected override IMainLogKey IdForSection(DaySummaryViewModel section)
             => section.Identity;
 
-        protected override TimeEntryViewData Wrap(LogItemViewModel item)
-            => new TimeEntryViewData(context, item);
+        protected override TimeEntryViewData Wrap(MainLogItemViewModel item)
+            => new TimeEntryViewData(context, item as TimeEntryLogItemViewModel);
 
         protected override DaySummaryViewModel Wrap(DaySummaryViewModel section)
             => section;
 
-        protected override bool AreItemContentsTheSame(LogItemViewModel item1, LogItemViewModel item2)
+        protected override bool AreItemContentsTheSame(MainLogItemViewModel item1, MainLogItemViewModel item2)
             => item1 == item2;
 
         protected override bool AreSectionsRepresentationsTheSame(
             DaySummaryViewModel oneHeader,
             DaySummaryViewModel otherHeader,
-            IReadOnlyList<LogItemViewModel> one,
-            IReadOnlyList<LogItemViewModel> other)
+            IReadOnlyList<MainLogItemViewModel> one,
+            IReadOnlyList<MainLogItemViewModel> other)
         {
             return oneHeader.Title == otherHeader.Title && one.ContainsExactlyAll(other);
         }

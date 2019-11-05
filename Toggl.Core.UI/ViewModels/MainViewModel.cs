@@ -33,7 +33,7 @@ using Toggl.Core.UI.Services;
 
 namespace Toggl.Core.UI.ViewModels
 {
-    using MainLogSection = AnimatableSectionModel<DaySummaryViewModel, LogItemViewModel, IMainLogKey>;
+    using MainLogSection = AnimatableSectionModel<DaySummaryViewModel, MainLogItemViewModel, IMainLogKey>;
 
     [Preserve(AllMembers = true)]
     public sealed class MainViewModel : ViewModel
