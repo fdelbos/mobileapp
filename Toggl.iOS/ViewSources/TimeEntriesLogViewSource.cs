@@ -15,10 +15,10 @@ using UIKit;
 
 namespace Toggl.iOS.ViewSources
 {
-    using MainLogSection = AnimatableSectionModel<DaySummaryViewModel, TimeEntryLogItemViewModel, IMainLogKey>;
+    using MainLogSection = AnimatableSectionModel<MainLogSectionViewModel, MainLogItemViewModel, IMainLogKey>;
 
     public sealed class TimeEntriesLogViewSource
-        : BaseTableViewSource<MainLogSection, DaySummaryViewModel, TimeEntryLogItemViewModel>
+        : BaseTableViewSource<MainLogSection, MainLogSectionViewModel, MainLogItemViewModel>
     {
         private const int rowHeightCompact = 64;
         private const int rowHeightRegular = 48;
@@ -87,17 +87,17 @@ namespace Toggl.iOS.ViewSources
             var model = ModelAt(indexPath);
 
             cell.ContinueButtonTap
-                .Subscribe(() => continueTapSubject.OnNext(model))
+                .Subscribe(() => continueTapSubject.OnNext(model as TimeEntryLogItemViewModel))
                 .DisposedBy(cell.DisposeBag);
 
             cell.ToggleGroup
-                .Subscribe(() => toggleGroupExpansionSubject.OnNext(model.GroupId))
+                .Subscribe(() => toggleGroupExpansionSubject.OnNext((model as TimeEntryLogItemViewModel).GroupId))
                 .DisposedBy(cell.DisposeBag);
 
             if (indexPath.Row == 0 && indexPath.Section == 0)
                 firstCellSubject.OnNext(cell);
 
-            cell.Item = model;
+            cell.Item = model as TimeEntryLogItemViewModel;
 
             return cell;
         }
@@ -105,7 +105,7 @@ namespace Toggl.iOS.ViewSources
         public override UIView GetViewForHeader(UITableView tableView, nint section)
         {
             var header = (TimeEntriesLogHeaderView)tableView.DequeueReusableHeaderFooterView(TimeEntriesLogHeaderView.Identifier);
-            header.Item = HeaderOf((int)section);
+            header.Item = HeaderOf((int)section) as DaySummaryViewModel;
             return header;
         }
 
@@ -147,7 +147,7 @@ namespace Toggl.iOS.ViewSources
             if (item == null)
                 return null;
 
-            return UISwipeActionsConfiguration.FromActions(new[] { factory(item) });
+            return UISwipeActionsConfiguration.FromActions(new[] { factory(item as TimeEntryLogItemViewModel) });
         }
 
         private UIContextualAction continueSwipeActionFor(TimeEntryLogItemViewModel viewModel)

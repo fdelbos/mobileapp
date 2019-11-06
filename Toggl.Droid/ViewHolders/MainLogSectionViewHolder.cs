@@ -6,7 +6,7 @@ using Toggl.Core.UI.ViewModels.TimeEntriesLog;
 
 namespace Toggl.Droid.ViewHolders
 {
-    public class MainLogSectionViewHolder : BaseRecyclerViewHolder<DaySummaryViewModel>
+    public class MainLogSectionViewHolder : BaseRecyclerViewHolder<MainLogSectionViewModel>
     {
         private TextView mainLogHeaderTitle;
         private TextView mainLogHeaderDuration;
@@ -27,8 +27,8 @@ namespace Toggl.Droid.ViewHolders
 
         protected override void UpdateView()
         {
-            mainLogHeaderTitle.Text = Item.Title;
-            mainLogHeaderDuration.Text = Item.TotalTrackedTime;
+            mainLogHeaderTitle.Text = (Item as DaySummaryViewModel).Title;
+            mainLogHeaderDuration.Text = (Item as DaySummaryViewModel).TotalTrackedTime;
         }
     }
 }

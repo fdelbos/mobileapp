@@ -187,6 +187,10 @@ namespace Toggl.Droid.Fragments
                 .Subscribe(mainRecyclerAdapter.UpdateCollection)
                 .DisposedBy(DisposeBag);
 
+            ViewModel.MainLogItems
+                .Subscribe((mainLogItems) => Console.WriteLine(mainLogItems))
+                .DisposedBy(DisposeBag);
+
             ViewModel.IsTimeEntryRunning
                 .Subscribe(updateRecyclerViewPadding)
                 .DisposedBy(DisposeBag);

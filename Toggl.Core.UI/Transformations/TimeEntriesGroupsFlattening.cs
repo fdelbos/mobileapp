@@ -16,7 +16,7 @@ using static Toggl.Core.UI.ViewModels.TimeEntriesLog.LogItemVisualizationIntent;
 namespace Toggl.Core.UI.Transformations
 {
     using LogGrouping = IGrouping<DateTime, IThreadSafeTimeEntry>;
-    using MainLogSection = AnimatableSectionModel<DaySummaryViewModel, MainLogItemViewModel, IMainLogKey>;
+    using MainLogSection = AnimatableSectionModel<MainLogSectionViewModel, MainLogItemViewModel, IMainLogKey>;
 
     internal sealed class TimeEntriesGroupsFlattening
     {

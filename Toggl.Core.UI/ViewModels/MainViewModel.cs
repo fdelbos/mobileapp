@@ -14,6 +14,7 @@ using Toggl.Core.Extensions;
 using Toggl.Core.Interactors;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Services;
+using Toggl.Core.Suggestions;
 using Toggl.Core.Sync;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Extensions;
@@ -32,7 +33,7 @@ using Toggl.Core.UI.Services;
 
 namespace Toggl.Core.UI.ViewModels
 {
-    using MainLogSection = AnimatableSectionModel<DaySummaryViewModel, MainLogItemViewModel, IMainLogKey>;
+    using MainLogSection = AnimatableSectionModel<MainLogSectionViewModel, MainLogItemViewModel, IMainLogKey>;
 
     [Preserve(AllMembers = true)]
     public sealed class MainViewModel : ViewModel
@@ -78,6 +79,8 @@ namespace Toggl.Core.UI.ViewModels
         public IObservable<bool> ShouldShowRatingView { get; private set; }
         public IObservable<bool> SwipeActionsEnabled { get; }
         public IObservable<IImmutableList<MainLogSection>> TimeEntries { get; }
+
+        public IObservable<IImmutableList<MainLogSection>> MainLogItems { get; private set; }
 
         public RatingViewModel RatingViewModel { get; }
         public SuggestionsViewModel SuggestionsViewModel { get; }
@@ -271,7 +274,20 @@ namespace Toggl.Core.UI.ViewModels
             SyncProgressState
                 .Subscribe(postAccessibilityAnnouncementAboutSync)
                 .DisposedBy(disposeBag);
+
+            MainLogItems = Observable
+                .CombineLatest(SuggestionsViewModel.Suggestions, TimeEntriesViewModel.TimeEntries, mergeMainLogItems)
+                .AsDriver(ImmutableList<MainLogSection>.Empty, schedulerProvider);;
         }
+
+        private IImmutableList<MainLogSection> mergeMainLogItems(IImmutableList<Suggestion> suggestions, IImmutableList<MainLogSection> timeEntries)
+        {
+            var suggestionsSection = new MainLogSection(new SuggestionsSectionViewModel(), suggestions.Select(suggestionToMainLogItem));
+            return timeEntries.Prepend(suggestionsSection).ToImmutableList();
+        }
+
+        private MainLogItemViewModel suggestionToMainLogItem(Suggestion suggestion, int position)
+            => new SuggestionLogItemViewModel(position, suggestion);
 
         public void Track(ITrackableEvent e)
         {

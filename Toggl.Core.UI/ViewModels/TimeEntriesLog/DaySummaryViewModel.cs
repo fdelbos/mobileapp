@@ -4,13 +4,11 @@ using Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity;
 
 namespace Toggl.Core.UI.ViewModels.TimeEntriesLog
 {
-    public sealed class DaySummaryViewModel : IDiffable<IMainLogKey>
+    public sealed class DaySummaryViewModel : MainLogSectionViewModel
     {
         public string Title { get; }
 
         public string TotalTrackedTime { get; }
-
-        public IMainLogKey Identity { get; }
 
         public DaySummaryViewModel(DateTime day, string title, string totalTrackedTime)
         {
