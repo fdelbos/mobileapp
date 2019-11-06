@@ -17,7 +17,7 @@ using Toggl.Core.UI.Helper;
 
 namespace Toggl.Droid.Adapters
 {
-    public class MainRecyclerAdapter : ReactiveSectionedRecyclerAdapter<MainLogItemViewModel, TimeEntryViewData, DaySummaryViewModel, DaySummaryViewModel, MainLogCellViewHolder, MainLogSectionViewHolder, IMainLogKey>
+    public class MainRecyclerAdapter : ReactiveSectionedRecyclerAdapter<MainLogItemViewModel, TimeEntryViewData, MainLogSectionViewModel, MainLogSectionViewModel, MainLogCellViewHolder, MainLogSectionViewHolder, IMainLogKey>
     {
         public const int SuggestionViewType = 2;
         public const int UserFeedbackViewType = 3;
@@ -137,25 +137,25 @@ namespace Toggl.Droid.Adapters
         protected override IMainLogKey IdFor(MainLogItemViewModel item)
             => item.Identity;
 
-        protected override IMainLogKey IdForSection(DaySummaryViewModel section)
+        protected override IMainLogKey IdForSection(MainLogSectionViewModel section)
             => section.Identity;
 
         protected override TimeEntryViewData Wrap(MainLogItemViewModel item)
             => new TimeEntryViewData(context, item as TimeEntryLogItemViewModel);
 
-        protected override DaySummaryViewModel Wrap(DaySummaryViewModel section)
+        protected override MainLogSectionViewModel Wrap(MainLogSectionViewModel section)
             => section;
 
         protected override bool AreItemContentsTheSame(MainLogItemViewModel item1, MainLogItemViewModel item2)
             => item1 == item2;
 
         protected override bool AreSectionsRepresentationsTheSame(
-            DaySummaryViewModel oneHeader,
-            DaySummaryViewModel otherHeader,
+            MainLogSectionViewModel oneHeader,
+            MainLogSectionViewModel otherHeader,
             IReadOnlyList<MainLogItemViewModel> one,
             IReadOnlyList<MainLogItemViewModel> other)
         {
-            return oneHeader.Title == otherHeader.Title && one.ContainsExactlyAll(other);
+            return (oneHeader as DaySummaryViewModel).Title == (otherHeader as DaySummaryViewModel).Title && one.ContainsExactlyAll(other);
         }
     }
 }
