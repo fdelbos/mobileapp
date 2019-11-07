@@ -64,11 +64,17 @@ namespace Toggl.iOS
                 return;
             }
 
+            // The widgets service will listen for changes to the running
+            // time entry and it will update the data in the shared database
+            // and that way the widget will show correct information after we sync.
+            dependencyContainer.WidgetsService.Start();
+
             var syncInteractor = application.ApplicationState == UIApplicationState.Active
                 ? interactorFactory.RunPushNotificationInitiatedSyncInForeground()
                 : interactorFactory.RunPushNotificationInitiatedSyncInBackground();
 
             syncInteractor.Execute()
+                .Do(_ => dependencyContainer.WidgetsService)
                 .Select(mapToNativeOutcomes)
                 .Subscribe(completionHandler);
         }
