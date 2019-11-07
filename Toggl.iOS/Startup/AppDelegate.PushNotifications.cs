@@ -74,7 +74,6 @@ namespace Toggl.iOS
                 : interactorFactory.RunPushNotificationInitiatedSyncInBackground();
 
             syncInteractor.Execute()
-                .Do(_ => dependencyContainer.WidgetsService)
                 .Select(mapToNativeOutcomes)
                 .Subscribe(completionHandler);
         }
