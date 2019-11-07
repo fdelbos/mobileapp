@@ -2,8 +2,8 @@ namespace Toggl.Shared
 {
     public struct PushNotificationsConfiguration
     {
-        public bool RegisterPushNotificationsTokenWithServer { get; }
-        public bool HandlePushNotifications { get; }
+        public bool RegisterPushNotificationsTokenWithServer => true;
+        public bool HandlePushNotifications => true;
 
         public PushNotificationsConfiguration(bool registerPushNotificationsTokenWithServer, bool handlePushNotifications)
         {
