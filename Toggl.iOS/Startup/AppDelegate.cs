@@ -25,9 +25,9 @@ namespace Toggl.iOS
                 += (sender, certificate, chain, sslPolicyErrors) => true;
 #endif
 
-            #if !DEBUG
-                Firebase.Core.App.Configure();
-            #endif
+#if !DEBUG
+            Firebase.Core.App.Configure();
+#endif
 
             UNUserNotificationCenter.Current.Delegate = this;
             UIApplication.SharedApplication.RegisterForRemoteNotifications();
@@ -37,7 +37,7 @@ namespace Toggl.iOS
 
             Window = new UIWindow(UIScreen.MainScreen.Bounds);
             Window.MakeKeyAndVisible();
-            
+
             IosDependencyContainer.EnsureInitialized(Window, this);
             var app = new AppStart(IosDependencyContainer.Instance);
             app.LoadLocalizationConfiguration();
@@ -78,7 +78,7 @@ namespace Toggl.iOS
 
 #if USE_ANALYTICS
             var openUrlOptions = new UIKit.UIApplicationOpenUrlOptions(options);
-            return Google.SignIn.SignIn.SharedInstance.HandleUrl(url, openUrlOptions.SourceApplication, openUrlOptions.Annotation);
+            return Google.SignIn.SignIn.SharedInstance.HandleUrl(url);
 #endif
 
             return false;
