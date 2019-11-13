@@ -311,7 +311,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                         errorString.Get);
                     UserAccessManager
                         .ResetPassword(Arg.Any<Email>())
-                        .Returns(Task.FromException<string>(new Exception()));
+                        .Returns(Task.FromException<string>(exception));
                     var observer = TestScheduler.CreateObserver<string>();
                     ViewModel.ErrorMessage.Subscribe(observer);
 
