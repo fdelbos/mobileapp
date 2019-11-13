@@ -115,7 +115,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             [Fact, LogIfTooSlow]
             public void ReturnsFalseWheThePasswordIsValidButTheViewIsLoading()
             {
-                var never = Observable.Never<Unit>();
+                var never = new Task(() => { });
                 UserAccessManager.RefreshToken(Arg.Any<Password>()).Returns(never);
                 ViewModel.Password.OnNext(ValidPassword.ToString());
                 var nextIsEnabledObserver = Observe(ViewModel.NextIsEnabled);
@@ -172,7 +172,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 ViewModel.Password.OnNext(ValidPassword.ToString());
                 UserAccessManager.RefreshToken(Arg.Any<Password>())
-                            .Returns(Observable.Return(Unit.Default));
+                            .Returns(Task.CompletedTask);
 
                 ViewModel.Done.Execute();
 
@@ -188,7 +188,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var isLoadingObserver = Observe(ViewModel.Done.Executing);
 
                 UserAccessManager.RefreshToken(Arg.Any<Password>())
-                            .Returns(Observable.Return(Unit.Default));
+                            .Returns(Task.CompletedTask);
 
                 ViewModel.Done.Execute();
                 TestScheduler.Start();
@@ -201,7 +201,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 ViewModel.Password.OnNext(ValidPassword.ToString());
                 UserAccessManager.RefreshToken(Arg.Any<Password>())
-                            .Returns(Observable.Throw<Unit>(new Exception()));
+                            .Returns(Task.FromException(new Exception()));
                 var isLoadingObserver = Observe(ViewModel.Done.Executing);
 
                 ViewModel.Done.Execute();
@@ -216,7 +216,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
             {
                 ViewModel.Password.OnNext(ValidPassword.ToString());
                 UserAccessManager.RefreshToken(Arg.Any<Password>())
-                            .Returns(Observable.Throw<Unit>(new Exception()));
+                            .Returns(Task.FromException(new Exception()));
 
                 ViewModel.Done.Execute();
 

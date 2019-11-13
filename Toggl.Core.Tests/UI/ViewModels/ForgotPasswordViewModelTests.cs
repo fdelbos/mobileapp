@@ -80,7 +80,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Email.OnNext(ValidEmail);
                 UserAccessManager
                     .ResetPassword(Arg.Any<Email>())
-                    .Returns(Observable.Never<string>());
+                    .Returns(new Task<string>(() => "abc"));
 
                 var observer = TestScheduler.CreateObserver<string>();
                 ViewModel.ErrorMessage.Subscribe(observer);
@@ -96,7 +96,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Email.OnNext(ValidEmail);
                 UserAccessManager
                     .ResetPassword(Arg.Any<Email>())
-                    .Returns(Observable.Never<string>());
+                    .Returns(new Task<string>(() => "abc"));
 
                 var observer = TestScheduler.CreateObserver<bool>();
                 ViewModel.PasswordResetSuccessful.Subscribe(observer);
@@ -133,7 +133,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Email.OnNext(ValidEmail);
                 UserAccessManager
                     .ResetPassword(Arg.Any<Email>())
-                    .Returns(Observable.Never<string>());
+                    .Returns(new Task<string>(() => "abc"));
 
                 ViewModel.Reset.Execute();
 
@@ -149,7 +149,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Email.OnNext(ValidEmail);
                 UserAccessManager
                     .ResetPassword(Arg.Any<Email>())
-                    .Returns(Observable.Throw<string>(new Exception()));
+                    .Returns(Task.FromException<string>(new Exception()));
                 var observer = TestScheduler.CreateObserver<string>();
                 ViewModel.ErrorMessage.Subscribe(observer);
                 ViewModel.Reset.Execute();
@@ -157,7 +157,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 UserAccessManager
                     .ResetPassword(Arg.Any<Email>())
-                    .Returns(Observable.Never<string>());
+                    .Returns(new Task<string>(() => "abc"));
 
                 ViewModel.Reset.Execute();
                 TestScheduler.Start();
@@ -174,7 +174,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     ViewModel.Email.OnNext(ValidEmail);
                     UserAccessManager
                         .ResetPassword(Arg.Any<Email>())
-                        .Returns(Observable.Return("Great success"));
+                        .Returns(Task.FromResult("Great success"));
 
                     var observer = TestScheduler.CreateObserver<bool>();
                     ViewModel.Reset.Executing.Subscribe(observer);
@@ -191,7 +191,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     ViewModel.Email.OnNext(ValidEmail);
                     UserAccessManager
                         .ResetPassword(Arg.Any<Email>())
-                        .Returns(Observable.Return("Great success"));
+                        .Returns(Task.FromResult("Great success"));
 
                     var observer = TestScheduler.CreateObserver<bool>();
                     ViewModel.PasswordResetSuccessful.Subscribe(observer);
@@ -208,7 +208,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     ViewModel.Email.OnNext(ValidEmail);
                     UserAccessManager
                         .ResetPassword(Arg.Any<Email>())
-                        .Returns(Observable.Return("Great success"));
+                        .Returns(Task.FromResult("Great success"));
 
                     ViewModel.Reset.Execute();
                     TestScheduler.Start();
@@ -227,7 +227,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     viewModel.Email.OnNext(ValidEmail);
                     UserAccessManager
                         .ResetPassword(Arg.Any<Email>())
-                        .Returns(Observable.Return("Great success"));
+                        .Returns(Task.FromResult("Great success"));
 
                     viewModel.Reset.Execute();
                     TestScheduler.Start();
@@ -255,7 +255,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     ViewModel.Email.OnNext(ValidEmail);
                     UserAccessManager
                         .ResetPassword(Arg.Any<Email>())
-                        .Returns(Observable.Throw<string>(new Exception()));
+                        .Returns(Task.FromException<string>(new Exception()));
 
                     var observer = TestScheduler.CreateObserver<bool>();
                     ViewModel.PasswordResetSuccessful.Subscribe(observer);
@@ -274,8 +274,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                         Substitute.For<IRequest>(), Substitute.For<IResponse>());
                     UserAccessManager
                         .ResetPassword(Arg.Any<Email>())
-                        .Returns(Observable.Throw<string>(exception));
-
+                        .Returns(Task.FromException<string>(exception));
                     var observer = TestScheduler.CreateObserver<string>();
                     ViewModel.ErrorMessage.Subscribe(observer);
 
@@ -291,7 +290,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     ViewModel.Email.OnNext(ValidEmail);
                     UserAccessManager
                         .ResetPassword(Arg.Any<Email>())
-                        .Returns(Observable.Throw<string>(new OfflineException()));
+                        .Returns(Task.FromException<string>(new OfflineException()));
 
                     var observer = TestScheduler.CreateObserver<string>();
                     ViewModel.ErrorMessage.Subscribe(observer);
@@ -312,8 +311,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                         errorString.Get);
                     UserAccessManager
                         .ResetPassword(Arg.Any<Email>())
-                        .Returns(Observable.Throw<string>(exception));
-
+                        .Returns(Task.FromException<string>(new Exception()));
                     var observer = TestScheduler.CreateObserver<string>();
                     ViewModel.ErrorMessage.Subscribe(observer);
 
@@ -329,7 +327,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     ViewModel.Email.OnNext(ValidEmail);
                     UserAccessManager
                         .ResetPassword(Arg.Any<Email>())
-                        .Returns(Observable.Throw<string>(new Exception()));
+                        .Returns(Task.FromException<string>(new Exception()));
 
                     var observer = TestScheduler.CreateObserver<string>();
                     ViewModel.ErrorMessage.Subscribe(observer);

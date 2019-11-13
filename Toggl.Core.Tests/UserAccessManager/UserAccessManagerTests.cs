@@ -172,14 +172,6 @@ namespace Toggl.Core.Tests.Login
             }
 
             [Fact, LogIfTooSlow]
-            public async Task AlwaysReturnsASingleResult()
-            {
-                await UserAccessManager
-                        .Login(Email, Password)
-                        .SingleAsync();
-            }
-
-            [Fact, LogIfTooSlow]
             public void DoesNotRetryWhenTheApiThrowsSomethingOtherThanUserIsMissingApiTokenException()
             {
                 var serverErrorException = Substitute.For<ServerErrorException>(Substitute.For<IRequest>(), Substitute.For<IResponse>(), "Some Exception");
@@ -413,14 +405,6 @@ namespace Toggl.Core.Tests.Login
             }
 
             [Fact, LogIfTooSlow]
-            public async Task AlwaysReturnsASingleResult()
-            {
-                await UserAccessManager
-                        .SignUp(Email, Password, TermsAccepted, CountryId, Timezone)
-                        .SingleAsync();
-            }
-
-            [Fact, LogIfTooSlow]
             public void DoesNotRetryWhenTheApiThrowsSomethingOtherThanUserIsMissingApiTokenException()
             {
                 var serverErrorException = Substitute.For<ServerErrorException>(Substitute.For<IRequest>(), Substitute.For<IResponse>(), "Some Exception");
@@ -500,14 +484,6 @@ namespace Toggl.Core.Tests.Login
             }
 
             [Fact, LogIfTooSlow]
-            public async Task AlwaysReturnsASingleResult()
-            {
-                await UserAccessManager
-                        .RefreshToken(Password)
-                        .SingleAsync();
-            }
-
-            [Fact, LogIfTooSlow]
             public async Task SavesTheApiTokenToPrivateSharedStorage()
             {
                 await UserAccessManager.RefreshToken(Password);
@@ -570,14 +546,6 @@ namespace Toggl.Core.Tests.Login
                 await UserAccessManager.LoginWithGoogle(googleToken);
 
                 await Database.User.Received().Create(Arg.Is<IDatabaseUser>(receivedUser => receivedUser.SyncStatus == SyncStatus.InSync));
-            }
-
-            [Fact, LogIfTooSlow]
-            public async Task AlwaysReturnsASingleResult()
-            {
-                await UserAccessManager
-                        .LoginWithGoogle(googleToken)
-                        .SingleAsync();
             }
 
             [Fact, LogIfTooSlow]
