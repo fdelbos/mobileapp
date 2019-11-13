@@ -219,7 +219,7 @@ namespace Toggl.Core.Interactors
 
         #region Timezones
 
-        IInteractor<IObservable<IEnumerable<string>>> GetSupportedTimezones();
+        IInteractor<IEnumerable<string>> GetSupportedTimezones();
 
         #endregion
 

@@ -15,7 +15,7 @@ namespace Toggl.Core.Tests.Interactors.Timezones
             {
                 var interactor = new GetSupportedTimezonesInteractor();
 
-                var returnedTimezones = await interactor.Execute();
+                var returnedTimezones = interactor.Execute();
 
                 returnedTimezones.Should().NotBeEmpty();
             }

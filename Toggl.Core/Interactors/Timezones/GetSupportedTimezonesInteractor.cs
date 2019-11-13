@@ -6,19 +6,12 @@ using Toggl.Shared;
 
 namespace Toggl.Core.Interactors.Timezones
 {
-    public sealed class GetSupportedTimezonesInteractor : IInteractor<IObservable<List<string>>>
+    public sealed class GetSupportedTimezonesInteractor : IInteractor<List<string>>
     {
-        public GetSupportedTimezonesInteractor()
-        {
-        }
-
-        public IObservable<List<string>> Execute()
+        public List<string> Execute()
         {
             string json = Resources.TimezonesJson;
-
-            var timezones = JsonConvert.DeserializeObject<List<string>>(json);
-
-            return Observable.Return(timezones);
+            return JsonConvert.DeserializeObject<List<string>>(json);
         }
     }
 }

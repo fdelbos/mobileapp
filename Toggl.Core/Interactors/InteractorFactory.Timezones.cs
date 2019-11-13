@@ -6,7 +6,7 @@ namespace Toggl.Core.Interactors
 {
     public sealed partial class InteractorFactory
     {
-        public IInteractor<IObservable<IEnumerable<string>>> GetSupportedTimezones() =>
+        public IInteractor<IEnumerable<string>> GetSupportedTimezones() =>
             new GetSupportedTimezonesInteractor();
     }
 }
