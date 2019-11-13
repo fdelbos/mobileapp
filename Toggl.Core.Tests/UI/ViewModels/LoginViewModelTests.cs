@@ -135,7 +135,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 UserAccessManager
                     .Login(Arg.Any<Email>(), Arg.Any<Password>())
                     .Returns(new Task(() => { }));
-                ViewModel.Login();
+                ViewModel.Login.Execute();
 
                 TestScheduler.Start();
                 observer.Messages.AssertEqual(
@@ -152,7 +152,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.SetEmail(ValidEmail);
                 ViewModel.SetPassword(ValidPassword);
 
-                ViewModel.Login();
+                ViewModel.Login.Execute();
 
                 UserAccessManager.Received().Login(Arg.Is(ValidEmail), Arg.Is(ValidPassword));
             }
@@ -164,9 +164,9 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 UserAccessManager.Login(Arg.Any<Email>(), Arg.Any<Password>()).Returns(never);
                 ViewModel.SetEmail(ValidEmail);
                 ViewModel.SetPassword(ValidPassword);
-                ViewModel.Login();
+                ViewModel.Login.Execute();
 
-                ViewModel.Login();
+                ViewModel.Login.Execute();
 
                 UserAccessManager.Received(1).Login(Arg.Any<Email>(), Arg.Any<Password>());
             }
@@ -184,7 +184,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 [Fact, LogIfTooSlow]
                 public void SetsIsNewUserToFalse()
                 {
-                    ViewModel.Login();
+                    ViewModel.Login.Execute();
 
                     OnboardingStorage.Received().SetIsNewUser(false);
                 }
@@ -192,7 +192,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 [Fact, LogIfTooSlow]
                 public void NavigatesToTheTimeEntriesViewModel()
                 {
-                    ViewModel.Login();
+                    ViewModel.Login.Execute();
 
                     NavigationService.Received().Navigate<MainTabBarViewModel>(ViewModel.View);
                 }
@@ -200,7 +200,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 [Fact, LogIfTooSlow]
                 public void TracksTheLoginEvent()
                 {
-                    ViewModel.Login();
+                    ViewModel.Login.Execute();
 
                     AnalyticsService.Received().Login.Track(AuthenticationMethod.EmailAndPassword);
                 }
@@ -214,7 +214,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     var observable = Observable.Return(user);
                     InteractorFactory.GetCurrentUser().Execute().Returns(observable);
 
-                    ViewModel.Login();
+                    ViewModel.Login.Execute();
 
                     AnalyticsService.Received().SetAppCenterUserId(id);
                 }
@@ -228,7 +228,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     viewModel.SetEmail(ValidEmail);
                     viewModel.SetPassword(ValidPassword);
 
-                    viewModel.Login();
+                    viewModel.Login.Execute();
 
                     LastTimeUsageStorage.Received().SetLogin(Arg.Is(now));
                 }
@@ -250,7 +250,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     UserAccessManager.Login(Arg.Any<Email>(), Arg.Any<Password>())
                         .Returns(Task.FromException(new Exception()));
 
-                    ViewModel.Login();
+                    ViewModel.Login.Execute();
 
                     TestScheduler.Start();
                     observer.Messages.AssertEqual(
@@ -266,7 +266,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     UserAccessManager.Login(Arg.Any<Email>(), Arg.Any<Password>())
                         .Returns(Task.FromException(new Exception()));
 
-                    ViewModel.Login();
+                    ViewModel.Login.Execute();
 
                     NavigationService.DidNotReceive().Navigate<MainViewModel>(ViewModel.View);
                 }
@@ -281,7 +281,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     UserAccessManager.Login(Arg.Any<Email>(), Arg.Any<Password>())
                         .Returns(Task.FromException(exception));
 
-                    ViewModel.Login();
+                    ViewModel.Login.Execute();
 
                     TestScheduler.Start();
                     observer.Messages.AssertEqual(
@@ -299,7 +299,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     UserAccessManager.Login(Arg.Any<Email>(), Arg.Any<Password>())
                         .Returns(Task.FromException(exception));
 
-                    ViewModel.Login();
+                    ViewModel.Login.Execute();
 
                     TestScheduler.Start();
                     observer.Messages.AssertEqual(
@@ -316,7 +316,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     UserAccessManager.Login(Arg.Any<Email>(), Arg.Any<Password>())
                         .Returns(Task.FromException(exception));
 
-                    ViewModel.Login();
+                    ViewModel.Login.Execute();
 
                     TestScheduler.Start();
                     observer.Messages.AssertEqual(
@@ -336,7 +336,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     ErrorHandlingService.TryHandleDeprecationError(Arg.Any<Exception>())
                         .Returns(true);
 
-                    ViewModel.Login();
+                    ViewModel.Login.Execute();
 
                     TestScheduler.Start();
                     observer.Messages.AssertEqual(
@@ -351,7 +351,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     UserAccessManager.Login(Arg.Any<Email>(), Arg.Any<Password>())
                         .Returns(Task.FromException(exception));
 
-                    ViewModel.Login();
+                    ViewModel.Login.Execute();
 
                     AnalyticsService.UnknownLoginFailure.Received()
                         .Track(exception.GetType().FullName, exception.Message);
@@ -360,116 +360,116 @@ namespace Toggl.Core.Tests.UI.ViewModels
             }
         }
 
-//        public sealed class TheGoogleLoginMethod : LoginViewModelTest
-//        {
-//            [Fact, LogIfTooSlow]
-//            public void CallsTheUserAccessManager()
-//            {
-//                ViewModel.GoogleLogin();
-//
-//                UserAccessManager.Received().LoginWithGoogle(Arg.Any<string>());
-//            }
-//
-//            [Fact, LogIfTooSlow]
-//            public void DoesNothingWhenThePageIsCurrentlyLoading()
-//            {
-//                var never = new Task(() => { });
-//                View.GetGoogleToken().Returns(Observable.Return(""));
-//                UserAccessManager.LoginWithGoogle(Arg.Any<string>()).Returns(never);
-//                ViewModel.GoogleLogin();
-//
-//                ViewModel.GoogleLogin();
-//
-//                UserAccessManager.Received(1).LoginWithGoogle(Arg.Any<string>());
-//            }
-//
-//            [Fact, LogIfTooSlow]
-//            public void NavigatesToTheTimeEntriesViewModelWhenTheLoginSucceeds()
-//            {
-//                View.GetGoogleToken().Returns(Observable.Return(""));
-//                UserAccessManager.LoginWithGoogle(Arg.Any<string>())
-//                    .Returns(Task.CompletedTask);
-//
-//                ViewModel.GoogleLogin();
-//
-//                NavigationService.Received().Navigate<MainTabBarViewModel>(ViewModel.View);
-//            }
-//
-//            [Fact, LogIfTooSlow]
-//            public void TracksGoogleLoginEvent()
-//            {
-//                View.GetGoogleToken().Returns(Observable.Return(""));
-//                UserAccessManager.LoginWithGoogle(Arg.Any<string>())
-//                    .Returns(Task.CompletedTask);
-//
-//                ViewModel.GoogleLogin();
-//
-//                AnalyticsService.Received().Login.Track(AuthenticationMethod.Google);
-//            }
-//
-//            [Fact, LogIfTooSlow]
-//            public void StopsTheViewModelLoadStateWhenItErrors()
-//            {
-//                var observer = TestScheduler.CreateObserver<bool>();
-//                ViewModel.IsLoading.Subscribe(observer);
-//                View.GetGoogleToken().Returns(Observable.Return(""));
-//                UserAccessManager.LoginWithGoogle(Arg.Any<string>())
-//                    .Returns(Task.FromException(new GoogleLoginException(false)));
-//
-//                ViewModel.GoogleLogin();
-//
-//                TestScheduler.Start();
-//                observer.Messages.AssertEqual(
-//                    ReactiveTest.OnNext(1, false),
-//                    ReactiveTest.OnNext(2, true),
-//                    ReactiveTest.OnNext(3, false)
-//                );
-//            }
-//
-//            [Fact, LogIfTooSlow]
-//            public void DoesNotNavigateWhenTheLoginFails()
-//            {
-//                View.GetGoogleToken().Returns(Observable.Return(""));
-//                UserAccessManager.LoginWithGoogle(Arg.Any<string>())
-//                    .Returns(Task.FromException(new GoogleLoginException(false)));
-//
-//                ViewModel.GoogleLogin();
-//
-//                NavigationService.DidNotReceive().Navigate<MainViewModel>(ViewModel.View);
-//            }
-//
-//            [Fact, LogIfTooSlow]
-//            public void DoesNotDisplayAnErrormessageWhenTheUserCancelsTheRequestOnTheGoogleService()
-//            {
-//                var observer = SchedulerProvider.TestScheduler.CreateObserver<string>();
-//                ViewModel.ErrorMessage.Subscribe(observer);
-//                View.GetGoogleToken().Returns(Observable.Return(""));
-//                UserAccessManager.LoginWithGoogle(Arg.Any<string>())
-//                    .Returns(Task.FromException(new GoogleLoginException(true)));
-//
-//                ViewModel.GoogleLogin();
-//
-//                SchedulerProvider.TestScheduler.Start();
-//                observer.Messages.AssertEqual(
-//                    ReactiveTest.OnNext(1, "")
-//                );
-//            }
-//
-//            [FsCheck.Xunit.Property]
-//            public void SavesTheTimeOfLastLogin(DateTimeOffset now)
-//            {
-//                TimeService.CurrentDateTime.Returns(now);
-//                View.GetGoogleToken().Returns(Observable.Return(""));
-//                UserAccessManager.LoginWithGoogle(Arg.Any<string>())
-//                    .Returns(Task.CompletedTask);
-//                var viewModel = CreateViewModel();
-//                viewModel.AttachView(View);
-//
-//                viewModel.GoogleLogin();
-//
-//                LastTimeUsageStorage.Received().SetLogin(Arg.Is(now));
-//            }
-//        }
+        public sealed class TheGoogleLoginMethod : LoginViewModelTest
+        {
+            [Fact, LogIfTooSlow]
+            public void CallsTheUserAccessManager()
+            {
+                ViewModel.GoogleLogin.Execute();
+
+                UserAccessManager.Received().LoginWithGoogle(Arg.Any<string>());
+            }
+
+            [Fact, LogIfTooSlow]
+            public void DoesNothingWhenThePageIsCurrentlyLoading()
+            {
+                var never = new Task(() => { });
+                View.GetGoogleToken().Returns(Observable.Return(""));
+                UserAccessManager.LoginWithGoogle(Arg.Any<string>()).Returns(never);
+                ViewModel.GoogleLogin.Execute();
+
+                ViewModel.GoogleLogin.Execute();
+
+                UserAccessManager.Received(1).LoginWithGoogle(Arg.Any<string>());
+            }
+
+            [Fact, LogIfTooSlow]
+            public void NavigatesToTheTimeEntriesViewModelWhenTheLoginSucceeds()
+            {
+                View.GetGoogleToken().Returns(Observable.Return(""));
+                UserAccessManager.LoginWithGoogle(Arg.Any<string>())
+                    .Returns(Task.CompletedTask);
+
+                ViewModel.GoogleLogin.Execute();
+
+                NavigationService.Received().Navigate<MainTabBarViewModel>(ViewModel.View);
+            }
+
+            [Fact, LogIfTooSlow]
+            public void TracksGoogleLoginEvent()
+            {
+                View.GetGoogleToken().Returns(Observable.Return(""));
+                UserAccessManager.LoginWithGoogle(Arg.Any<string>())
+                    .Returns(Task.CompletedTask);
+
+                ViewModel.GoogleLogin.Execute();
+
+                AnalyticsService.Received().Login.Track(AuthenticationMethod.Google);
+            }
+
+            [Fact, LogIfTooSlow]
+            public void StopsTheViewModelLoadStateWhenItErrors()
+            {
+                var observer = TestScheduler.CreateObserver<bool>();
+                ViewModel.IsLoading.Subscribe(observer);
+                View.GetGoogleToken().Returns(Observable.Return(""));
+                UserAccessManager.LoginWithGoogle(Arg.Any<string>())
+                    .Returns(Task.FromException(new GoogleLoginException(false)));
+
+                ViewModel.GoogleLogin.Execute();
+
+                TestScheduler.Start();
+                observer.Messages.AssertEqual(
+                    ReactiveTest.OnNext(1, false),
+                    ReactiveTest.OnNext(2, true),
+                    ReactiveTest.OnNext(3, false)
+                );
+            }
+
+            [Fact, LogIfTooSlow]
+            public void DoesNotNavigateWhenTheLoginFails()
+            {
+                View.GetGoogleToken().Returns(Observable.Return(""));
+                UserAccessManager.LoginWithGoogle(Arg.Any<string>())
+                    .Returns(Task.FromException(new GoogleLoginException(false)));
+
+                ViewModel.GoogleLogin.Execute();
+
+                NavigationService.DidNotReceive().Navigate<MainViewModel>(ViewModel.View);
+            }
+
+            [Fact, LogIfTooSlow]
+            public void DoesNotDisplayAnErrormessageWhenTheUserCancelsTheRequestOnTheGoogleService()
+            {
+                var observer = SchedulerProvider.TestScheduler.CreateObserver<string>();
+                ViewModel.ErrorMessage.Subscribe(observer);
+                View.GetGoogleToken().Returns(Observable.Return(""));
+                UserAccessManager.LoginWithGoogle(Arg.Any<string>())
+                    .Returns(Task.FromException(new GoogleLoginException(true)));
+
+                ViewModel.GoogleLogin.Execute();
+
+                SchedulerProvider.TestScheduler.Start();
+                observer.Messages.AssertEqual(
+                    ReactiveTest.OnNext(1, "")
+                );
+            }
+
+            [FsCheck.Xunit.Property]
+            public void SavesTheTimeOfLastLogin(DateTimeOffset now)
+            {
+                TimeService.CurrentDateTime.Returns(now);
+                View.GetGoogleToken().Returns(Observable.Return(""));
+                UserAccessManager.LoginWithGoogle(Arg.Any<string>())
+                    .Returns(Task.CompletedTask);
+                var viewModel = CreateViewModel();
+                viewModel.AttachView(View);
+
+                viewModel.GoogleLogin.Execute();
+
+                LastTimeUsageStorage.Received().SetLogin(Arg.Is(now));
+            }
+        }
 
         public sealed class TheTogglePasswordVisibilityMethod : LoginViewModelTest
         {
