@@ -4,7 +4,6 @@ using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using Toggl.Core.Analytics;
 using Toggl.Core.Exceptions;
-using Toggl.Core.Extensions;
 using Toggl.Core.Interactors;
 using Toggl.Core.Login;
 using Toggl.Core.Services;
@@ -35,11 +34,7 @@ namespace Toggl.Core.UI.ViewModels
         private readonly IErrorHandlingService errorHandlingService;
         private readonly ILastTimeUsageStorage lastTimeUsageStorage;
         private readonly ITimeService timeService;
-        private readonly ISchedulerProvider schedulerProvider;
-        private readonly IRxActionFactory rxActionFactory;
         private readonly IInteractorFactory interactorFactory;
-
-        private IDisposable loginDisposable;
 
         private readonly Subject<ShakeTargets> shakeSubject = new Subject<ShakeTargets>();
         private readonly Subject<bool> isShowPasswordButtonVisibleSubject = new Subject<bool>();
@@ -91,7 +86,6 @@ namespace Toggl.Core.UI.ViewModels
             this.onboardingStorage = onboardingStorage;
             this.errorHandlingService = errorHandlingService;
             this.lastTimeUsageStorage = lastTimeUsageStorage;
-            this.schedulerProvider = schedulerProvider;
             this.interactorFactory = interactorFactory;
 
             var emailObservable = emailSubject.Select(email => email.TrimmedEnd());
@@ -99,40 +93,40 @@ namespace Toggl.Core.UI.ViewModels
             Signup = rxActionFactory.FromAsync(signup);
             ForgotPassword = rxActionFactory.FromAsync(forgotPassword);
 
-            Shake = shakeSubject.AsDriver(this.schedulerProvider);
+            Shake = shakeSubject.AsDriver(schedulerProvider);
 
             Email = emailObservable
                 .Select(email => email.ToString())
                 .DistinctUntilChanged()
-                .AsDriver(this.schedulerProvider);
+                .AsDriver(schedulerProvider);
 
             Password = passwordSubject
                 .Select(password => password.ToString())
                 .DistinctUntilChanged()
-                .AsDriver(this.schedulerProvider);
+                .AsDriver(schedulerProvider);
 
             IsLoading = isLoadingSubject
                 .DistinctUntilChanged()
-                .AsDriver(this.schedulerProvider);
+                .AsDriver(schedulerProvider);
 
             ErrorMessage = errorMessageSubject
                 .DistinctUntilChanged()
-                .AsDriver(this.schedulerProvider);
+                .AsDriver(schedulerProvider);
 
             IsPasswordMasked = isPasswordMaskedSubject
                 .DistinctUntilChanged()
-                .AsDriver(this.schedulerProvider);
+                .AsDriver(schedulerProvider);
 
             IsShowPasswordButtonVisible = Password
                 .Select(password => password.Length > 1)
                 .CombineLatest(isShowPasswordButtonVisibleSubject.AsObservable(), CommonFunctions.And)
                 .DistinctUntilChanged()
-                .AsDriver(this.schedulerProvider);
+                .AsDriver(schedulerProvider);
 
             HasError = ErrorMessage
                 .Select(string.IsNullOrEmpty)
                 .Select(CommonFunctions.Invert)
-                .AsDriver(this.schedulerProvider);
+                .AsDriver(schedulerProvider);
 
             LoginEnabled = emailObservable
                 .CombineLatest(
@@ -140,7 +134,7 @@ namespace Toggl.Core.UI.ViewModels
                     IsLoading,
                     (email, password, isLoading) => email.IsValid && password.IsValid && !isLoading)
                 .DistinctUntilChanged()
-                .AsDriver(this.schedulerProvider);
+                .AsDriver(schedulerProvider);
         }
 
         public override Task Initialize(CredentialsParameter parameter)
@@ -160,7 +154,7 @@ namespace Toggl.Core.UI.ViewModels
         public void SetIsShowPasswordButtonVisible(bool visible)
             => isShowPasswordButtonVisibleSubject.OnNext(visible);
 
-        public void Login()
+        public async Task Login()
         {
             var shakeTargets = ShakeTargets.None;
             shakeTargets |= emailSubject.Value.IsValid ? ShakeTargets.None : ShakeTargets.Email;
@@ -177,28 +171,33 @@ namespace Toggl.Core.UI.ViewModels
             isLoadingSubject.OnNext(true);
             errorMessageSubject.OnNext("");
 
-            loginDisposable =
-                userAccessManager
-                    .Login(emailSubject.Value, passwordSubject.Value)
-                    .Track(analyticsService.Login, AuthenticationMethod.EmailAndPassword)
-                    .Subscribe(_ => onAuthenticated(), onError, onCompleted);
+            try
+            {
+                await userAccessManager.Login(emailSubject.Value, passwordSubject.Value);
+                analyticsService.Login.Track(AuthenticationMethod.EmailAndPassword);
+                onAuthenticated();
+            }
+            catch(Exception e)
+            {
+                onError(e);
+            }
         }
 
         public void TogglePasswordVisibility()
             => isPasswordMaskedSubject.OnNext(!isPasswordMaskedSubject.Value);
 
-        public void GoogleLogin()
-        {
-            if (isLoadingSubject.Value) return;
-
-            isLoadingSubject.OnNext(true);
-
-            loginDisposable = View?
-                .GetGoogleToken()
-                .SelectMany(userAccessManager.LoginWithGoogle)
-                .Track(analyticsService.Login, AuthenticationMethod.Google)
-                .Subscribe(_ => onAuthenticated(), onError, onCompleted);
-        }
+//        public void GoogleLogin()
+//        {
+//            if (isLoadingSubject.Value) return;
+//
+//            isLoadingSubject.OnNext(true);
+//
+//            loginDisposable = View?
+//                .GetGoogleToken()
+//                .SelectMany(userAccessManager.LoginWithGoogle)
+//                .Track(analyticsService.Login, AuthenticationMethod.Google)
+//                .Subscribe(_ => onAuthenticated(), onError, onCompleted);
+//        }
 
         private Task signup()
         {
@@ -237,7 +236,6 @@ namespace Toggl.Core.UI.ViewModels
         private void onError(Exception exception)
         {
             isLoadingSubject.OnNext(false);
-            onCompleted();
 
             if (errorHandlingService.TryHandleDeprecationError(exception))
                 return;
@@ -256,12 +254,6 @@ namespace Toggl.Core.UI.ViewModels
                     errorMessageSubject.OnNext(Resources.GenericLoginError);
                     break;
             }
-        }
-
-        private void onCompleted()
-        {
-            loginDisposable?.Dispose();
-            loginDisposable = null;
         }
     }
 }

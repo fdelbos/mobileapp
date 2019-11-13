@@ -55,7 +55,7 @@ namespace Toggl.Core.UI.ViewModels
             this.analyticsService = analyticsService;
             this.rxActionFactory = rxActionFactory;
 
-            Reset = rxActionFactory.FromObservable(reset);
+            Reset = rxActionFactory.FromAsync(reset);
             PasswordResetWithInvalidEmail = passwordResetWithInvalidEmailSubject.AsDriver(schedulerProvider);
 
             var resetActionStartedObservable = Reset
@@ -86,18 +86,17 @@ namespace Toggl.Core.UI.ViewModels
             return base.Initialize(parameter);
         }
 
-        private IObservable<Unit> reset()
+        private async Task reset()
         {
             if (!Email.Value.IsValid)
             {
                 passwordResetWithInvalidEmailSubject.OnNext(Unit.Default);
-                return Observable.Empty<Unit>();
+                return;
             }
 
-            return userAccessManager.ResetPassword(Email.Value)
-                .Track(analyticsService.ResetPassword)
-                .SelectUnit()
-                .Do(closeWithDelay);
+            await userAccessManager.ResetPassword(Email.Value);
+            analyticsService.ResetPassword.Track();
+            closeWithDelay();
         }
 
         private void closeWithDelay()

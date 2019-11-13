@@ -49,11 +49,9 @@ namespace Toggl.Core.UI.ViewModels
         private readonly IPlatformInfo platformInfo;
 
         private IDisposable getCountrySubscription;
-        private IDisposable signupDisposable;
         private bool termsOfServiceAccepted;
         private List<ICountry> allCountries;
         private long? countryId;
-        private string timezone;
 
         private readonly Subject<ShakeTargets> shakeSubject = new Subject<ShakeTargets>();
         private readonly Subject<bool> isShowPasswordButtonVisibleSubject = new Subject<bool>();
@@ -265,28 +263,29 @@ namespace Toggl.Core.UI.ViewModels
             isLoadingSubject.OnNext(true);
             errorMessageSubject.OnNext(string.Empty);
 
-            var supportedTimezonesObs = new GetSupportedTimezonesInteractor().Execute();
-            signupDisposable = supportedTimezonesObs
-                .Select(supportedTimezones => supportedTimezones.FirstOrDefault(tz => platformInfo.TimezoneIdentifier == tz))
-                .SelectMany(timezone
-                    => userAccessManager
-                        .SignUp(
-                            emailSubject.Value,
-                            passwordSubject.Value,
-                            termsOfServiceAccepted,
-                             (int)countryId.Value,
-                            timezone)
-                )
-                .Track(analyticsService.SignUp, AuthenticationMethod.EmailAndPassword)
-                .Do(_ =>
-                {
-                    var password = passwordSubject.Value;
-                    if (!password.IsValid)
-                        return;
+            try
+            {
+                await userAccessManager.SignUp(
+                    emailSubject.Value,
+                    passwordSubject.Value,
+                    termsOfServiceAccepted,
+                    (int)countryId.Value,
+                    timezone());
 
+                analyticsService.SignUp.Track(AuthenticationMethod.EmailAndPassword);
+
+                var password = passwordSubject.Value;
+                if (password.IsValid)
+                {
                     analyticsService.Track(new SignupPasswordComplexityEvent(password));
-                })
-                .Subscribe(_ => onAuthenticated(), onError, onCompleted);
+                }
+
+                onAuthenticated();
+            }
+            catch (Exception e)
+            {
+                onError(e);
+            }
         }
 
         private async void onAuthenticated()
@@ -306,7 +305,6 @@ namespace Toggl.Core.UI.ViewModels
         private void onError(Exception exception)
         {
             isLoadingSubject.OnNext(false);
-            onCompleted();
 
             if (errorHandlingService.TryHandleDeprecationError(exception))
                 return;
@@ -330,12 +328,6 @@ namespace Toggl.Core.UI.ViewModels
             }
         }
 
-        private void onCompleted()
-        {
-            signupDisposable?.Dispose();
-            signupDisposable = null;
-        }
-
         private async Task googleSignup()
         {
             if (!countryId.HasValue)
@@ -351,11 +343,18 @@ namespace Toggl.Core.UI.ViewModels
             isLoadingSubject.OnNext(true);
             errorMessageSubject.OnNext(string.Empty);
 
-            signupDisposable = View.GetGoogleToken()
-                .SelectMany(googleToken => userAccessManager
-                    .SignUpWithGoogle(googleToken, termsOfServiceAccepted, (int)countryId.Value, timezone))
-                .Track(analyticsService.SignUp, AuthenticationMethod.Google)
-                .Subscribe(_ => onAuthenticated(), onError, onCompleted);
+            try
+            {
+                var googleToken = await View.GetGoogleToken().FirstAsync();
+                await userAccessManager.SignUpWithGoogle(googleToken, termsOfServiceAccepted, (int) countryId.Value,
+                    timezone());
+                analyticsService.SignUp.Track(AuthenticationMethod.Google);
+                onAuthenticated();
+            }
+            catch (Exception e)
+            {
+                onError(e);
+            }
         }
 
         public void TogglePasswordVisibility()
@@ -391,13 +390,18 @@ namespace Toggl.Core.UI.ViewModels
             return Navigate<LoginViewModel, CredentialsParameter>(parameter);
         }
 
-        private async Task<bool> requestAcceptanceOfTermsAndConditionsIfNeeded()
+        private async Task requestAcceptanceOfTermsAndConditionsIfNeeded()
         {
-            if (termsOfServiceAccepted)
-                return true;
+            if (!termsOfServiceAccepted)
+            {
+                termsOfServiceAccepted = await Navigate<TermsOfServiceViewModel, bool>();
+            }
+        }
 
-            termsOfServiceAccepted = await Navigate<TermsOfServiceViewModel, bool>();
-            return termsOfServiceAccepted;
+        private string timezone()
+        {
+            var supportedTimezones = new GetSupportedTimezonesInteractor().Execute();
+            return supportedTimezones.FirstOrDefault(tz => platformInfo.TimezoneIdentifier == tz);
         }
     }
 }

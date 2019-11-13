@@ -59,7 +59,7 @@ namespace Toggl.Core.UI.ViewModels
             this.userAccessManager = userAccessManager;
             this.interactorFactory = interactorFactory;
 
-            Done = rxActionFactory.FromObservable(done);
+            Done = rxActionFactory.FromAsync(done);
             SignOut = rxActionFactory.FromAsync(signout);
 
             Error = Done.Errors
@@ -98,14 +98,16 @@ namespace Toggl.Core.UI.ViewModels
             await Navigate<LoginViewModel, CredentialsParameter>(CredentialsParameter.Empty);
         }
 
-        private IObservable<Unit> done() =>
-            Password
-                .FirstAsync()
-                .Select(Shared.Password.From)
-                .ThrowIf(password => !password.IsValid, new InvalidOperationException())
-                .SelectMany(userAccessManager.RefreshToken)
-                .Do(onLogin)
-                .SelectUnit();
+        private async Task done()
+        {
+            var passwordInput = await Password.FirstAsync();
+            var password = Shared.Password.From(passwordInput);
+            if (!password.IsValid)
+                throw new InvalidOperationException();
+
+            await userAccessManager.RefreshToken(password);
+            onLogin();
+        }
 
         private void onLogin()
         {
