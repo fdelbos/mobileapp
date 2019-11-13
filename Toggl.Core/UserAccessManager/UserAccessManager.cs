@@ -2,15 +2,15 @@
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using System.Reactive.Threading.Tasks;
+using System.Threading.Tasks;
 using Toggl.Core.Models;
 using Toggl.Core.Services;
 using Toggl.Networking;
 using Toggl.Networking.Network;
 using Toggl.Shared;
-using Toggl.Shared.Extensions;
 using Toggl.Shared.Models;
 using Toggl.Storage;
+using Task = System.Threading.Tasks.Task;
 
 namespace Toggl.Core.Login
 {
@@ -40,59 +40,57 @@ namespace Toggl.Core.Login
             this.privateSharedStorageService = privateSharedStorageService;
         }
 
-        public IObservable<Unit> Login(Email email, Password password)
+        public async Task Login(Email email, Password password)
         {
             if (!email.IsValid)
                 throw new ArgumentException($"A valid {nameof(email)} must be provided when trying to login");
             if (!password.IsValid)
                 throw new ArgumentException($"A valid {nameof(password)} must be provided when trying to login");
 
+            await clearDatabase();
             var credentials = Credentials.WithPassword(email, password);
-
-            return database.Value
-                .Clear()
-                .SelectMany(_ => apiFactory.Value.CreateApiWith(credentials).User.Get())
-                .Select(User.Clean)
-                .SelectMany(database.Value.User.Create)
-                .Select(apiFromUser)
-                .Do(userLoggedInSubject.OnNext)
-                .SelectUnit();
+            var api = apiFactory.Value.CreateApiWith(credentials);
+            var user = await api.User.Get();
+            await createRecordInDatabase(user);
         }
 
-        public IObservable<Unit> LoginWithGoogle(string googleToken)
-            => database.Value
-                .Clear()
-                .SelectMany(_ => loginWithGoogle(googleToken));
+        public async Task LoginWithGoogle(string googleToken)
+        {
+            await clearDatabase();
+            var credentials = Credentials.WithGoogleToken(googleToken);
+            var api = apiFactory.Value.CreateApiWith(credentials);
+            var user = await api.User.GetWithGoogle();
+            await createRecordInDatabase(user);
+        }
 
-        public IObservable<Unit> SignUp(Email email, Password password, bool termsAccepted, int countryId, string timezone)
+        public async Task SignUp(Email email, Password password, bool termsAccepted, int countryId, string timezone)
         {
             if (!email.IsValid)
                 throw new ArgumentException($"A valid {nameof(email)} must be provided when trying to signup");
             if (!password.IsValid)
                 throw new ArgumentException($"A valid {nameof(password)} must be provided when trying to signup");
 
-            return database.Value
-                .Clear()
-                .SelectMany(_ => signUp(email, password, termsAccepted, countryId, timezone))
-                .Select(User.Clean)
-                .SelectMany(database.Value.User.Create)
-                .Select(apiFromUser)
-                .Do(userLoggedInSubject.OnNext)
-                .SelectUnit();
+            await clearDatabase();
+            var api = apiFactory.Value.CreateApiWith(Credentials.None);
+            var user = await api.User.SignUp(email, password, termsAccepted, countryId, timezone);
+            await createRecordInDatabase(user);
         }
 
-        public IObservable<Unit> SignUpWithGoogle(string googleToken, bool termsAccepted, int countryId, string timezone)
-            => database.Value
-                .Clear()
-                .SelectMany(_ => signUpWithGoogle(googleToken, termsAccepted, countryId, timezone));
+        public async Task SignUpWithGoogle(string googleToken, bool termsAccepted, int countryId, string timezone)
+        {
+            await clearDatabase();
+            var api = apiFactory.Value.CreateApiWith(Credentials.None);
+            var user = await api.User.SignUpWithGoogle(googleToken, termsAccepted, countryId, timezone);
+            await createRecordInDatabase(user);
+        }
 
-        public IObservable<string> ResetPassword(Email email)
+        public async Task<string> ResetPassword(Email email)
         {
             if (!email.IsValid)
                 throw new ArgumentException($"A valid {nameof(email)} must be provided when trying to reset forgotten password.");
 
             var api = apiFactory.Value.CreateApiWith(Credentials.None);
-            return api.User.ResetPassword(email).ToObservable();
+            return await api.User.ResetPassword(email);
         }
 
         public bool CheckIfLoggedIn()
@@ -100,13 +98,17 @@ namespace Toggl.Core.Login
             if (privateSharedStorageService.Value.HasUserDataStored())
                 return true;
 
-            return
-                database.Value
-                .User.Single()
-                .Do(storeApiInfoOnPrivateStorage)
-                .SelectValue(true)
-                .Catch(Observable.Return(false))
-                .Wait();
+            try
+            {
+                var user = database.Value.User.Single().Wait();
+                storeApiInfoOnPrivateStorage(user);
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
         }
 
         public void LoginWithSavedCredentials()
@@ -117,41 +119,37 @@ namespace Toggl.Core.Login
                 return;
             }
 
-            database.Value
-                .User.Single()
-                .Do(user => userLoggedInSubject.OnNext(apiFromUser(user)))
-                .Catch((Exception ex) => Observable.Empty<User>())
-                .ToArray()
-                .Wait();
+            try
+            {
+                var user = database.Value.User.Single().Wait();
+                var api = apiFromUser(user);
+                userLoggedInSubject.OnNext(api);
+            }
+            catch
+            {
+                // silent error
+            }
         }
 
         public string GetSavedApiToken()
             => privateSharedStorageService.Value.GetApiToken();
 
-        private ITogglApi apiFromSharedStorage()
-        {
-            var apiToken = privateSharedStorageService.Value.GetApiToken();
-            var newCredentials = Credentials.WithApiToken(apiToken);
-            var api = apiFactory.Value.CreateApiWith(newCredentials);
-            return api;
-        }
-
-        public IObservable<Unit> RefreshToken(Password password)
+        public async Task RefreshToken(Password password)
         {
             if (!password.IsValid)
                 throw new ArgumentException($"A valid {nameof(password)} must be provided when trying to refresh token");
 
-            return database.Value.User
-                .Single()
-                .Select(user => user.Email)
-                .Select(email => Credentials.WithPassword(email, password))
-                .Select(apiFactory.Value.CreateApiWith)
-                .SelectMany(api => api.User.Get())
-                .Select(User.Clean)
-                .SelectMany(database.Value.User.Update)
-                .Select(apiFromUser)
-                .Do(userLoggedInSubject.OnNext)
-                .SelectUnit();
+            var user = await database.Value.User.Single().SingleAsync();
+            var credentials = Credentials.WithPassword(user.Email, password);
+            var api = apiFactory.Value.CreateApiWith(credentials);
+            var userData = await api.User.Get();
+
+            var cleanUser = User.Clean(userData);
+            var updatedUser = await database.Value.User.Update(cleanUser);
+            var finalApi = apiFromUser(updatedUser);
+
+            storeApiInfoOnPrivateStorage(updatedUser);
+            userLoggedInSubject.OnNext(finalApi);
         }
 
         public void OnUserLoggedOut()
@@ -159,12 +157,14 @@ namespace Toggl.Core.Login
             userLoggedOutSubject.OnNext(Unit.Default);
         }
 
-        private ITogglApi apiFromUser(IUser user)
+        private async Task createRecordInDatabase(IUser userData)
         {
+            var cleanUser = User.Clean(userData);
+            var user = await database.Value.User.Create(cleanUser);
+            var api = apiFromUser(user);
+
             storeApiInfoOnPrivateStorage(user);
-            var newCredentials = Credentials.WithApiToken(user.ApiToken);
-            var api = apiFactory.Value.CreateApiWith(newCredentials);
-            return api;
+            userLoggedInSubject.OnNext(api);
         }
 
         private void storeApiInfoOnPrivateStorage(IUser user)
@@ -173,40 +173,22 @@ namespace Toggl.Core.Login
             privateSharedStorageService.Value.SaveUserId(user.Id);
         }
 
-        private IObservable<Unit> loginWithGoogle(string googleToken)
+        private ITogglApi apiFromSharedStorage()
         {
-            var credentials = Credentials.WithGoogleToken(googleToken);
-
-            return Observable
-                .Return(apiFactory.Value.CreateApiWith(credentials))
-                .SelectMany(api => api.User.GetWithGoogle())
-                .Select(User.Clean)
-                .SelectMany(database.Value.User.Create)
-                .Select(apiFromUser)
-                .Do(userLoggedInSubject.OnNext)
-                .SelectUnit();
+            var apiToken = privateSharedStorageService.Value.GetApiToken();
+            var credentials = Credentials.WithApiToken(apiToken);
+            return apiFactory.Value.CreateApiWith(credentials);
         }
 
-        private IObservable<IUser> signUp(Email email, Password password, bool termsAccepted, int countryId, string timezone)
+        private ITogglApi apiFromUser(IUser user)
         {
-            return apiFactory.Value
-                .CreateApiWith(Credentials.None)
-                .User
-                .SignUp(email, password, termsAccepted, countryId, timezone)
-                .ToObservable();
+            var credentials = Credentials.WithApiToken(user.ApiToken);
+            return apiFactory.Value.CreateApiWith(credentials);
         }
 
-        private IObservable<Unit> signUpWithGoogle(string googleToken, bool termsAccepted, int countryId, string timezone)
+        private async Task clearDatabase()
         {
-            var api = apiFactory.Value.CreateApiWith(Credentials.None);
-            return api.User
-                .SignUpWithGoogle(googleToken, termsAccepted, countryId, timezone)
-                .ToObservable()
-                .Select(User.Clean)
-                .SelectMany(database.Value.User.Create)
-                .Select(apiFromUser)
-                .Do(userLoggedInSubject.OnNext)
-                .SelectUnit();
+            await database.Value.Clear().SingleAsync();
         }
     }
 }
