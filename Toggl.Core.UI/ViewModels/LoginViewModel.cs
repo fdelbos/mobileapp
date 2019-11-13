@@ -56,6 +56,8 @@ namespace Toggl.Core.UI.ViewModels
 
         public ViewAction Signup { get; }
         public ViewAction ForgotPassword { get; }
+        public ViewAction Login { get; }
+        public ViewAction GoogleLogin { get; }
 
         public LoginViewModel(
             IUserAccessManager userAccessManager,
@@ -90,6 +92,8 @@ namespace Toggl.Core.UI.ViewModels
 
             var emailObservable = emailSubject.Select(email => email.TrimmedEnd());
 
+            Login = rxActionFactory.FromAsync(login);
+            GoogleLogin = rxActionFactory.FromAsync(googleLogin);
             Signup = rxActionFactory.FromAsync(signup);
             ForgotPassword = rxActionFactory.FromAsync(forgotPassword);
 
@@ -154,7 +158,7 @@ namespace Toggl.Core.UI.ViewModels
         public void SetIsShowPasswordButtonVisible(bool visible)
             => isShowPasswordButtonVisibleSubject.OnNext(visible);
 
-        public async Task Login()
+        private async Task login()
         {
             var shakeTargets = ShakeTargets.None;
             shakeTargets |= emailSubject.Value.IsValid ? ShakeTargets.None : ShakeTargets.Email;
@@ -175,7 +179,7 @@ namespace Toggl.Core.UI.ViewModels
             {
                 await userAccessManager.Login(emailSubject.Value, passwordSubject.Value);
                 analyticsService.Login.Track(AuthenticationMethod.EmailAndPassword);
-                onAuthenticated();
+                await onAuthenticated();
             }
             catch(Exception e)
             {
@@ -186,18 +190,27 @@ namespace Toggl.Core.UI.ViewModels
         public void TogglePasswordVisibility()
             => isPasswordMaskedSubject.OnNext(!isPasswordMaskedSubject.Value);
 
-//        public void GoogleLogin()
-//        {
-//            if (isLoadingSubject.Value) return;
-//
-//            isLoadingSubject.OnNext(true);
-//
-//            loginDisposable = View?
-//                .GetGoogleToken()
-//                .SelectMany(userAccessManager.LoginWithGoogle)
-//                .Track(analyticsService.Login, AuthenticationMethod.Google)
-//                .Subscribe(_ => onAuthenticated(), onError, onCompleted);
-//        }
+        private async Task googleLogin()
+        {
+            if (isLoadingSubject.Value) return;
+
+            isLoadingSubject.OnNext(true);
+
+            if (View == null) return;
+
+            var token = await View.GetGoogleToken().FirstAsync();
+
+            try
+            {
+                await userAccessManager.LoginWithGoogle(token);
+                analyticsService.Login.Track(AuthenticationMethod.Google);
+                await onAuthenticated();
+            }
+            catch (Exception e)
+            {
+                onError(e);
+            }
+        }
 
         private Task signup()
         {
@@ -218,7 +231,7 @@ namespace Toggl.Core.UI.ViewModels
                 emailSubject.OnNext(emailParameter.Email);
         }
 
-        private async void onAuthenticated()
+        private async Task onAuthenticated()
         {
             lastTimeUsageStorage.SetLogin(timeService.CurrentDateTime);
 

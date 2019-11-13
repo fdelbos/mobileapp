@@ -110,12 +110,12 @@ namespace Toggl.iOS.ViewControllers
                 .BindAction(ViewModel.Signup)
                 .DisposedBy(DisposeBag);
 
-            LoginButton.Rx().Tap()
-                .Subscribe(ViewModel.Login)
+            LoginButton.Rx()
+                .BindAction(ViewModel.Login)
                 .DisposedBy(DisposeBag);
 
-            GoogleLoginButton.Rx().Tap()
-                .Subscribe(ViewModel.GoogleLogin)
+            GoogleLoginButton.Rx()
+                .BindAction(ViewModel.GoogleLogin)
                 .DisposedBy(DisposeBag);
 
             ForgotPasswordButton.Rx()
@@ -250,7 +250,7 @@ namespace Toggl.iOS.ViewControllers
 
             PasswordTextField.ShouldReturn += _ =>
             {
-                ViewModel.Login();
+                ViewModel.Login.Execute();
                 PasswordTextField.ResignFirstResponder();
                 return false;
             };

@@ -80,16 +80,16 @@ namespace Toggl.Droid.Activities
                 .BindAction(ViewModel.Signup)
                 .DisposedBy(DisposeBag);
 
-            loginButton.Rx().Tap()
-                .Subscribe(ViewModel.Login)
+            loginButton.Rx()
+                .BindAction(ViewModel.Login)
                 .DisposedBy(DisposeBag);
 
             passwordEditText.Rx().EditorActionSent()
-                .Subscribe(ViewModel.Login)
+                .Subscribe(ViewModel.Login.Inputs)
                 .DisposedBy(DisposeBag);
 
-            googleLoginButton.Rx().Tap()
-                .Subscribe(ViewModel.GoogleLogin)
+            googleLoginButton.Rx()
+                .BindAction(ViewModel.GoogleLogin)
                 .DisposedBy(DisposeBag);
 
             forgotPasswordView.Rx()
