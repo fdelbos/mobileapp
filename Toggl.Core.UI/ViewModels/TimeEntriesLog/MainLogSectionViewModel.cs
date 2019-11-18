@@ -3,7 +3,7 @@ using Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity;
 
 namespace Toggl.Core.UI.ViewModels.TimeEntriesLog
 {
-    public abstract class MainLogSectionViewModel : IDiffable<IMainLogKey>
+    public abstract class MainLogSectionViewModel : MainLogItemViewModel
     {
         public IMainLogKey Identity { get; protected set; }
     }

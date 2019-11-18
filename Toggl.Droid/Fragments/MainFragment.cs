@@ -36,6 +36,7 @@ using System.Linq;
 using Android.Content;
 using Toggl.Droid.Widgets;
 using Android.Appwidget;
+using Toggl.Core.Suggestions;
 using Toggl.Droid.Services;
 
 namespace Toggl.Droid.Fragments
@@ -143,12 +144,9 @@ namespace Toggl.Droid.Fragments
                 .Subscribe(onSyncChanged)
                 .DisposedBy(DisposeBag);
 
-            mainRecyclerAdapter = new MainRecyclerAdapter(Context, ViewModel.TimeService)
-            {
-                SuggestionsViewModel = ViewModel.SuggestionsViewModel,
-                RatingViewModel = ViewModel.RatingViewModel,
-            };
-            mainRecyclerAdapter.SetupRatingViewVisibility(shouldShowRatingViewOnResume);
+            mainRecyclerAdapter = new MainRecyclerAdapter(Context, ViewModel.TimeService);
+//            mainRecyclerAdapter.SetupRatingViewVisibility(shouldShowRatingViewOnResume);
+            mainRecyclerAdapter.SetupRatingViewVisibility(true);
             touchCallback = new MainRecyclerViewTouchCallback(mainRecyclerAdapter);
 
             setupRecycler();
@@ -171,6 +169,11 @@ namespace Toggl.Droid.Fragments
                 .Subscribe(ViewModel.TimeEntriesViewModel.DelayDeleteTimeEntries.Inputs)
                 .DisposedBy(DisposeBag);
 
+            mainRecyclerAdapter.SuggestionTaps
+                .Select(vm => vm.Suggestion)
+                .Subscribe(ViewModel.SuggestionsViewModel.StartTimeEntry.Inputs)
+                .DisposedBy(DisposeBag);
+
             ViewModel.TimeEntriesViewModel.TimeEntriesPendingDeletion
                 .Subscribe(showUndoDeletion)
                 .DisposedBy(DisposeBag);
@@ -183,7 +186,7 @@ namespace Toggl.Droid.Fragments
                  .Subscribe(ViewModel.Refresh.Inputs)
                  .DisposedBy(DisposeBag);
 
-            ViewModel.TimeEntries
+            ViewModel.MainLogItems
                 .Subscribe(mainRecyclerAdapter.UpdateCollection)
                 .DisposedBy(DisposeBag);
 

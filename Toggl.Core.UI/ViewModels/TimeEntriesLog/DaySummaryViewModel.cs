@@ -16,5 +16,14 @@ namespace Toggl.Core.UI.ViewModels.TimeEntriesLog
             TotalTrackedTime = totalTrackedTime;
             Identity = new DayHeaderKey(day);
         }
+
+        public override bool Equals(MainLogItemViewModel logItem)
+        {
+            if (ReferenceEquals(null, logItem)) return false;
+            if (ReferenceEquals(this, logItem)) return true;
+            if (!(logItem is DaySummaryViewModel other)) return false;
+
+            return Title == other.Title && TotalTrackedTime == other.TotalTrackedTime;
+        }
     }
 }

@@ -3,8 +3,10 @@ using Android.Runtime;
 using Android.Support.V7.Widget;
 using Android.Support.V7.Widget.Helper;
 using System;
+using Toggl.Core.UI.ViewModels.TimeEntriesLog;
 using Toggl.Droid.Adapters;
 using Toggl.Droid.ViewHolders;
+using Toggl.Droid.ViewHolders.MainLog;
 
 namespace Toggl.Droid.ViewHelpers
 {
@@ -30,7 +32,7 @@ namespace Toggl.Droid.ViewHelpers
         {
             if (viewHolder is MainLogCellViewHolder mainLogCellViewHolder && mainLogCellViewHolder.CanSync)
             {
-                return !mainLogCellViewHolder.Item.ViewModel.CanContinue ? ItemTouchHelper.Left : base.GetSwipeDirs(recyclerView, viewHolder);
+                return !((TimeEntryLogItemViewModel) mainLogCellViewHolder.Item).CanContinue ? ItemTouchHelper.Left : base.GetSwipeDirs(recyclerView, viewHolder);
             }
 
             return ItemTouchHelper.ActionStateIdle;

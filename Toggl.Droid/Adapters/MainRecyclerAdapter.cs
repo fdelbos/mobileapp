@@ -1,26 +1,38 @@
-using Android.Support.V7.Widget;
 using Android.Views;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Toggl.Core;
 using Toggl.Core.Analytics;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog;
-using Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity;
 using Toggl.Droid.ViewHelpers;
+using Toggl.Droid.ViewHolders.MainLog;
+using Android.Content;
+using Android.Content.Res;
+using Android.Runtime;
+using Android.Util;
+using Android.Widget;
+using Toggl.Core.UI.Collections;
+using Toggl.Core.UI.Helper;
+using Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity;
 using Toggl.Droid.ViewHolders;
 using Toggl.Shared.Extensions;
-using Android.Content;
-using Toggl.Core.UI.Helper;
 
 namespace Toggl.Droid.Adapters
 {
-    public class MainRecyclerAdapter : ReactiveSectionedRecyclerAdapter<MainLogItemViewModel, TimeEntryViewData, MainLogSectionViewModel, MainLogSectionViewModel, MainLogCellViewHolder, MainLogSectionViewHolder, IMainLogKey>
+    using MainLogSection = AnimatableSectionModel<MainLogSectionViewModel, MainLogItemViewModel, IMainLogKey>;
+
+    public class MainRecyclerAdapter : BaseRecyclerAdapter<MainLogItemViewModel>
     {
-        public const int SuggestionViewType = 2;
-        public const int UserFeedbackViewType = 3;
+        public const int LogItemViewType = 1;
+        public const int SuggestionItemViewType = 2;
+        public const int DaySummarySectionViewType = 3;
+        public const int SuggestionSectionViewType = 4;
+        public const int UserFeedbackViewType = 5;
 
         private readonly Context context;
         private readonly ITimeService timeService;
@@ -31,7 +43,14 @@ namespace Toggl.Droid.Adapters
             => toggleGroupExpansionSubject.AsObservable();
 
         public IObservable<TimeEntryLogItemViewModel> TimeEntryTaps
-            => timeEntryTappedSubject.Select(item => item.ViewModel).AsObservable();
+            => timeEntryTappedSubject
+                .Do(a => Log.Debug("TimeEntryTaps", a.ToString()))
+                .Select(t => t as TimeEntryLogItemViewModel).AsObservable();
+
+        public IObservable<SuggestionLogItemViewModel> SuggestionTaps
+            => continueSuggestionTimeEntrySubject
+                .Do(a => Log.Debug("SuggestionTaps", a.ToString()))
+                .Select(t => t as SuggestionLogItemViewModel).AsObservable();
 
         public IObservable<ContinueTimeEntryInfo> ContinueTimeEntry
             => continueTimeEntrySubject.AsObservable();
@@ -39,13 +58,11 @@ namespace Toggl.Droid.Adapters
         public IObservable<TimeEntryLogItemViewModel> DeleteTimeEntrySubject
             => deleteTimeEntrySubject.AsObservable();
 
-        public SuggestionsViewModel SuggestionsViewModel { get; set; }
-        public RatingViewModel RatingViewModel { get; set; }
-
         private readonly Subject<GroupId> toggleGroupExpansionSubject = new Subject<GroupId>();
         private readonly Subject<TimeEntryLogItemViewModel> deleteTimeEntrySubject = new Subject<TimeEntryLogItemViewModel>();
-        private readonly Subject<TimeEntryViewData> timeEntryTappedSubject = new Subject<TimeEntryViewData>();
+        private readonly Subject<MainLogItemViewModel> timeEntryTappedSubject = new Subject<MainLogItemViewModel>();
         private readonly Subject<ContinueTimeEntryInfo> continueTimeEntrySubject = new Subject<ContinueTimeEntryInfo>();
+        private readonly Subject<MainLogItemViewModel> continueSuggestionTimeEntrySubject = new Subject<MainLogItemViewModel>();
 
         public MainRecyclerAdapter(Context context, ITimeService timeService)
         {
@@ -53,9 +70,94 @@ namespace Toggl.Droid.Adapters
             this.timeService = timeService;
         }
 
+        public MainRecyclerAdapter(IntPtr javaReference, JniHandleOwnership transfer)
+            : base(javaReference, transfer)
+        {
+        }
+
+        public override int GetItemViewType(int position)
+        {
+            var item = GetItem(position);
+            switch (item)
+            {
+                case TimeEntryLogItemViewModel _:
+                    return LogItemViewType;
+                case SuggestionLogItemViewModel _:
+                    return SuggestionItemViewType;
+                case DaySummaryViewModel _:
+                    return DaySummarySectionViewType;
+                case SuggestionsSectionViewModel _:
+                    return SuggestionSectionViewType;
+                case UserFeedbackViewModel _:
+                    return UserFeedbackViewType;
+                default:
+                    throw new Exception("Invalid item type");
+            }
+        }
+
+        protected override BaseRecyclerViewHolder<MainLogItemViewModel> CreateViewHolder(ViewGroup parent,
+            LayoutInflater inflater, int viewType)
+        {
+            switch (viewType)
+            {
+                case LogItemViewType:
+                    var logItemView = LayoutInflater.FromContext(parent.Context)
+                        .Inflate(Resource.Layout.MainLogCell, parent, false);
+                    var mainLogCellViewHolder = new MainLogCellViewHolder(logItemView)
+                    {
+                        TappedSubject = timeEntryTappedSubject,
+                        ContinueButtonTappedSubject = continueTimeEntrySubject,
+                        ToggleGroupExpansionSubject = toggleGroupExpansionSubject
+                    };
+                    return mainLogCellViewHolder;
+                case SuggestionItemViewType:
+                    var suggestionsView = LayoutInflater.FromContext(parent.Context)
+                        .Inflate(Resource.Layout.MainSuggestionsCard, parent, false);
+                    var mainLogSuggestionItemViewHolder = new MainLogSuggestionItemViewHolder(suggestionsView)
+                    {
+                        TappedSubject = continueSuggestionTimeEntrySubject
+                    };
+                    return mainLogSuggestionItemViewHolder;
+                case DaySummarySectionViewType:
+                    var sectionView = LayoutInflater.FromContext(parent.Context)
+                        .Inflate(Resource.Layout.MainLogHeader, parent, false);
+                    return new MainLogSectionViewHolder(sectionView);
+                case SuggestionSectionViewType:
+                    var suggestionsSectionView = LayoutInflater.FromContext(parent.Context)
+                        .Inflate(Resource.Layout.MainLogSuggestionsHeader, parent, false);
+                    return new MainLogSuggestionSectionViewHolder(suggestionsSectionView);
+                case UserFeedbackViewType:
+                    var userFeedbackView = LayoutInflater.FromContext(parent.Context).Inflate(Resource.Layout.MainUserFeedbackCard, parent, false);
+                    return new MainLogUserFeedbackViewHolder(userFeedbackView);
+                default:
+                    throw new Exception("Invalid view type");
+            }
+        }
+
+        public void UpdateCollection(IImmutableList<MainLogSection> items)
+        {
+            var flattenItems = items.Aggregate(ImmutableList<MainLogItemViewModel>.Empty, (acc, nextSection) => acc.AddRange(nextSection.Items.Prepend(nextSection.Header)));
+            SetItems(flattenItems);
+        }
+
+        protected override void SetItems(IImmutableList<MainLogItemViewModel> newItems)
+        {
+
+            if (isRatingViewVisible && Items.Count > 0)
+            {
+                var ratingIndex = newItems.Select((value, index) => new {index, value})
+                    .Single(p => p.value is DaySummaryViewModel)?.index ?? 0;
+                base.SetItems(newItems.Insert(ratingIndex, new UserFeedbackViewModel()));
+            }
+            else
+            {
+                base.SetItems(newItems);
+            }
+        }
+
         public void ContinueTimeEntryBySwiping(int position)
         {
-            var continuedTimeEntry = GetItemAt(position) as TimeEntryLogItemViewModel;
+            var continuedTimeEntry = GetItem(position) as TimeEntryLogItemViewModel;
             NotifyItemChanged(position);
 
             var continueMode = continuedTimeEntry.IsTimeEntryGroupHeader
@@ -67,51 +169,9 @@ namespace Toggl.Droid.Adapters
 
         public void DeleteTimeEntry(int position)
         {
-            var deletedTimeEntry = GetItemAt(position) as TimeEntryLogItemViewModel;
+            var deletedTimeEntry = GetItem(position) as TimeEntryLogItemViewModel;
             deleteTimeEntrySubject.OnNext(deletedTimeEntry);
         }
-
-        public override int HeaderOffset => isRatingViewVisible ? 2 : 1;
-
-        protected override bool TryBindCustomViewType(RecyclerView.ViewHolder holder, int position)
-        {
-            return holder is MainLogSuggestionsListViewHolder
-                || holder is MainLogUserFeedbackViewHolder;
-        }
-
-        public override RecyclerView.ViewHolder OnCreateViewHolder(ViewGroup parent, int viewType)
-        {
-            if (viewType == SuggestionViewType)
-            {
-                var suggestionsView = LayoutInflater.FromContext(parent.Context).Inflate(Resource.Layout.MainSuggestions, parent, false);
-                var mainLogSuggestionsListViewHolder = new MainLogSuggestionsListViewHolder(suggestionsView, SuggestionsViewModel);
-                return mainLogSuggestionsListViewHolder;
-            }
-
-            if (viewType == UserFeedbackViewType)
-            {
-                var suggestionsView = LayoutInflater.FromContext(parent.Context).Inflate(Resource.Layout.MainUserFeedbackCard, parent, false);
-                var userFeedbackViewHolder = new MainLogUserFeedbackViewHolder(suggestionsView, RatingViewModel);
-                return userFeedbackViewHolder;
-            }
-
-            return base.OnCreateViewHolder(parent, viewType);
-        }
-
-        public override int GetItemViewType(int position)
-        {
-            if (position == 0)
-                return SuggestionViewType;
-
-            if (isRatingViewVisible && position == 1)
-                return UserFeedbackViewType;
-
-            return base.GetItemViewType(position);
-        }
-
-        protected override MainLogSectionViewHolder CreateHeaderViewHolder(ViewGroup parent)
-            => new MainLogSectionViewHolder(LayoutInflater.FromContext(parent.Context)
-                .Inflate(Resource.Layout.MainLogHeader, parent, false));
 
         public void SetupRatingViewVisibility(bool isVisible)
         {
@@ -119,43 +179,7 @@ namespace Toggl.Droid.Adapters
                 return;
 
             isRatingViewVisible = isVisible;
-            NotifyDataSetChanged();
-        }
-
-        protected override MainLogCellViewHolder CreateItemViewHolder(ViewGroup parent)
-        {
-            var mainLogCellViewHolder = new MainLogCellViewHolder(LayoutInflater.FromContext(parent.Context).Inflate(Resource.Layout.MainLogCell, parent, false))
-            {
-                TappedSubject = timeEntryTappedSubject,
-                ContinueButtonTappedSubject = continueTimeEntrySubject,
-                ToggleGroupExpansionSubject = toggleGroupExpansionSubject
-            };
-
-            return mainLogCellViewHolder;
-        }
-
-        protected override IMainLogKey IdFor(MainLogItemViewModel item)
-            => item.Identity;
-
-        protected override IMainLogKey IdForSection(MainLogSectionViewModel section)
-            => section.Identity;
-
-        protected override TimeEntryViewData Wrap(MainLogItemViewModel item)
-            => new TimeEntryViewData(context, item as TimeEntryLogItemViewModel);
-
-        protected override MainLogSectionViewModel Wrap(MainLogSectionViewModel section)
-            => section;
-
-        protected override bool AreItemContentsTheSame(MainLogItemViewModel item1, MainLogItemViewModel item2)
-            => item1 == item2;
-
-        protected override bool AreSectionsRepresentationsTheSame(
-            MainLogSectionViewModel oneHeader,
-            MainLogSectionViewModel otherHeader,
-            IReadOnlyList<MainLogItemViewModel> one,
-            IReadOnlyList<MainLogItemViewModel> other)
-        {
-            return (oneHeader as DaySummaryViewModel).Title == (otherHeader as DaySummaryViewModel).Title && one.ContainsExactlyAll(other);
+            SetItems(Items);
         }
     }
 }

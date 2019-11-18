@@ -278,12 +278,12 @@ namespace Toggl.Core.UI.ViewModels
 
             MainLogItems = Observable
                 .CombineLatest(SuggestionsViewModel.Suggestions, TimeEntriesViewModel.TimeEntries, mergeMainLogItems)
-                .AsDriver(ImmutableList<MainLogSection>.Empty, schedulerProvider);;
+                .AsDriver(ImmutableList<MainLogSection>.Empty, schedulerProvider);
         }
 
         private IImmutableList<MainLogSection> mergeMainLogItems(IImmutableList<Suggestion> suggestions, IImmutableList<MainLogSection> timeEntries)
         {
-            var suggestionsSection = new MainLogSection(new SuggestionsSectionViewModel(), suggestions.Select(suggestionToMainLogItem));
+            var suggestionsSection = new MainLogSection(new SuggestionsSectionViewModel("Test Suggestions Title"), suggestions.Select(suggestionToMainLogItem));
             return timeEntries.Prepend(suggestionsSection).ToImmutableList();
         }
 

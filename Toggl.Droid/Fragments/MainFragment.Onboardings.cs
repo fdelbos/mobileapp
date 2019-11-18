@@ -13,6 +13,7 @@ using Toggl.Droid.Extensions;
 using Toggl.Droid.Extensions.Reactive;
 using Toggl.Droid.Helper;
 using Toggl.Droid.ViewHolders;
+using Toggl.Droid.ViewHolders.MainLog;
 using Toggl.Shared.Extensions;
 
 namespace Toggl.Droid.Fragments
@@ -172,7 +173,7 @@ namespace Toggl.Droid.Fragments
             for (var position = layoutManager.FindLastVisibleItemPosition(); position >= 0; position--)
             {
                 var viewType = mainRecyclerAdapter.GetItemViewType(position);
-                if (viewType != MainRecyclerAdapter.ItemViewType)
+                if (viewType != MainRecyclerAdapter.LogItemViewType)
                 {
                     continue;
                 }
