@@ -3,11 +3,11 @@ using Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity;
 
 namespace Toggl.Core.UI.ViewModels.TimeEntriesLog
 {
-    public class SuggestionsSectionViewModel : MainLogSectionViewModel
+    public class SuggestionsHeaderViewModel : MainLogSectionViewModel
     {
         public string Title { get; }
 
-        public SuggestionsSectionViewModel(string title)
+        public SuggestionsHeaderViewModel(string title)
         {
             Title = title;
         }
@@ -16,7 +16,7 @@ namespace Toggl.Core.UI.ViewModels.TimeEntriesLog
         {
             if (ReferenceEquals(null, logItem)) return false;
             if (ReferenceEquals(this, logItem)) return true;
-            if (!(logItem is SuggestionsSectionViewModel other)) return false;
+            if (!(logItem is SuggestionsHeaderViewModel other)) return false;
 
             return Title == other.Title;
         }

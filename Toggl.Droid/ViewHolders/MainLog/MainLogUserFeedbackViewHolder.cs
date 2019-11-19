@@ -6,6 +6,7 @@ using Android.Widget;
 using System;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog;
@@ -66,62 +67,62 @@ namespace Toggl.Droid.ViewHolders.MainLog
 
         protected override void UpdateView()
         {
-            // TODO
-//            Item.Impression
-//                .Select(callToActionTitle)
-//                .Subscribe(impressionTitle.Rx().TextObserver())
-//                .DisposedBy(disposeBag);
-//
-//            Item.Impression
-//                .Select(callToActionDescription)
-//                .Subscribe(impressionDescription.Rx().TextObserver())
-//                .DisposedBy(disposeBag);
-//
-//            Item.Impression
-//                .Select(callToActionButtonTitle)
-//                .Subscribe(rateButton.Rx().TextObserver())
-//                .DisposedBy(disposeBag);
-//
-//            Item.Impression
-//                .Select(impression => impression.HasValue)
-//                .Subscribe(impressionGroup.Rx().IsVisible())
-//                .DisposedBy(disposeBag);
-//
-//            Item.Impression
-//                .Select(impression => impression.HasValue)
-//                .Select(Invert)
-//                .Subscribe(questionGroup.Rx().IsVisible())
-//                .DisposedBy(disposeBag);
-//
-//            Item.Impression
-//               .Select(impression => impression ?? false)
-//               .Select(drawableFromImpression)
-//               .Subscribe(impressionThumbsImage.Rx().Image(itemView.Context))
-//               .DisposedBy(disposeBag);
-//
-//            thumbsUpButton.Rx().Tap()
-//                .Subscribe(() => Item.RegisterImpression(true))
-//                .DisposedBy(disposeBag);
-//
-//            yesText.Rx().Tap()
-//                .Subscribe(() => Item.RegisterImpression(true))
-//                .DisposedBy(disposeBag);
-//
-//            thumbsDownButton.Rx().Tap()
-//                .Subscribe(() => Item.RegisterImpression(false))
-//                .DisposedBy(disposeBag);
-//
-//            noText.Rx().Tap()
-//                .Subscribe(() => Item.RegisterImpression(false))
-//                .DisposedBy(disposeBag);
-//
-//            rateButton.Rx().Tap()
-//                .Subscribe(Item.PerformMainAction.Inputs)
-//                .DisposedBy(disposeBag);
-//
-//            laterButton.Rx().Tap()
-//                .Subscribe(Item.Dismiss)
-//                .DisposedBy(disposeBag);
+            var viewModel = ((UserFeedbackViewModel) Item).RatingViewModel;
+            viewModel.Impression
+                .Select(callToActionTitle)
+                .Subscribe(impressionTitle.Rx().TextObserver())
+                .DisposedBy(disposeBag);
+
+            viewModel.Impression
+                .Select(callToActionDescription)
+                .Subscribe(impressionDescription.Rx().TextObserver())
+                .DisposedBy(disposeBag);
+
+            viewModel.Impression
+                .Select(callToActionButtonTitle)
+                .Subscribe(rateButton.Rx().TextObserver())
+                .DisposedBy(disposeBag);
+
+            viewModel.Impression
+                .Select(impression => impression.HasValue)
+                .Subscribe(impressionGroup.Rx().IsVisible())
+                .DisposedBy(disposeBag);
+
+            viewModel.Impression
+                .Select(impression => impression.HasValue)
+                .Select(Invert)
+                .Subscribe(questionGroup.Rx().IsVisible())
+                .DisposedBy(disposeBag);
+
+            viewModel.Impression
+               .Select(impression => impression ?? false)
+               .Select(drawableFromImpression)
+               .Subscribe(impressionThumbsImage.Rx().Image(ItemView.Context))
+               .DisposedBy(disposeBag);
+
+            thumbsUpButton.Rx().Tap()
+                .Subscribe(() => viewModel.RegisterImpression(true))
+                .DisposedBy(disposeBag);
+
+            yesText.Rx().Tap()
+                .Subscribe(() => viewModel.RegisterImpression(true))
+                .DisposedBy(disposeBag);
+
+            thumbsDownButton.Rx().Tap()
+                .Subscribe(() => viewModel.RegisterImpression(false))
+                .DisposedBy(disposeBag);
+
+            noText.Rx().Tap()
+                .Subscribe(() => viewModel.RegisterImpression(false))
+                .DisposedBy(disposeBag);
+
+            rateButton.Rx().Tap()
+                .Subscribe(viewModel.PerformMainAction.Inputs)
+                .DisposedBy(disposeBag);
+
+            laterButton.Rx().Tap()
+                .Subscribe(viewModel.Dismiss)
+                .DisposedBy(disposeBag);
         }
 
         private int drawableFromImpression(bool impression)

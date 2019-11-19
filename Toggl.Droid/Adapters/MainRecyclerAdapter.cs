@@ -1,26 +1,18 @@
 using Android.Views;
 using System;
-using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using Toggl.Core;
 using Toggl.Core.Analytics;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog;
-using Toggl.Droid.ViewHelpers;
 using Toggl.Droid.ViewHolders.MainLog;
-using Android.Content;
-using Android.Content.Res;
 using Android.Runtime;
-using Android.Util;
-using Android.Widget;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity;
 using Toggl.Droid.ViewHolders;
-using Toggl.Shared.Extensions;
 
 namespace Toggl.Droid.Adapters
 {
@@ -28,14 +20,11 @@ namespace Toggl.Droid.Adapters
 
     public class MainRecyclerAdapter : BaseRecyclerAdapter<MainLogItemViewModel>
     {
-        public const int LogItemViewType = 1;
-        public const int SuggestionItemViewType = 2;
-        public const int DaySummarySectionViewType = 3;
-        public const int SuggestionSectionViewType = 4;
+        public const int TimeEntryLogItemViewType = 1;
+        public const int SuggestionLogItemViewType = 2;
+        public const int DaySummaryViewType = 3;
+        public const int SuggestionsHeaderViewType = 4;
         public const int UserFeedbackViewType = 5;
-
-        private readonly Context context;
-        private readonly ITimeService timeService;
 
         private bool isRatingViewVisible = false;
 
@@ -44,12 +33,10 @@ namespace Toggl.Droid.Adapters
 
         public IObservable<TimeEntryLogItemViewModel> TimeEntryTaps
             => timeEntryTappedSubject
-                .Do(a => Log.Debug("TimeEntryTaps", a.ToString()))
                 .Select(t => t as TimeEntryLogItemViewModel).AsObservable();
 
         public IObservable<SuggestionLogItemViewModel> SuggestionTaps
             => continueSuggestionTimeEntrySubject
-                .Do(a => Log.Debug("SuggestionTaps", a.ToString()))
                 .Select(t => t as SuggestionLogItemViewModel).AsObservable();
 
         public IObservable<ContinueTimeEntryInfo> ContinueTimeEntry
@@ -58,16 +45,16 @@ namespace Toggl.Droid.Adapters
         public IObservable<TimeEntryLogItemViewModel> DeleteTimeEntrySubject
             => deleteTimeEntrySubject.AsObservable();
 
+        public RatingViewModel UserFeedbackViewModel { get; set; }
+
         private readonly Subject<GroupId> toggleGroupExpansionSubject = new Subject<GroupId>();
         private readonly Subject<TimeEntryLogItemViewModel> deleteTimeEntrySubject = new Subject<TimeEntryLogItemViewModel>();
         private readonly Subject<MainLogItemViewModel> timeEntryTappedSubject = new Subject<MainLogItemViewModel>();
         private readonly Subject<ContinueTimeEntryInfo> continueTimeEntrySubject = new Subject<ContinueTimeEntryInfo>();
         private readonly Subject<MainLogItemViewModel> continueSuggestionTimeEntrySubject = new Subject<MainLogItemViewModel>();
 
-        public MainRecyclerAdapter(Context context, ITimeService timeService)
+        public MainRecyclerAdapter()
         {
-            this.context = context;
-            this.timeService = timeService;
         }
 
         public MainRecyclerAdapter(IntPtr javaReference, JniHandleOwnership transfer)
@@ -81,13 +68,13 @@ namespace Toggl.Droid.Adapters
             switch (item)
             {
                 case TimeEntryLogItemViewModel _:
-                    return LogItemViewType;
+                    return TimeEntryLogItemViewType;
                 case SuggestionLogItemViewModel _:
-                    return SuggestionItemViewType;
+                    return SuggestionLogItemViewType;
                 case DaySummaryViewModel _:
-                    return DaySummarySectionViewType;
-                case SuggestionsSectionViewModel _:
-                    return SuggestionSectionViewType;
+                    return DaySummaryViewType;
+                case SuggestionsHeaderViewModel _:
+                    return SuggestionsHeaderViewType;
                 case UserFeedbackViewModel _:
                     return UserFeedbackViewType;
                 default:
@@ -100,7 +87,7 @@ namespace Toggl.Droid.Adapters
         {
             switch (viewType)
             {
-                case LogItemViewType:
+                case TimeEntryLogItemViewType:
                     var logItemView = LayoutInflater.FromContext(parent.Context)
                         .Inflate(Resource.Layout.MainLogCell, parent, false);
                     var mainLogCellViewHolder = new MainLogCellViewHolder(logItemView)
@@ -110,7 +97,7 @@ namespace Toggl.Droid.Adapters
                         ToggleGroupExpansionSubject = toggleGroupExpansionSubject
                     };
                     return mainLogCellViewHolder;
-                case SuggestionItemViewType:
+                case SuggestionLogItemViewType:
                     var suggestionsView = LayoutInflater.FromContext(parent.Context)
                         .Inflate(Resource.Layout.MainSuggestionsCard, parent, false);
                     var mainLogSuggestionItemViewHolder = new MainLogSuggestionItemViewHolder(suggestionsView)
@@ -118,16 +105,17 @@ namespace Toggl.Droid.Adapters
                         TappedSubject = continueSuggestionTimeEntrySubject
                     };
                     return mainLogSuggestionItemViewHolder;
-                case DaySummarySectionViewType:
+                case DaySummaryViewType:
                     var sectionView = LayoutInflater.FromContext(parent.Context)
-                        .Inflate(Resource.Layout.MainLogHeader, parent, false);
+                        .Inflate(Resource.Layout.MainLogDayHeader, parent, false);
                     return new MainLogSectionViewHolder(sectionView);
-                case SuggestionSectionViewType:
+                case SuggestionsHeaderViewType:
                     var suggestionsSectionView = LayoutInflater.FromContext(parent.Context)
                         .Inflate(Resource.Layout.MainLogSuggestionsHeader, parent, false);
                     return new MainLogSuggestionSectionViewHolder(suggestionsSectionView);
                 case UserFeedbackViewType:
-                    var userFeedbackView = LayoutInflater.FromContext(parent.Context).Inflate(Resource.Layout.MainUserFeedbackCard, parent, false);
+                    var userFeedbackView = LayoutInflater.FromContext(parent.Context)
+                        .Inflate(Resource.Layout.MainUserFeedbackCard, parent, false);
                     return new MainLogUserFeedbackViewHolder(userFeedbackView);
                 default:
                     throw new Exception("Invalid view type");
@@ -142,12 +130,11 @@ namespace Toggl.Droid.Adapters
 
         protected override void SetItems(IImmutableList<MainLogItemViewModel> newItems)
         {
-
             if (isRatingViewVisible && Items.Count > 0)
             {
                 var ratingIndex = newItems.Select((value, index) => new {index, value})
                     .Single(p => p.value is DaySummaryViewModel)?.index ?? 0;
-                base.SetItems(newItems.Insert(ratingIndex, new UserFeedbackViewModel()));
+                base.SetItems(newItems.Insert(ratingIndex, new UserFeedbackViewModel(UserFeedbackViewModel)));
             }
             else
             {

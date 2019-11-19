@@ -283,7 +283,7 @@ namespace Toggl.Core.UI.ViewModels
 
         private IImmutableList<MainLogSection> mergeMainLogItems(IImmutableList<Suggestion> suggestions, IImmutableList<MainLogSection> timeEntries)
         {
-            var suggestionsSection = new MainLogSection(new SuggestionsSectionViewModel("Test Suggestions Title"), suggestions.Select(suggestionToMainLogItem));
+            var suggestionsSection = new MainLogSection(new SuggestionsHeaderViewModel("Test Suggestions Title"), suggestions.Select(suggestionToMainLogItem));
             return timeEntries.Prepend(suggestionsSection).ToImmutableList();
         }
 

@@ -173,7 +173,7 @@ namespace Toggl.Droid.Fragments
             for (var position = layoutManager.FindLastVisibleItemPosition(); position >= 0; position--)
             {
                 var viewType = mainRecyclerAdapter.GetItemViewType(position);
-                if (viewType != MainRecyclerAdapter.LogItemViewType)
+                if (viewType != MainRecyclerAdapter.TimeEntryLogItemViewType)
                 {
                     continue;
                 }

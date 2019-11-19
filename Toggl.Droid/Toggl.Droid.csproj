@@ -616,7 +616,6 @@
     </Compile>
     <Compile Include="Views\AutocompleteEditText.cs" />
     <Compile Include="Services\NotificationServiceAndroid.cs" />
-    <Compile Include="Adapters\ReactiveSectionedRecyclerAdapter.cs" />
     <Compile Include="Activities\SignUpActivity.ViewBinds.cs">
       <DependentUpon>SignUpActivity.cs</DependentUpon>
     </Compile>

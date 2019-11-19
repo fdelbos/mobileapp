@@ -4,7 +4,6 @@ using Android.Graphics.Drawables;
 using Android.OS;
 using Android.Support.Design.Widget;
 using Android.Support.V4.Content;
-using Android.Support.V7.App;
 using Android.Support.V7.Widget;
 using Android.Support.V7.Widget.Helper;
 using Android.Text;
@@ -32,12 +31,6 @@ using static Android.Content.Context;
 using static Toggl.Core.Sync.SyncProgress;
 using static Toggl.Core.Analytics.EditTimeEntryOrigin;
 using FoundationResources = Toggl.Shared.Resources;
-using System.Linq;
-using Android.Content;
-using Toggl.Droid.Widgets;
-using Android.Appwidget;
-using Toggl.Core.Suggestions;
-using Toggl.Droid.Services;
 
 namespace Toggl.Droid.Fragments
 {
@@ -144,9 +137,11 @@ namespace Toggl.Droid.Fragments
                 .Subscribe(onSyncChanged)
                 .DisposedBy(DisposeBag);
 
-            mainRecyclerAdapter = new MainRecyclerAdapter(Context, ViewModel.TimeService);
-//            mainRecyclerAdapter.SetupRatingViewVisibility(shouldShowRatingViewOnResume);
-            mainRecyclerAdapter.SetupRatingViewVisibility(true);
+            mainRecyclerAdapter = new MainRecyclerAdapter()
+            {
+                UserFeedbackViewModel = ViewModel.RatingViewModel
+            };
+            mainRecyclerAdapter.SetupRatingViewVisibility(shouldShowRatingViewOnResume);
             touchCallback = new MainRecyclerViewTouchCallback(mainRecyclerAdapter);
 
             setupRecycler();
