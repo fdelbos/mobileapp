@@ -13,7 +13,7 @@ using static AndroidX.AppCompat.App.AppCompatDelegate;
 
 namespace Toggl.Droid
 {
-    [Application(AllowBackup = false)]
+    [Application(AllowBackup = false, Debuggable = true)]
     public class TogglApplication : Application, ILifecycleObserver
     {
         private const int modeNightAutoBattery = 3;
