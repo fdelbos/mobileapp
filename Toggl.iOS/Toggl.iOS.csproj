@@ -2090,6 +2090,7 @@
     <Compile Include="ViewControllers\ReportsViewController.designer.cs">
       <DependentUpon>ReportsViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="Views\Reports\ReportsCollectionViewRegularLayout.cs" />
     <Compile Include="ViewSources\ReportsCollectionViewSource.cs" />
     <Compile Include="Cells\Reports\ReportsSummaryCollectionViewCell.cs" />
     <Compile Include="Cells\Reports\ReportsSummaryCollectionViewCell.designer.cs">
@@ -2107,6 +2108,7 @@
     <Compile Include="Cells\Reports\ReportsProjectCollectionViewCell.designer.cs">
       <DependentUpon>ReportsProjectCollectionViewCell.cs</DependentUpon>
     </Compile>
+    <Compile Include="Views\Reports\ReportsCollectionViewCompactLayout.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Core.UI\Toggl.Core.UI.csproj">
