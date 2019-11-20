@@ -87,21 +87,19 @@ namespace Toggl.Droid.Adapters
                 case TimeEntryLogItemViewType:
                     var logItemView = LayoutInflater.FromContext(parent.Context)
                         .Inflate(Resource.Layout.MainLogCell, parent, false);
-                    var mainLogCellViewHolder = new MainLogCellViewHolder(logItemView)
+                    return new MainLogCellViewHolder(logItemView)
                     {
                         EditTimeEntrySubject = editTimeEntrySubject,
                         ContinueButtonTappedSubject = continueTimeEntrySubject,
                         ToggleGroupExpansionSubject = toggleGroupExpansionSubject
                     };
-                    return mainLogCellViewHolder;
                 case SuggestionLogItemViewType:
                     var suggestionsView = LayoutInflater.FromContext(parent.Context)
                         .Inflate(Resource.Layout.MainSuggestionsCard, parent, false);
-                    var mainLogSuggestionItemViewHolder = new MainLogSuggestionItemViewHolder(suggestionsView)
+                    return new MainLogSuggestionItemViewHolder(suggestionsView)
                     {
                         ContinueSuggestionSubject = continueSuggestionSubject
                     };
-                    return mainLogSuggestionItemViewHolder;
                 case DaySummaryViewType:
                     var sectionView = LayoutInflater.FromContext(parent.Context)
                         .Inflate(Resource.Layout.MainLogHeader, parent, false);
