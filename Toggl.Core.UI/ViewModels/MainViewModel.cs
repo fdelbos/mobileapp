@@ -287,7 +287,11 @@ namespace Toggl.Core.UI.ViewModels
 
         private IImmutableList<MainLogSection> mergeMainLogItems(IImmutableList<Suggestion> suggestions, IImmutableList<MainLogSection> timeEntries)
         {
-            var suggestionsSection = new MainLogSection(new SuggestionsHeaderViewModel("Test Suggestions Title"), suggestions.Select(suggestionToMainLogItem));
+            if (suggestions.Count <= 0) return timeEntries.ToImmutableList();
+
+            var suggestionList = suggestions.Select(suggestionToMainLogItem);
+            var suggestionsHeaderViewModel = new SuggestionsHeaderViewModel(suggestions.Count > 1 ? Resources.WorkingOnThese : Resources.WorkingOnThis);
+            var suggestionsSection = new MainLogSection(suggestionsHeaderViewModel, suggestionList);
             return timeEntries.Prepend(suggestionsSection).ToImmutableList();
         }
 
@@ -438,7 +442,7 @@ namespace Toggl.Core.UI.ViewModels
                 .ContinueTimeEntry(continueInfo.Id, continueInfo.ContinueMode)
                 .Execute()
                 .ConfigureAwait(false);
-               
+
             analyticsService.TimeEntryContinued.Track(
                 originFromContinuationMode(continueInfo.ContinueMode),
                 continueInfo.IndexInLog,

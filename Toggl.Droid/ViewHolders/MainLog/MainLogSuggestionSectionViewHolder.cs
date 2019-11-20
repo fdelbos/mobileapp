@@ -26,7 +26,7 @@ namespace Toggl.Droid.ViewHolders.MainLog
 
         protected override void UpdateView()
         {
-            mainLogHeaderTitle.Text = Resources.WorkingOnThese;
+            mainLogHeaderTitle.Text = ((SuggestionsHeaderViewModel) Item).Title;
         }
     }
 }
