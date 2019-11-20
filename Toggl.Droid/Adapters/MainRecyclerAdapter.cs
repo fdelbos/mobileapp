@@ -13,10 +13,6 @@ using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity;
 using Toggl.Droid.ViewHolders;
-using Toggl.Shared.Extensions;
-using Android.Content;
-using AndroidX.RecyclerView.Widget;
-using Toggl.Core.UI.Helper;
 
 namespace Toggl.Droid.Adapters
 {
