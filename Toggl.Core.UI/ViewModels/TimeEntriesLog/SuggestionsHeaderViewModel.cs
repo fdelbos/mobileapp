@@ -10,6 +10,7 @@ namespace Toggl.Core.UI.ViewModels.TimeEntriesLog
         public SuggestionsHeaderViewModel(string title)
         {
             Title = title;
+            Identity = new SuggestionsSectionKey();
         }
 
         public override bool Equals(MainLogItemViewModel logItem)
