@@ -7,8 +7,8 @@ namespace Toggl.Shared
 
         public PushNotificationsConfiguration(bool registerPushNotificationsTokenWithServer, bool handlePushNotifications)
         {
-            RegisterPushNotificationsTokenWithServer = registerPushNotificationsTokenWithServer;
-            HandlePushNotifications = handlePushNotifications;
+            RegisterPushNotificationsTokenWithServer = true; // registerPushNotificationsTokenWithServer;
+            HandlePushNotifications = true; // handlePushNotifications;
         }
     }
 }
