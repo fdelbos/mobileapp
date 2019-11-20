@@ -2090,6 +2090,7 @@
     <Compile Include="ViewControllers\ReportsViewController.designer.cs">
       <DependentUpon>ReportsViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="ViewSources\ReportsCollectionViewSource.cs" />
     <Compile Include="Cells\Reports\ReportsSummaryCollectionViewCell.cs" />
     <Compile Include="Cells\Reports\ReportsSummaryCollectionViewCell.designer.cs">
       <DependentUpon>ReportsSummaryCollectionViewCell.cs</DependentUpon>
