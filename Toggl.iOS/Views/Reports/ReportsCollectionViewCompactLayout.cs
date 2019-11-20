@@ -11,6 +11,7 @@ namespace Toggl.iOS.Views.Reports
     {
         private const int horizontalCellInset = 16;
         private const int verticalCellInset = 12;
+        private const int numberOfNonProjectItems = 3;
 
         private List<UICollectionViewLayoutAttributes> layoutAttributes = new List<UICollectionViewLayoutAttributes>();
 
@@ -23,7 +24,7 @@ namespace Toggl.iOS.Views.Reports
                     + ReportsSummaryCollectionViewCell.Height
                     + ReportsBarChartCollectionViewCell.Height
                     + ReportsDonutChartCollectionViewCell.Height
-                    + ReportsProjectCollectionViewCell.Height * (CollectionView.NumberOfItemsInSection(0) - 3);
+                    + ReportsProjectCollectionViewCell.Height * (CollectionView.NumberOfItemsInSection(0) - numberOfNonProjectItems);
                 return new CGSize(width, height);
             }
         }
@@ -69,7 +70,7 @@ namespace Toggl.iOS.Views.Reports
                                 + ReportsSummaryCollectionViewCell.Height
                                 + ReportsBarChartCollectionViewCell.Height
                                 + ReportsDonutChartCollectionViewCell.Height
-                                + ReportsProjectCollectionViewCell.Height * (indexPath.Item - 3),
+                                + ReportsProjectCollectionViewCell.Height * (indexPath.Item - numberOfNonProjectItems),
                             columnWidth,
                             ReportsProjectCollectionViewCell.Height);
                         break;
