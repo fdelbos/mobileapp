@@ -2,6 +2,7 @@ using Foundation;
 using Toggl.iOS.Shared.Models;
 using Toggl.iOS.Shared.Extensions;
 using Toggl.Shared.Models;
+using System;
 
 namespace Toggl.iOS.Shared
 {
@@ -71,6 +72,18 @@ namespace Toggl.iOS.Shared
         {
             var dict = userDefaults.ValueForKey(new NSString(runningTimeEntry)) as NSDictionary;
             return getTimeEntryViewModel(dict);
+        }
+
+        public void ObserveChangesToCurrentRunningTimeEntry(Action<TimeEntryViewModel> update)
+        {
+            userDefaults.AddObserver(
+                runningTimeEntry,
+                NSKeyValueObservingOptions.OldNew,
+                change =>
+                {
+                    var dict = change.NewValue as NSDictionary;
+                    update(getTimeEntryViewModel(dict));
+                });
         }
 
         private ITimeEntry getTimeEntry(NSDictionary dict)

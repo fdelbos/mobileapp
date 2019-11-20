@@ -59,6 +59,8 @@ namespace Toggl.iOS.TimerWidgetExtension
             dataSource.Suggestions = suggestions;
             dataSource.Callback = continueSuggestion;
             SuggestionsTableView.Source = dataSource;
+
+            SharedStorage.Instance.ObserveChangesToCurrentRunningTimeEntry(renderRunningTimeEntry);
         }
 
         public override void ViewWillAppear(bool animated)
