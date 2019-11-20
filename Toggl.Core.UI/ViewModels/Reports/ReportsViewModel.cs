@@ -27,6 +27,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
 
         public IObservable<IEnumerable<IReportElement>> Elements { get; set; }
         public IObservable<bool> HasMultipleWorkspaces { get; set; }
+        public IObservable<string> CurrentWorkspaceName { get; private set; }
 
         public IObservable<string> FormattedTimeRange { get; set; }
 
@@ -54,6 +55,9 @@ namespace Toggl.Core.UI.ViewModels.Reports
                 .Select(w => w.Count() > 1)
                 .DistinctUntilChanged()
                 .AsDriver(schedulerProvider);
+
+            // TODO: Get the current WS name instead of this placeholder
+            CurrentWorkspaceName = Observable.Return("Workspace");
 
             SelectWorkspace = rxActionFactory.FromAsync(selectWorkspace);
             SelectTimeRange = rxActionFactory.FromAsync(selectTimeRange);
