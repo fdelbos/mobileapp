@@ -24,6 +24,8 @@ namespace Toggl.iOS.Shared
         private const string timeEntryServerDeletedAt = "ServerDeletedAt";
         private const string timeEntryAt = "At";
 
+        private IDisposable currentTimeEntryObservingDisposable;
+
         public void SetRunningTimeEntry(ITimeEntry timeEntry, string projectName = "", string projectColor = "", string taskName = "", string clientName = "")
         {
             if (timeEntry == null)
@@ -74,16 +76,24 @@ namespace Toggl.iOS.Shared
             return getTimeEntryViewModel(dict);
         }
 
-        public void ObserveChangesToCurrentRunningTimeEntry(Action<TimeEntryViewModel> update)
+        public void ObserveChangesToCurrentRunningTimeEntry(Action<TimeEntryViewModel> onUpdate)
         {
-            userDefaults.AddObserver(
-                runningTimeEntry,
-                NSKeyValueObservingOptions.OldNew,
-                change =>
-                {
-                    var dict = change.NewValue as NSDictionary;
-                    update(getTimeEntryViewModel(dict));
-                });
+            currentTimeEntryObservingDisposable?.Dispose();
+            currentTimeEntryObservingDisposable =
+                userDefaults.AddObserver(
+                    runningTimeEntry,
+                    NSKeyValueObservingOptions.New,
+                    change =>
+                    {
+                        var dict = change.NewValue as NSDictionary;
+                        onUpdate(getTimeEntryViewModel(dict));
+                    });
+        }
+
+        public void StopObservingChangesToCurrentRunningTimeEntry()
+        {
+            currentTimeEntryObservingDisposable?.Dispose();
+            currentTimeEntryObservingDisposable = null;
         }
 
         private ITimeEntry getTimeEntry(NSDictionary dict)

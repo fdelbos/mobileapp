@@ -97,8 +97,11 @@ namespace Toggl.iOS.TimerWidgetExtension
         public override void ViewDidDisappear(bool animated)
         {
             base.ViewDidDisappear(animated);
+
             elapsedTimeTimer?.Invalidate();
             elapsedTimeTimer = null;
+
+            SharedStorage.Instance.StopObservingChangesToCurrentRunningTimeEntry();
         }
 
         [Export("widgetActiveDisplayModeDidChange:withMaximumSize:")]
