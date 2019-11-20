@@ -111,7 +111,7 @@ namespace Toggl.Droid.Adapters
                     return mainLogSuggestionItemViewHolder;
                 case DaySummaryViewType:
                     var sectionView = LayoutInflater.FromContext(parent.Context)
-                        .Inflate(Resource.Layout.MainLogDayHeader, parent, false);
+                        .Inflate(Resource.Layout.MainLogHeader, parent, false);
                     return new MainLogSectionViewHolder(sectionView);
                 case SuggestionsHeaderViewType:
                     var suggestionsSectionView = LayoutInflater.FromContext(parent.Context)
