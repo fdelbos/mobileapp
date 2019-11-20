@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Reactive.Subjects;
 using Android.Graphics;
 using Android.Runtime;
 using Android.Views;
@@ -13,6 +14,8 @@ namespace Toggl.Droid.ViewHolders.MainLog
 {
     public sealed class MainLogSuggestionItemViewHolder : BaseRecyclerViewHolder<MainLogItemViewModel>
     {
+        public ISubject<SuggestionLogItemViewModel> ContinueSuggestionSubject { get; set; }
+
         private TextView descriptionLabel;
         private TextView projectLabel;
         private TextView clientLabel;
@@ -30,6 +33,7 @@ namespace Toggl.Droid.ViewHolders.MainLog
             descriptionLabel = ItemView.FindViewById<TextView>(Resource.Id.DescriptionLabel);
             projectLabel = ItemView.FindViewById<TextView>(Resource.Id.ProjectLabel);
             clientLabel = ItemView.FindViewById<TextView>(Resource.Id.ClientLabel);
+            ItemView.Click += onItemClick;
         }
 
         protected override void UpdateView()
@@ -45,6 +49,21 @@ namespace Toggl.Droid.ViewHolders.MainLog
 
             clientLabel.Text = viewModel.Suggestion.ClientName;
             clientLabel.Visibility = viewModel.Suggestion.HasProject.ToVisibility();
+        }
+
+        private void onItemClick(object sender, EventArgs e)
+        {
+            ContinueSuggestionSubject.OnNext((SuggestionLogItemViewModel) Item);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+
+            if (!disposing)
+                return;
+
+            ItemView.Click -= onItemClick;
         }
 
         [Conditional("DEBUG")]

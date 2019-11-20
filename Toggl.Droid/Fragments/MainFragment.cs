@@ -149,7 +149,7 @@ namespace Toggl.Droid.Fragments
                 .Subscribe(ViewModel.TimeEntriesViewModel.ToggleGroupExpansion.Inputs)
                 .DisposedBy(DisposeBag);
 
-            mainRecyclerAdapter.TimeEntryTaps
+            mainRecyclerAdapter.EditTimeEntry
                 .Select(editEventInfo)
                 .Subscribe(ViewModel.SelectTimeEntry.Inputs)
                 .DisposedBy(DisposeBag);
@@ -163,7 +163,7 @@ namespace Toggl.Droid.Fragments
                 .Subscribe(ViewModel.TimeEntriesViewModel.DelayDeleteTimeEntries.Inputs)
                 .DisposedBy(DisposeBag);
 
-            mainRecyclerAdapter.SuggestionTaps
+            mainRecyclerAdapter.ContinueSuggestion
                 .Select(vm => vm.Suggestion)
                 .Subscribe(ViewModel.SuggestionsViewModel.StartTimeEntry.Inputs)
                 .DisposedBy(DisposeBag);

@@ -30,18 +30,14 @@ namespace Toggl.Droid.Adapters
         public const int SuggestionsHeaderViewType = 4;
         public const int UserFeedbackViewType = 5;
 
-        private bool isRatingViewVisible = false;
+        private bool isRatingViewVisible;
+        public RatingViewModel UserFeedbackViewModel { get; set; }
+
+        public IObservable<TimeEntryLogItemViewModel> EditTimeEntry
+            => editTimeEntrySubject.AsObservable();
 
         public IObservable<GroupId> ToggleGroupExpansion
             => toggleGroupExpansionSubject.AsObservable();
-
-        public IObservable<TimeEntryLogItemViewModel> TimeEntryTaps
-            => timeEntryTappedSubject
-                .Select(t => t as TimeEntryLogItemViewModel).AsObservable();
-
-        public IObservable<SuggestionLogItemViewModel> SuggestionTaps
-            => continueSuggestionTimeEntrySubject
-                .Select(t => t as SuggestionLogItemViewModel).AsObservable();
 
         public IObservable<ContinueTimeEntryInfo> ContinueTimeEntry
             => continueTimeEntrySubject.AsObservable();
@@ -49,13 +45,14 @@ namespace Toggl.Droid.Adapters
         public IObservable<TimeEntryLogItemViewModel> DeleteTimeEntrySubject
             => deleteTimeEntrySubject.AsObservable();
 
-        public RatingViewModel UserFeedbackViewModel { get; set; }
+        public IObservable<SuggestionLogItemViewModel> ContinueSuggestion
+            => continueSuggestionSubject.AsObservable();
 
+        private readonly Subject<TimeEntryLogItemViewModel> editTimeEntrySubject = new Subject<TimeEntryLogItemViewModel>();
         private readonly Subject<GroupId> toggleGroupExpansionSubject = new Subject<GroupId>();
         private readonly Subject<TimeEntryLogItemViewModel> deleteTimeEntrySubject = new Subject<TimeEntryLogItemViewModel>();
-        private readonly Subject<MainLogItemViewModel> timeEntryTappedSubject = new Subject<MainLogItemViewModel>();
         private readonly Subject<ContinueTimeEntryInfo> continueTimeEntrySubject = new Subject<ContinueTimeEntryInfo>();
-        private readonly Subject<MainLogItemViewModel> continueSuggestionTimeEntrySubject = new Subject<MainLogItemViewModel>();
+        private readonly Subject<SuggestionLogItemViewModel> continueSuggestionSubject = new Subject<SuggestionLogItemViewModel>();
 
         public MainRecyclerAdapter()
         {
@@ -96,7 +93,7 @@ namespace Toggl.Droid.Adapters
                         .Inflate(Resource.Layout.MainLogCell, parent, false);
                     var mainLogCellViewHolder = new MainLogCellViewHolder(logItemView)
                     {
-                        TappedSubject = timeEntryTappedSubject,
+                        EditTimeEntrySubject = editTimeEntrySubject,
                         ContinueButtonTappedSubject = continueTimeEntrySubject,
                         ToggleGroupExpansionSubject = toggleGroupExpansionSubject
                     };
@@ -106,7 +103,7 @@ namespace Toggl.Droid.Adapters
                         .Inflate(Resource.Layout.MainSuggestionsCard, parent, false);
                     var mainLogSuggestionItemViewHolder = new MainLogSuggestionItemViewHolder(suggestionsView)
                     {
-                        TappedSubject = continueSuggestionTimeEntrySubject
+                        ContinueSuggestionSubject = continueSuggestionSubject
                     };
                     return mainLogSuggestionItemViewHolder;
                 case DaySummaryViewType:

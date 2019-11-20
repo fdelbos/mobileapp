@@ -41,6 +41,7 @@ namespace Toggl.Droid.ViewHolders.MainLog
 
         public bool CanSync => ((TimeEntryLogItemViewModel) Item).CanContinue;
         public View MainLogContentView { get; private set; }
+        public ISubject<TimeEntryLogItemViewModel> EditTimeEntrySubject { get; set; }
         public Subject<ContinueTimeEntryInfo> ContinueButtonTappedSubject { get; set; }
         public Subject<GroupId> ToggleGroupExpansionSubject { get; set; }
 
@@ -80,12 +81,18 @@ namespace Toggl.Droid.ViewHolders.MainLog
             MainLogContentView = ItemView.FindViewById(Resource.Id.MainLogContentView);
 
             groupExpansionButton = ItemView.FindViewById(TimeEntriesLogCellToggleExpansionButton);
+            ItemView.Click += onItemClick;
             timeEntriesLogCellContinueButton.Click += onContinueClick;
             groupExpansionButton.Click += onExpansionClick;
 
             mainLogBackgroundContinue.Text = Shared.Resources.Continue;
             mainLogBackgroundDelete.Text = Shared.Resources.Delete;
             addDescriptionLabel.Text = Shared.Resources.AddDescription;
+        }
+
+        private void onItemClick(object sender, EventArgs e)
+        {
+            EditTimeEntrySubject.OnNext((TimeEntryLogItemViewModel) Item);
         }
 
         private void onExpansionClick(object sender, EventArgs e)
@@ -233,6 +240,7 @@ namespace Toggl.Droid.ViewHolders.MainLog
             if (!disposing)
                 return;
 
+            ItemView.Click -= onItemClick;
             timeEntriesLogCellContinueButton.Click -= onContinueClick;
             groupExpansionButton.Click -= onExpansionClick;
         }
