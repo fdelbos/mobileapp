@@ -14,10 +14,10 @@ namespace Toggl.iOS.ViewSources
 
         private ImmutableList<IReportElement> elements;
 
-        private const string summaryCellIdentifier = "summaryCellIdentifier";
-        private const string barChartCellIdentifier = "barChartCellIdentifier";
-        private const string donutChartCellIdentifier = "donutChartCellIdentifier";
-        private const string projectCellIdentifier = "projectCellIdentifier";
+        private const string summaryCellIdentifier = nameof(summaryCellIdentifier);
+        private const string barChartCellIdentifier = nameof(barChartCellIdentifier);
+        private const string donutChartCellIdentifier = nameof(donutChartCellIdentifier);
+        private const string projectCellIdentifier = nameof(projectCellIdentifier);
 
         public ReportsCollectionViewSource(UICollectionView collectionView)
         {
