@@ -239,8 +239,6 @@ namespace Toggl.iOS.ViewControllers
                 // tl;dr There might be false positives, but it's not a big deal - this is our best effort.
                 manuallyUpdateDescriptionText(textFieldInfo);
             }
-
-            updatePlaceholder();
         }
 
         private void manuallyUpdateDescriptionText(TextFieldInfo textFieldInfo)
