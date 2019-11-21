@@ -62,7 +62,6 @@ namespace Toggl.Droid.ViewHolders.MainLog
             yesText.Text = Shared.Resources.RatingYes;
             noText.Text = Shared.Resources.RatingNotReally;
             laterButton.Text = Shared.Resources.Later;
-
         }
 
         protected override void UpdateView()
