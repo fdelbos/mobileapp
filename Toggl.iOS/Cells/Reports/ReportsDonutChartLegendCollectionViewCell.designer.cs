@@ -8,8 +8,8 @@ using Foundation;
 
 namespace Toggl.iOS.Cells.Reports
 {
-    [Register("ReportsProjectCollectionViewCell")]
-    partial class ReportsProjectCollectionViewCell
+    [Register("ReportsDonutChartLegendCollectionViewCell")]
+    partial class ReportsDonutChartLegendCollectionViewCell
     {
         void ReleaseDesignerOutlets()
         {

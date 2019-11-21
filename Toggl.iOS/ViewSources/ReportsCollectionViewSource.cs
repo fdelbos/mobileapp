@@ -17,7 +17,7 @@ namespace Toggl.iOS.ViewSources
         private const string summaryCellIdentifier = nameof(summaryCellIdentifier);
         private const string barChartCellIdentifier = nameof(barChartCellIdentifier);
         private const string donutChartCellIdentifier = nameof(donutChartCellIdentifier);
-        private const string projectCellIdentifier = nameof(projectCellIdentifier);
+        private const string donutChartLegendCellIdentifier = nameof(donutChartLegendCellIdentifier);
 
         public ReportsCollectionViewSource(UICollectionView collectionView)
         {
@@ -26,7 +26,7 @@ namespace Toggl.iOS.ViewSources
             collectionView.RegisterNibForCell(ReportsSummaryCollectionViewCell.Nib, summaryCellIdentifier);
             collectionView.RegisterNibForCell(ReportsBarChartCollectionViewCell.Nib, barChartCellIdentifier);
             collectionView.RegisterNibForCell(ReportsDonutChartCollectionViewCell.Nib, donutChartCellIdentifier);
-            collectionView.RegisterNibForCell(ReportsProjectCollectionViewCell.Nib, projectCellIdentifier);
+            collectionView.RegisterNibForCell(ReportsDonutChartLegendCollectionViewCell.Nib, donutChartLegendCellIdentifier);
         }
 
         public void SetNewElements(IImmutableList<IReportElement> elements)
@@ -56,7 +56,7 @@ namespace Toggl.iOS.ViewSources
                     cell.BackgroundColor = UIColor.SystemRedColor;
                     return cell;
                 default:
-                    cell = collectionView.DequeueReusableCell(projectCellIdentifier, indexPath) as UICollectionViewCell;
+                    cell = collectionView.DequeueReusableCell(donutChartLegendCellIdentifier, indexPath) as UICollectionViewCell;
                     // TODO: populate cell
                     cell.BackgroundColor = UIColor.SystemYellowColor;
                     return cell;

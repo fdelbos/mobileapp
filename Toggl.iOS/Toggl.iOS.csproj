@@ -1479,7 +1479,7 @@
     <InterfaceDefinition Include="Cells\Reports\ReportsSummaryCollectionViewCell.xib" />
     <InterfaceDefinition Include="Cells\Reports\ReportsBarChartCollectionViewCell.xib" />
     <InterfaceDefinition Include="Cells\Reports\ReportsDonutChartCollectionViewCell.xib" />
-    <InterfaceDefinition Include="Cells\Reports\ReportsProjectCollectionViewCell.xib" />
+    <InterfaceDefinition Include="Cells\Reports\ReportsDonutChartLegendCollectionViewCell.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -2104,9 +2104,9 @@
     <Compile Include="Cells\Reports\ReportsDonutChartCollectionViewCell.designer.cs">
       <DependentUpon>ReportsDonutChartCollectionViewCell.cs</DependentUpon>
     </Compile>
-    <Compile Include="Cells\Reports\ReportsProjectCollectionViewCell.cs" />
-    <Compile Include="Cells\Reports\ReportsProjectCollectionViewCell.designer.cs">
-      <DependentUpon>ReportsProjectCollectionViewCell.cs</DependentUpon>
+    <Compile Include="Cells\Reports\ReportsDonutChartLegendCollectionViewCell.cs" />
+    <Compile Include="Cells\Reports\ReportsDonutChartLegendCollectionViewCell.designer.cs">
+      <DependentUpon>ReportsDonutChartLegendCollectionViewCell.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\Reports\ReportsCollectionViewCompactLayout.cs" />
   </ItemGroup>
