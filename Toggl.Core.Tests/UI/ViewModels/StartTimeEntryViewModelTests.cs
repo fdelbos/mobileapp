@@ -463,10 +463,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                     await ViewModel.Initialize(DefaultParameter);
 
-                    ViewModel.SetTextSpans.ExecuteSequentally(
-                        ImmutableList.Create<ISpan>(projectSpan),
-                        ImmutableList.Create<ISpan>(projectSpan, querySpan)
-                    ).Subscribe();
+                    ViewModel.SetTextSpans(ImmutableList.Create<ISpan>(projectSpan));
+                    ViewModel.SetTextSpans(ImmutableList.Create<ISpan>(projectSpan, querySpan));
 
                     TestScheduler.Start();
                     observer.LastEmittedValue()
@@ -485,10 +483,9 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     var observer = TestScheduler.CreateObserver<CollectionSections>();
                     ViewModel.Suggestions.Subscribe(observer);
 
-                    ViewModel.SetTextSpans.ExecuteWithCompletion(ImmutableList.Create<ISpan>(projectSpan))
-                        .PrependAction(ViewModel.ToggleTagSuggestions)
-                        .PrependAction(ViewModel.SetTextSpans, ImmutableList.Create<ISpan>(projectSpan, querySpan))
-                        .Subscribe();
+                    ViewModel.SetTextSpans(ImmutableList.Create<ISpan>(projectSpan));
+                    ViewModel.ToggleTagSuggestions.ExecuteWithCompletion();
+                    ViewModel.SetTextSpans(ImmutableList.Create<ISpan>(projectSpan, querySpan));
 
                     TestScheduler.Start();
                     observer.LastEmittedValue()
@@ -643,10 +640,9 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 InteractorFactory.GetProjectById(Arg.Is(projectId)).Execute()
                     .Returns(Observable.Return(project));
 
-                ViewModel.SelectSuggestion.ExecuteWithCompletion(new ProjectSuggestion(project))
-                    .PrependAction(ViewModel.SetTextSpans, ImmutableList.Create<ISpan>(querySpan, projectSpan))
-                    .PrependAction(ViewModel.SelectSuggestion, tagSuggestion)
-                    .Subscribe();
+                ViewModel.SelectSuggestion.ExecuteWithCompletion(new ProjectSuggestion(project));
+                ViewModel.SetTextSpans(ImmutableList.Create<ISpan>(querySpan, projectSpan));
+                ViewModel.SelectSuggestion.ExecuteWithCompletion(tagSuggestion);
 
                 TestScheduler.Start();
                 InteractorFactory
@@ -979,7 +975,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Suggestions.Subscribe();
 
                 ViewModel.Initialize(DefaultParameter);
-                ViewModel.SetTextSpans.Execute(ImmutableList.Create<ISpan>(new QueryTextSpan(description, description.Length)));
+                ViewModel.SetTextSpans(ImmutableList.Create<ISpan>(new QueryTextSpan(description, description.Length)));
 
                 ViewModel.ToggleProjectSuggestions.Execute();
 
@@ -1097,11 +1093,9 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Initialize(DefaultParameter);
                 ViewModel.Suggestions.Subscribe();
 
-                ViewModel.SetTextSpans.ExecuteSequentally(
-                    ImmutableList.Create<ISpan>(new ProjectSpan(ProjectId, ProjectName, ProjectColor)),
-                    ImmutableList.Create<ISpan>(new QueryTextSpan(description, description.Length)))
-                    .PrependAction(ViewModel.ToggleTagSuggestions)
-                    .Subscribe();
+                ViewModel.SetTextSpans(ImmutableList.Create<ISpan>(new ProjectSpan(ProjectId, ProjectName, ProjectColor)));
+                ViewModel.SetTextSpans(ImmutableList.Create<ISpan>(new QueryTextSpan(description, description.Length)));
+                ViewModel.ToggleTagSuggestions.ExecuteWithCompletion();
 
                 TestScheduler.Start();
 
@@ -2051,14 +2045,12 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.Suggestions.Subscribe();
 
                 ViewModel.Initialize(DefaultParameter).Wait();
-                ViewModel.SetTextSpans.ExecuteSequentally(
-                    ImmutableList.Create<ISpan>(new QueryTextSpan(text, text.Length)),
-                    ImmutableList.Create<ISpan>(new QueryTextSpan(text, 0))
-                ).Subscribe();
+                ViewModel.SetTextSpans(ImmutableList.Create<ISpan>(new QueryTextSpan(text, text.Length)));
+                ViewModel.SetTextSpans(ImmutableList.Create<ISpan>(new QueryTextSpan(text, 0)));
 
                 TestScheduler.Start();
 
-                ViewModel.SetTextSpans.Execute(ImmutableList.Create<ISpan>(new QueryTextSpan("x" + text, 1)));
+                ViewModel.SetTextSpans(ImmutableList.Create<ISpan>(new QueryTextSpan("x" + text, 1)));
 
                 TestScheduler.Start();
                 await interactor.Received().Execute();
@@ -2131,10 +2123,9 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     .Returns(Observable.Return(tag));
                 await ViewModel.Initialize(DefaultParameter);
 
-                ViewModel.SetTextSpans.ExecuteWithCompletion(
-                        ImmutableList.Create<ISpan>(new QueryTextSpan($"{QuerySymbols.Tags}{query}", 1)))
-                    .PrependAction(ViewModel.SelectSuggestion, new TagSuggestion(tag))
-                    .Subscribe();
+                ViewModel.SetTextSpans(
+                        ImmutableList.Create<ISpan>(new QueryTextSpan($"{QuerySymbols.Tags}{query}", 1)));
+                ViewModel.SelectSuggestion.ExecuteWithCompletion(new TagSuggestion(tag));
 
                 TestScheduler.Start();
                 var items = observer.LastEmittedValue().SelectMany(s => s.Items);
@@ -2146,8 +2137,10 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
     public static class TestExtensions
     {
-        public static IObservable<Unit> OnTextFieldInfoFromView(this StartTimeEntryViewModel viewModel, params ISpan[] spans)
-            => viewModel.SetTextSpans.ExecuteWithCompletion(spans.ToImmutableList());
+        public static void OnTextFieldInfoFromView(this StartTimeEntryViewModel viewModel,params ISpan[] spans)
+        {
+            viewModel.SetTextSpans(spans.ToImmutableList());
+        }
 
         public static QueryTextSpan GetQuerySpan(this TextFieldInfo textFieldInfo)
             => textFieldInfo.Spans.OfType<QueryTextSpan>().Single();
