@@ -65,7 +65,7 @@ namespace Toggl.Droid.Adapters
         {
             var inflater = LayoutInflater.From(parent.Context);
             var viewHolder = CreateViewHolder(parent, inflater, viewType);
-            viewHolder.ContinueSuggestionSubject = itemTapSubject;
+            viewHolder.TappedSubject = itemTapSubject;
             return viewHolder;
         }
 

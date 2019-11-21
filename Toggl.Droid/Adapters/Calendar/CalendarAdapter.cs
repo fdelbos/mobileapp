@@ -98,7 +98,7 @@ namespace Toggl.Droid.Adapters.Calendar
                 case anchoredViewType:
                     return new CalendarEntryViewHolder(LayoutInflater.From(parent.Context).Inflate(Resource.Layout.CalendarEntryCell, parent, false))
                     {
-                        ContinueSuggestionSubject = firstTapSubject
+                        TappedSubject = firstTapSubject
                     };
 
                 default:

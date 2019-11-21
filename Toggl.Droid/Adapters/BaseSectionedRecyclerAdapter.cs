@@ -85,12 +85,12 @@ namespace Toggl.Droid.Adapters
             if (ItemViewTypes.Contains(viewType))
             {
                 var itemViewHolder = CreateItemViewHolder(inflater, parent, viewType);
-                itemViewHolder.ContinueSuggestionSubject = itemTapSubject;
+                itemViewHolder.TappedSubject = itemTapSubject;
                 return itemViewHolder;
             }
 
             var headerViewHolder = CreateHeaderViewHolder(inflater, parent, viewType); ;
-            headerViewHolder.ContinueSuggestionSubject = headerTapSubject;
+            headerViewHolder.TappedSubject = headerTapSubject;
             return headerViewHolder;
         }
 
