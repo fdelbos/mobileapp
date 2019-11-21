@@ -15,7 +15,6 @@ namespace Toggl.Core.UI.ViewModels.TimeEntriesLog
         {
             RatingViewModel = ratingViewModel;
             Identity = new UserFeedbackKey();
-
         }
 
         public override bool Equals(MainLogItemViewModel logItem)
