@@ -456,6 +456,17 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.NavigationService);
             }
 
+            if (viewModelType == typeof(January2020CampaignViewModel))
+            {
+                return new January2020CampaignViewModel(
+                    dependencyContainer.OnboardingStorage,
+                    dependencyContainer.AnalyticsService,
+                    dependencyContainer.RemoteConfigService,
+                    dependencyContainer.PlatformInfo,
+                    dependencyContainer.SchedulerProvider,
+                    dependencyContainer.NavigationService);
+            }
+
             throw new InvalidOperationException($"Trying to locate ViewModel {viewModelType.Name} failed.");
         }
     }
