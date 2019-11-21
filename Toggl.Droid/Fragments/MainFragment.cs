@@ -40,7 +40,6 @@ namespace Toggl.Droid.Fragments
         private MainRecyclerAdapter mainRecyclerAdapter;
         private MainRecyclerViewTouchCallback touchCallback;
         private LinearLayoutManager layoutManager;
-        private bool shouldShowRatingViewOnResume;
         private ISubject<bool> visibilityChangedSubject = new BehaviorSubject<bool>(false);
         private IObservable<bool> visibilityChanged => visibilityChangedSubject.AsObservable();
 
@@ -241,11 +240,6 @@ namespace Toggl.Droid.Fragments
                 projectIsPlaceholder,
                 taskIsPlaceholder,
                 displayPlaceholders: true);
-        }
-
-        private void setupRatingViewVisibility(bool isVisible)
-        {
-            shouldShowRatingViewOnResume = isVisible;
         }
 
         public void SetFragmentIsVisible(bool isVisible)
