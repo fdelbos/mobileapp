@@ -620,7 +620,6 @@
     <Compile Include="ViewHolders\MainLog\MainLogSectionViewHolder.cs" />
     <Compile Include="ViewHolders\MainLog\MainLogSuggestionItemViewHolder.cs" />
     <Compile Include="ViewHolders\MainLog\MainLogSuggestionSectionViewHolder.cs" />
-    <Compile Include="ViewHolders\MainLog\MainLogSuggestionsListViewHolder.cs" />
     <Compile Include="ViewHolders\MainLog\MainLogUserFeedbackViewHolder.cs" />
     <Compile Include="ViewHolders\StartTimeEntry\SuggestionRecyclerViewHolder.cs" />
     <Compile Include="ViewHolders\StartTimeEntry\ProjectSuggestionViewHolder.cs" />
