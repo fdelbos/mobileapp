@@ -25,7 +25,7 @@ namespace Toggl.Core.UI.ViewModels.Reports
 
         private IInteractorFactory interactorFactory;
 
-        public IObservable<IEnumerable<IReportElement>> Elements { get; set; }
+        public IObservable<IImmutableList<IReportElement>> Elements { get; set; }
         public IObservable<bool> HasMultipleWorkspaces { get; set; }
         public IObservable<string> CurrentWorkspaceName { get; private set; }
 
@@ -162,7 +162,8 @@ namespace Toggl.Core.UI.ViewModels.Reports
                     return elements(new ReportNoDataElement());
 
                 return elements(
-                    new ReportSummaryElement(reportsTotal, summaryData),
+                    new ReportWorkspaceNameElement(filter.Workspace.Name),
+                    new ReportSummaryElement(summaryData),
                     new ReportBarChartElement(reportsTotal, summaryData),
                     new ReportDonutChartDonutElement(reportsTotal, summaryData));
             }
