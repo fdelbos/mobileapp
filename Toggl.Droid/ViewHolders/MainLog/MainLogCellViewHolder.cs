@@ -120,19 +120,21 @@ namespace Toggl.Droid.ViewHolders.MainLog
 
         private void onContinueClick(object sender, EventArgs e)
         {
-            var continueMode = ((TimeEntryLogItemViewModel) Item).IsTimeEntryGroupHeader
+            var timeEntryLogItemViewModel = (TimeEntryLogItemViewModel) Item;
+            var continueMode = timeEntryLogItemViewModel.IsTimeEntryGroupHeader
                 ? ContinueTimeEntryMode.TimeEntriesGroupContinueButton
                 : ContinueTimeEntryMode.SingleTimeEntryContinueButton;
 
-            ContinueButtonTappedSubject?.OnNext(new ContinueTimeEntryInfo(((TimeEntryLogItemViewModel) Item), continueMode));
+            ContinueButtonTappedSubject?.OnNext(new ContinueTimeEntryInfo(timeEntryLogItemViewModel, continueMode));
         }
 
         private ConstraintLayout.LayoutParams getDurationPaddingWidthDependentOnIcons()
         {
+            var timeEntryLogItemViewModel = (TimeEntryLogItemViewModel) Item;
             var whitePaddingWidth =
                 72
-                + (((TimeEntryLogItemViewModel) Item).IsBillable ? 22 : 0)
-                + (((TimeEntryLogItemViewModel) Item).HasTags ? 22 : 0);
+                + (timeEntryLogItemViewModel.IsBillable ? 22 : 0)
+                + (timeEntryLogItemViewModel.HasTags ? 22 : 0);
 
             var layoutParameters = (ConstraintLayout.LayoutParams)durationPadding.LayoutParameters;
             layoutParameters.Width = whitePaddingWidth.DpToPixels(ItemView.Context);
