@@ -208,16 +208,35 @@ namespace Toggl.iOS.ViewControllers
         {
             // When the user adds a token, then the cursor will be in an empty Text span. This is also
             // true when the description is totally empty, so we have to take care of this special case.            
-            var likelyJustAddedToken = textFieldInfo.Spans.Count > 1 && textFieldInfo.GetSpanWithCurrentTextCursor()?.Text.Length == 0;
-            if (likelyJustAddedToken)
+            var likelyJustAddedToken =
+                textFieldInfo.Spans.Count > 1
+                    && textFieldInfo.GetSpanWithCurrentTextCursor()?.Text.Length == 0;
+
+            // When the user tapps a button with the `@` or `#` symbol, we programatically adjust the description
+            // of the text field info object. We need to mirror this change by manually updating the text field text.
+            // When the user is typing letters or when he accepts autocorrect suggestions, the text view component
+            // already contains the same text as the text field info object at this point. Only when we add stuff
+            // to the text field info manually, there is an inconsistency at this point.
+            bool endsWithShortcutSymbol(string text)
+                => text != null && (text.EndsWith(QuerySymbols.Projects) || text.EndsWith(QuerySymbols.Tags));
+
+            var likelyASymbolWasAppended =
+                DescriptionTextView.AttributedText.Length == textFieldInfo.Description.Length - 1
+                    && endsWithShortcutSymbol(textFieldInfo.GetSpanWithCurrentTextCursor()?.Text);
+
+            // Unless the user adds a token (a tag or a project) or the user tapped a button which appends a `@` or `#`,
+            // we want to let the OS handle the rendering (adding a character or removing some characters is easy for iOS)
+            // but when the user adds a project or tag token, we must update the attributed text manually and
+            // also make sure that we don't run into some problems with autocorrect.
+            var needsManuallyUpdating = likelyJustAddedToken || likelyASymbolWasAppended;
+            if (needsManuallyUpdating)
             {
-                // Unless the user adds a token (a tag or a project), we want to let the OS handle the rendering
-                // (adding a character or removing some characters is easy for iOS)
-                // but when the user adds a project or tag token, we must update the attributed text manually and
-                // also make sure that we don't run into some problems with autocorrect. We don't want to do this
-                // every time, because it breaks the UX for example when the user holds the backspace key for a while,
-                // but if we call it sometimes when it looks like a token was just added but it actually wasn't,
-                // it's not a big deal and the user might not even notice. We're just doing our best to avoid it in most cases.
+                // We don't want to do this every time, because it might break the UX (for example when the user
+                // is holding the backspace key for a while) but if there is an extra manual update, it's not a big deal
+                // and the probably won't even notice. We're just doing our best to avoid it in most cases when it is
+                // unnecessary and do it in every case when we know it is necessary.
+
+                // tl;dr There might be false positives, but it's not a big deal - this is our best effort.
                 manuallyUpdateDescriptionText(textFieldInfo);
             }
 
