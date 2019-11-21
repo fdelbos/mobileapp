@@ -10,7 +10,7 @@ namespace Toggl.Droid.ViewHolders
     {
         private bool viewsAreInitialized = false;
 
-        public ISubject<T> ContinueSuggestionSubject { get; set; }
+        public ISubject<T> TappedSubject { get; set; }
 
         private T item;
         public T Item
@@ -55,7 +55,7 @@ namespace Toggl.Droid.ViewHolders
 
         protected virtual void OnItemViewClick(object sender, EventArgs args)
         {
-            ContinueSuggestionSubject?.OnNext(Item);
+            TappedSubject?.OnNext(Item);
         }
     }
 }
