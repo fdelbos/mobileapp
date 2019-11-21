@@ -12,7 +12,7 @@ namespace Toggl.iOS.ViewSources
     {
         private readonly UICollectionView collectionView;
 
-        private ImmutableList<IReportElement> elements;
+        private IImmutableList<IReportElement> elements;
 
         private const string summaryCellIdentifier = nameof(summaryCellIdentifier);
         private const string barChartCellIdentifier = nameof(barChartCellIdentifier);
@@ -29,9 +29,9 @@ namespace Toggl.iOS.ViewSources
             collectionView.RegisterNibForCell(ReportsProjectCollectionViewCell.Nib, projectCellIdentifier);
         }
 
-        public void SetNewElements(IEnumerable<IReportElement> elements)
+        public void SetNewElements(IImmutableList<IReportElement> elements)
         {
-            this.elements = elements.ToImmutableList();
+            this.elements = elements;
             collectionView.ReloadData();
         }
 
