@@ -200,7 +200,7 @@ namespace Toggl.iOS.ViewControllers
                 .Select(_ => DescriptionTextView.AttributedText) // Programatically changing the text doesn't send an event, that's why we do this, to get the last version of the text
                 .Do(updatePlaceholder)
                 .Select(text => text.AsSpans((int)DescriptionTextView.SelectedRange.Location).ToIImmutableList())
-                .Subscribe(ViewModel.SetTextSpans.Inputs)
+                .Subscribe(ViewModel.SetTextSpans)
                 .DisposedBy(DisposeBag);
         }
 
