@@ -140,7 +140,6 @@ namespace Toggl.Droid.Fragments
             {
                 UserFeedbackViewModel = ViewModel.RatingViewModel
             };
-            mainRecyclerAdapter.SetupRatingViewVisibility(shouldShowRatingViewOnResume);
             touchCallback = new MainRecyclerViewTouchCallback(mainRecyclerAdapter);
 
             setupRecycler();
@@ -250,7 +249,6 @@ namespace Toggl.Droid.Fragments
 
         private void setupRatingViewVisibility(bool isVisible)
         {
-            mainRecyclerAdapter.SetupRatingViewVisibility(isVisible);
             shouldShowRatingViewOnResume = isVisible;
         }
 

@@ -26,7 +26,6 @@ namespace Toggl.Droid.Adapters
         public const int SuggestionsHeaderViewType = 4;
         public const int UserFeedbackViewType = 5;
 
-        private bool isRatingViewVisible;
         public RatingViewModel UserFeedbackViewModel { get; set; }
 
         public IObservable<TimeEntryLogItemViewModel> EditTimeEntry
@@ -123,20 +122,6 @@ namespace Toggl.Droid.Adapters
             SetItems(flattenItems);
         }
 
-        protected override void SetItems(IImmutableList<MainLogItemViewModel> newItems)
-        {
-            if (isRatingViewVisible && Items.Count > 0)
-            {
-                var ratingIndex = newItems.Select((value, index) => new {index, value})
-                    .FirstOrDefault(p => p.value is DaySummaryViewModel)?.index ?? 0;
-                base.SetItems(newItems.Insert(ratingIndex, new UserFeedbackViewModel(UserFeedbackViewModel)));
-            }
-            else
-            {
-                base.SetItems(newItems);
-            }
-        }
-
         public void ContinueTimeEntryBySwiping(int position)
         {
             var continuedTimeEntry = GetItem(position) as TimeEntryLogItemViewModel;
@@ -153,15 +138,6 @@ namespace Toggl.Droid.Adapters
         {
             var deletedTimeEntry = GetItem(position) as TimeEntryLogItemViewModel;
             deleteTimeEntrySubject.OnNext(deletedTimeEntry);
-        }
-
-        public void SetupRatingViewVisibility(bool isVisible)
-        {
-            if (isRatingViewVisible == isVisible)
-                return;
-
-            isRatingViewVisible = isVisible;
-            SetItems(Items);
         }
     }
 }
