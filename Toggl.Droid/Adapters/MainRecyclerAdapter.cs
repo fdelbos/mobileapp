@@ -128,7 +128,7 @@ namespace Toggl.Droid.Adapters
             if (isRatingViewVisible && Items.Count > 0)
             {
                 var ratingIndex = newItems.Select((value, index) => new {index, value})
-                    .Single(p => p.value is DaySummaryViewModel)?.index ?? 0;
+                    .FirstOrDefault(p => p.value is DaySummaryViewModel)?.index ?? 0;
                 base.SetItems(newItems.Insert(ratingIndex, new UserFeedbackViewModel(UserFeedbackViewModel)));
             }
             else
