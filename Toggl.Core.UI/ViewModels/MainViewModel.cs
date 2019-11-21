@@ -39,6 +39,7 @@ using static Toggl.Core.Analytics.ContinueTimeEntryOrigin;
 namespace Toggl.Core.UI.ViewModels
 {
     using MainLogSection = AnimatableSectionModel<MainLogSectionViewModel, MainLogItemViewModel, IMainLogKey>;
+    using RatingSection = AnimatableSectionModel<MainLogSectionViewModel, MainLogItemViewModel, IMainLogKey>;
 
     [Preserve(AllMembers = true)]
     public sealed class MainViewModel : ViewModel
@@ -67,6 +68,8 @@ namespace Toggl.Core.UI.ViewModels
         private readonly CompositeDisposable disposeBag = new CompositeDisposable();
 
         private readonly ISubject<Unit> hideRatingView = new Subject<Unit>();
+
+        private readonly MainLogSection userFeedbackMainLogSection;
 
         public IObservable<bool> LogEmpty { get; }
         public IObservable<int> TimeEntriesCount { get; }
@@ -173,6 +176,9 @@ namespace Toggl.Core.UI.ViewModels
             ratingViewExperiment = new RatingViewExperiment(timeService, dataSource, onboardingStorage, remoteConfigService, updateRemoteConfigCacheService);
 
             SwipeActionsEnabled = userPreferences.SwipeActionsEnabled.AsDriver(schedulerProvider);
+
+            userFeedbackMainLogSection = new MainLogSection(new UserFeedbackViewModel(RatingViewModel),
+                Enumerable.Empty<UserFeedbackViewModel>());
         }
 
         public override async Task Initialize()
@@ -281,18 +287,25 @@ namespace Toggl.Core.UI.ViewModels
                 .DisposedBy(disposeBag);
 
             MainLogItems = Observable
-                .CombineLatest(SuggestionsViewModel.Suggestions, TimeEntriesViewModel.TimeEntries, mergeMainLogItems)
+                .CombineLatest(SuggestionsViewModel.Suggestions, TimeEntriesViewModel.TimeEntries, ShouldShowRatingView, mergeMainLogItems)
                 .AsDriver(ImmutableList<MainLogSection>.Empty, schedulerProvider);
         }
 
-        private IImmutableList<MainLogSection> mergeMainLogItems(IImmutableList<Suggestion> suggestions, IImmutableList<MainLogSection> timeEntries)
+        private IImmutableList<MainLogSection> mergeMainLogItems(IImmutableList<Suggestion> suggestions, IImmutableList<MainLogSection> timeEntries, bool shouldShowRatingView)
         {
-            if (suggestions.Count <= 0) return timeEntries.ToImmutableList();
+            if (suggestions.Count <= 0)
+            {
+                return shouldShowRatingView
+                    ? timeEntries.Prepend(userFeedbackMainLogSection).ToImmutableList()
+                    : timeEntries.ToImmutableList();
+            }
 
             var suggestionList = suggestions.Select(suggestionToMainLogItem);
             var suggestionsHeaderViewModel = new SuggestionsHeaderViewModel(suggestions.Count > 1 ? Resources.WorkingOnThese : Resources.WorkingOnThis);
             var suggestionsSection = new MainLogSection(suggestionsHeaderViewModel, suggestionList);
-            return timeEntries.Prepend(suggestionsSection).ToImmutableList();
+            return shouldShowRatingView
+                ? timeEntries.Prepend(userFeedbackMainLogSection).Prepend(suggestionsSection).ToImmutableList()
+                : timeEntries.Prepend(suggestionsSection).ToImmutableList();
         }
 
         private MainLogItemViewModel suggestionToMainLogItem(Suggestion suggestion, int position)

@@ -7,13 +7,15 @@ using Toggl.Shared.Extensions;
 
 namespace Toggl.Core.UI.ViewModels.TimeEntriesLog
 {
-    public class UserFeedbackViewModel : MainLogItemViewModel
+    public class UserFeedbackViewModel : MainLogSectionViewModel
     {
         public RatingViewModel RatingViewModel { get; }
 
         public UserFeedbackViewModel(RatingViewModel ratingViewModel)
         {
             RatingViewModel = ratingViewModel;
+            Identity = new UserFeedbackKey();
+
         }
 
         public override bool Equals(MainLogItemViewModel logItem)

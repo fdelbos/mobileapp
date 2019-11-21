@@ -215,10 +215,6 @@ namespace Toggl.Droid.Fragments
                 .Subscribe(onEmptyStateVisibilityChanged)
                 .DisposedBy(DisposeBag);
 
-            ViewModel.ShouldShowRatingView
-                .Subscribe(setupRatingViewVisibility)
-                .DisposedBy(DisposeBag);
-
             setupOnboardingSteps();
         }
 
