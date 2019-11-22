@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
 using Toggl.Core.DataSources;
@@ -24,6 +25,8 @@ namespace Toggl.Core.UI.ViewModels.Reports
         private DateTimeOffsetRange selectedTimeRange;
 
         private IInteractorFactory interactorFactory;
+
+        private readonly ISubject<string> currentWorkspaceNameSubject = new Subject<string>();
 
         public IObservable<IImmutableList<IReportElement>> Elements { get; set; }
         public IObservable<bool> HasMultipleWorkspaces { get; set; }
@@ -56,8 +59,11 @@ namespace Toggl.Core.UI.ViewModels.Reports
                 .DistinctUntilChanged()
                 .AsDriver(schedulerProvider);
 
-            // TODO: Get the current WS name instead of this placeholder
-            CurrentWorkspaceName = Observable.Return("Workspace");
+            CurrentWorkspaceName = currentWorkspaceNameSubject
+                .AsObservable()
+                .StartWith(string.Empty)
+                .DistinctUntilChanged()
+                .AsDriver(schedulerProvider);
 
             SelectWorkspace = rxActionFactory.FromAsync(selectWorkspace);
             SelectTimeRange = rxActionFactory.FromAsync(selectTimeRange);
@@ -148,6 +154,8 @@ namespace Toggl.Core.UI.ViewModels.Reports
         {
             try
             {
+                currentWorkspaceNameSubject.OnNext(filter.Workspace.Name);
+
                 var user = await interactorFactory.GetCurrentUser().Execute();
 
                 var reportsTotal = await interactorFactory
