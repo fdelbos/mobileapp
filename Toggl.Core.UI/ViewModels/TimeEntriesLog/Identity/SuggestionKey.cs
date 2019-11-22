@@ -9,6 +9,9 @@ namespace Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity
             this.suggestionId = suggestionId;
         }
 
+        public long Identifier()
+            => GetHashCode();
+
         public bool Equals(IMainLogKey otherKey)
             => otherKey is SuggestionKey other && suggestionId == other.suggestionId;
 

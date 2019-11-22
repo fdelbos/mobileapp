@@ -9,6 +9,9 @@ namespace Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity
             this.timeEntryId = timeEntryId;
         }
 
+        public long Identifier()
+            => GetHashCode();
+
         public bool Equals(IMainLogKey other)
             => other is SingleTimeEntryKey singleKey && timeEntryId == singleKey.timeEntryId;
 

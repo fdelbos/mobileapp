@@ -2,9 +2,8 @@ namespace Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity
 {
     public class SuggestionsSectionKey : IMainLogKey
     {
-        public SuggestionsSectionKey()
-        {
-        }
+        public long Identifier()
+            => GetHashCode();
 
         public bool Equals(IMainLogKey otherKey)
             => otherKey is SuggestionsSectionKey;
@@ -15,5 +14,8 @@ namespace Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity
             if (ReferenceEquals(this, obj)) return true;
             return obj is SuggestionsSectionKey other && Equals(other);
         }
+
+        public override int GetHashCode()
+            => 13853211;
     }
 }

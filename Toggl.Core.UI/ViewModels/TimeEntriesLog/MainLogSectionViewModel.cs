@@ -5,6 +5,5 @@ namespace Toggl.Core.UI.ViewModels.TimeEntriesLog
 {
     public abstract class MainLogSectionViewModel : MainLogItemViewModel
     {
-        public IMainLogKey Identity { get; protected set; }
     }
 }

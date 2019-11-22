@@ -11,6 +11,9 @@ namespace Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity
             this.date = date;
         }
 
+        public long Identifier()
+            => GetHashCode();
+
         public bool Equals(IMainLogKey other)
             => other is DayHeaderKey headerKey && date == headerKey.date;
 
