@@ -1480,6 +1480,8 @@
     <InterfaceDefinition Include="Cells\Reports\ReportsBarChartCollectionViewCell.xib" />
     <InterfaceDefinition Include="Cells\Reports\ReportsDonutChartCollectionViewCell.xib" />
     <InterfaceDefinition Include="Cells\Reports\ReportsDonutChartLegendCollectionViewCell.xib" />
+    <InterfaceDefinition Include="Cells\Reports\ReportsNoDataCollectionViewCell.xib" />
+    <InterfaceDefinition Include="Cells\Reports\ReportsErrorCollectionViewCell.xib" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -2109,6 +2111,14 @@
       <DependentUpon>ReportsDonutChartLegendCollectionViewCell.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\Reports\ReportsCollectionViewCompactLayout.cs" />
+    <Compile Include="Cells\Reports\ReportsNoDataCollectionViewCell.cs" />
+    <Compile Include="Cells\Reports\ReportsNoDataCollectionViewCell.designer.cs">
+      <DependentUpon>ReportsNoDataCollectionViewCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Cells\Reports\ReportsErrorCollectionViewCell.cs" />
+    <Compile Include="Cells\Reports\ReportsErrorCollectionViewCell.designer.cs">
+      <DependentUpon>ReportsErrorCollectionViewCell.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toggl.Core.UI\Toggl.Core.UI.csproj">
