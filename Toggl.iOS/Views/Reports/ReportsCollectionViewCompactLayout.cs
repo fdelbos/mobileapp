@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using CoreGraphics;
 using Foundation;
 using Toggl.iOS.Cells.Reports;
+using Toggl.iOS.ViewSources;
 using UIKit;
 
 namespace Toggl.iOS.Views.Reports
@@ -11,20 +12,32 @@ namespace Toggl.iOS.Views.Reports
     {
         private const int horizontalCellInset = 16;
         private const int verticalCellInset = 12;
-        private const int numberOfNonProjectItems = 3;
 
         private List<UICollectionViewLayoutAttributes> layoutAttributes = new List<UICollectionViewLayoutAttributes>();
+        private ReportsCollectionViewSource source;
+
+        public ReportsCollectionViewCompactLayout(ReportsCollectionViewSource source)
+        {
+            this.source = source;
+        }
 
         public override CGSize CollectionViewContentSize
         {
             get
             {
                 var width = CollectionView.Bounds.Width;
-                var height = verticalCellInset * 6
-                    + ReportsSummaryCollectionViewCell.Height
-                    + ReportsBarChartCollectionViewCell.Height
-                    + ReportsDonutChartCollectionViewCell.Height
-                    + ReportsProjectCollectionViewCell.Height * (CollectionView.NumberOfItemsInSection(0) - numberOfNonProjectItems);
+                var height = CollectionView.Bounds.Height;
+                if (source.HasDataToDisplay())
+                {
+                    height = verticalCellInset
+                        + ReportsSummaryCollectionViewCell.Height
+                        + verticalCellInset * 2
+                        + ReportsBarChartCollectionViewCell.Height
+                        + verticalCellInset * 2
+                        + ReportsDonutChartCollectionViewCell.Height
+                        + ReportsDonutChartLegendCollectionViewCell.Height * (CollectionView.NumberOfItemsInSection(0) - source.NumberOfDonutChartLegendItems())
+                        + verticalCellInset;
+                }
                 return new CGSize(width, height);
             }
         }
@@ -36,43 +49,56 @@ namespace Toggl.iOS.Views.Reports
             {
                 var indexPath = NSIndexPath.FromItemSection(i, 0);
                 UICollectionViewLayoutAttributes attributes = UICollectionViewLayoutAttributes.CreateForCell(indexPath);
-                switch (i)
+                var cellType = source.CellTypeAt(indexPath);
+                switch (cellType)
                 {
-                    case 0:
-                        // The reports summary cell
+                    case ReportsCollectionViewCell.Summary:
                         attributes.Frame = new CGRect(
                             horizontalCellInset,
                             verticalCellInset,
                             columnWidth,
                             ReportsSummaryCollectionViewCell.Height);
                         break;
-                    case 1:
-                        // The bar chart cell
+                    case ReportsCollectionViewCell.BarChart:
                         attributes.Frame = new CGRect(
                             horizontalCellInset,
-                            verticalCellInset * 3 + ReportsSummaryCollectionViewCell.Height,
+                            verticalCellInset
+                                + ReportsSummaryCollectionViewCell.Height
+                                + verticalCellInset * 2,
                             columnWidth,
                             ReportsBarChartCollectionViewCell.Height);
                         break;
-                    case 2:
-                        // The donut chart cell
+                    case ReportsCollectionViewCell.DonutChart:
                         attributes.Frame = new CGRect(
                             horizontalCellInset,
-                            verticalCellInset * 5 + ReportsSummaryCollectionViewCell.Height + ReportsBarChartCollectionViewCell.Height,
+                            verticalCellInset
+                                + ReportsSummaryCollectionViewCell.Height
+                                + verticalCellInset * 2
+                                + ReportsBarChartCollectionViewCell.Height
+                                + verticalCellInset * 2,
                             columnWidth,
                             ReportsDonutChartCollectionViewCell.Height);
                         break;
-                    default:
-                        // The project cells
+                    case ReportsCollectionViewCell.DonutChartLegend:
                         attributes.Frame = new CGRect(
                             horizontalCellInset,
-                            verticalCellInset * 5
+                            verticalCellInset
                                 + ReportsSummaryCollectionViewCell.Height
+                                + verticalCellInset * 2
                                 + ReportsBarChartCollectionViewCell.Height
+                                + verticalCellInset * 2
                                 + ReportsDonutChartCollectionViewCell.Height
-                                + ReportsProjectCollectionViewCell.Height * (indexPath.Item - numberOfNonProjectItems),
+                                + ReportsDonutChartLegendCollectionViewCell.Height * (indexPath.Item - source.NumberOfDonutChartLegendItems()),
                             columnWidth,
-                            ReportsProjectCollectionViewCell.Height);
+                            ReportsDonutChartLegendCollectionViewCell.Height);
+                        break;
+                    case ReportsCollectionViewCell.NoData:
+                    case ReportsCollectionViewCell.Error:
+                        attributes.Frame = new CGRect(
+                            CollectionViewContentSize.Width / 4,
+                            CollectionViewContentSize.Height / 4,
+                            CollectionViewContentSize.Width / 2,
+                            CollectionViewContentSize.Height / 2);
                         break;
                 }
                 layoutAttributes.Add(attributes);

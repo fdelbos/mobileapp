@@ -55,14 +55,14 @@ namespace Toggl.iOS.ViewControllers
                 .BindAction(ViewModel.SelectWorkspace)
                 .DisposedBy(DisposeBag);
 
-            regularLayout = new ReportsCollectionViewRegularLayout();
-            compactLayout = new ReportsCollectionViewCompactLayout();
             var source = new ReportsCollectionViewSource(CollectionView);
+            CollectionView.Source = source;
+            regularLayout = new ReportsCollectionViewRegularLayout(source);
+            compactLayout = new ReportsCollectionViewCompactLayout(source);
             if (TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Regular)
                 CollectionView.SetCollectionViewLayout(regularLayout, false);
             else
                 CollectionView.SetCollectionViewLayout(compactLayout, false);
-            CollectionView.Source = source;
 
             ViewModel.Elements
                 .Subscribe(source.SetNewElements)

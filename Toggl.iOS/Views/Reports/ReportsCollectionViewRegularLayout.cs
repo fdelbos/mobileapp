@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using CoreGraphics;
 using Foundation;
 using Toggl.iOS.Cells.Reports;
+using Toggl.iOS.ViewSources;
 using UIKit;
 
 namespace Toggl.iOS.Views.Reports
@@ -12,9 +13,14 @@ namespace Toggl.iOS.Views.Reports
         private const int maxWidth = 834;
         private const int horizontalCellInset = 8;
         private const int verticalCellInset = 12;
-        private const int numberOfNonProjectItems = 3;
 
         private List<UICollectionViewLayoutAttributes> layoutAttributes = new List<UICollectionViewLayoutAttributes>();
+        private ReportsCollectionViewSource source;
+
+        public ReportsCollectionViewRegularLayout(ReportsCollectionViewSource source)
+        {
+            this.source = source;
+        }
 
         public override CGSize CollectionViewContentSize
         {
@@ -23,9 +29,15 @@ namespace Toggl.iOS.Views.Reports
                 var width = CollectionView.Bounds.Width;
                 if (width > maxWidth)
                     width = maxWidth;
-                var height = verticalCellInset * 2
-                    + ReportsDonutChartCollectionViewCell.Height
-                    + ReportsProjectCollectionViewCell.Height * (CollectionView.NumberOfItemsInSection(0) - numberOfNonProjectItems);
+                var height = CollectionView.Bounds.Height;
+                if (source.HasDataToDisplay())
+                {
+                    height = verticalCellInset
+                        + ReportsDonutChartCollectionViewCell.Height
+                        + verticalCellInset * 2
+                        + ReportsDonutChartLegendCollectionViewCell.Height * (CollectionView.NumberOfItemsInSection(0) - source.NumberOfDonutChartLegendItems())
+                        + verticalCellInset;
+                }
                 return new CGSize(width, height);
             }
         }
@@ -38,41 +50,46 @@ namespace Toggl.iOS.Views.Reports
             {
                 var indexPath = NSIndexPath.FromItemSection(i, 0);
                 UICollectionViewLayoutAttributes attributes = UICollectionViewLayoutAttributes.CreateForCell(indexPath);
-                switch (i)
+                var cellType = source.CellTypeAt(indexPath);
+                switch (cellType)
                 {
-                    case 0:
-                        // The reports summary cell
+                    case ReportsCollectionViewCell.Summary:
                         attributes.Frame = new CGRect(
                             horizontalStartPoint + horizontalCellInset,
                             verticalCellInset,
                             columnWidth,
                             ReportsSummaryCollectionViewCell.Height);
                         break;
-                    case 1:
-                        // The bar chart cell
+                    case ReportsCollectionViewCell.BarChart:
                         attributes.Frame = new CGRect(
                             horizontalStartPoint + horizontalCellInset,
                             verticalCellInset * 3 + ReportsSummaryCollectionViewCell.Height,
                             columnWidth,
                             ReportsBarChartCollectionViewCell.Height);
                         break;
-                    case 2:
-                        // The donut chart cell
+                    case ReportsCollectionViewCell.DonutChart:
                         attributes.Frame = new CGRect(
                             horizontalStartPoint + CollectionViewContentSize.Width / 2 + horizontalCellInset,
                             verticalCellInset,
                             columnWidth,
                             ReportsDonutChartCollectionViewCell.Height);
                         break;
-                    default:
-                        // The project cells
+                    case ReportsCollectionViewCell.DonutChartLegend:
                         attributes.Frame = new CGRect(
                             horizontalStartPoint + CollectionViewContentSize.Width / 2 + horizontalCellInset,
                             verticalCellInset
                                 + ReportsDonutChartCollectionViewCell.Height
-                                + ReportsProjectCollectionViewCell.Height * (indexPath.Item - numberOfNonProjectItems),
+                                + ReportsDonutChartLegendCollectionViewCell.Height * (indexPath.Item - source.NumberOfDonutChartLegendItems()),
                             columnWidth,
-                            ReportsProjectCollectionViewCell.Height);
+                            ReportsDonutChartLegendCollectionViewCell.Height);
+                        break;
+                    case ReportsCollectionViewCell.NoData:
+                    case ReportsCollectionViewCell.Error:
+                        attributes.Frame = new CGRect(
+                            CollectionViewContentSize.Width / 4,
+                            CollectionViewContentSize.Height / 4,
+                            CollectionViewContentSize.Width / 2,
+                            CollectionViewContentSize.Height / 2);
                         break;
                 }
                 layoutAttributes.Add(attributes);
