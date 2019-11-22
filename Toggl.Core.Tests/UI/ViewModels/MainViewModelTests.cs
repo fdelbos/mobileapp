@@ -21,9 +21,11 @@ using Toggl.Core.Tests.TestExtensions;
 using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels;
+using Toggl.Core.UI.Views;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Toggl.Storage;
+using Toggl.Storage.Settings;
 using Xunit;
 using static Toggl.Core.Helper.Constants;
 using ThreadingTask = System.Threading.Tasks.Task;
@@ -57,7 +59,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     PermissionsChecker,
                     BackgroundService,
                     PlatformInfo,
-                    WidgetsService);
+                    WidgetsService,
+                    LastTimeUsageStorage);
 
                 vm.Initialize();
 
@@ -110,7 +113,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 bool usePermissionsChecker,
                 bool useBackgroundService,
                 bool usePlatformInfo,
-                bool useWidgetsService)
+                bool useWidgetsService,
+                bool useLastTimeUsageStorage)
             {
                 var dataSource = useDataSource ? DataSource : null;
                 var syncManager = useSyncManager ? SyncManager : null;
@@ -131,6 +135,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var backgroundService = useBackgroundService ? BackgroundService : null;
                 var platformInfo = usePlatformInfo ? PlatformInfo : null;
                 var widgetsService = useWidgetsService ? WidgetsService : null;
+                var lastTimeUsageStorage = useLastTimeUsageStorage ? LastTimeUsageStorage : null;
 
                 Action tryingToConstructWithEmptyParameters =
                     () => new MainViewModel(
@@ -152,7 +157,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                         permissionsChecker,
                         backgroundService,
                         platformInfo,
-                        widgetsService);
+                        widgetsService,
+                        lastTimeUsageStorage);
 
                 tryingToConstructWithEmptyParameters
                     .Should().Throw<ArgumentNullException>();
@@ -245,6 +251,176 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
                 await NavigationService.Received().Navigate<NoWorkspaceViewModel, Unit>(View);
                 await NavigationService.DidNotReceive().Navigate<SelectDefaultWorkspaceViewModel, Unit>(View);
+            }
+
+            [Theory, LogIfTooSlow]
+            [InlineData("A")]
+            [InlineData("B")]
+            public async ThreadingTask NavigatesToJanuary2020CampaignPopup(string group)
+            {
+                var remoteConfig = new January2020CampaignConfiguration(group);
+                var mockTimeEntry = new MockTimeEntry
+                {
+                    Start = DateTimeOffset.Now,
+                    Duration = 1,
+                    IsDeleted = false,
+                    ServerDeletedAt = null,
+                    TagIds = new long[0],
+                    Workspace = new MockWorkspace { IsInaccessible = false }
+                };
+                var twoTEs = new BehaviorSubject<IEnumerable<IThreadSafeTimeEntry>>(new[] { mockTimeEntry, mockTimeEntry });
+                TimeService.CurrentDateTime.Returns(DateTimeOffset.Now);
+                RemoteConfigService.GetJanuary2020CampaignConfiguration().Returns(remoteConfig);
+                OnboardingStorage.WasJanuary2020CampaignShown().Returns(false);
+                LastTimeUsageStorage.LastLogin.Returns(DateTimeOffset.Now - TimeSpan.FromHours(49));
+                InteractorFactory.ObserveAllTimeEntriesVisibleToTheUser().Execute().Returns(twoTEs);
+                DataSource.Preferences.Current.Returns(
+                    new BehaviorSubject<IThreadSafePreferences>(
+                        new MockPreferences { CollapseTimeEntries = false }));
+
+                var vm = CreateViewModel();
+                await vm.Initialize(); // I need to initialize the VM after the arrangements are made
+
+                var task = vm.ViewAppearingAsync();
+                SchedulerProvider.TestScheduler.Start();
+                await task;
+
+                await NavigationService.Received().Navigate<January2020CampaignViewModel, Unit, Unit>(Unit.Default, Arg.Any<IView>());
+            }
+
+            [Theory, LogIfTooSlow]
+            [InlineData("A")]
+            [InlineData("B")]
+            public async ThreadingTask DoesNotShowJanuary2020CampaignIfItWasShownBefore(string group)
+            {
+                var remoteConfig = new January2020CampaignConfiguration(group);
+                var mockTimeEntry = new MockTimeEntry
+                {
+                    Start = DateTimeOffset.Now,
+                    Duration = 1,
+                    IsDeleted = false,
+                    ServerDeletedAt = null,
+                    TagIds = new long[0],
+                    Workspace = new MockWorkspace { IsInaccessible = false }
+                };
+                var twoTEs = new BehaviorSubject<IEnumerable<IThreadSafeTimeEntry>>(new[] { mockTimeEntry, mockTimeEntry });
+                TimeService.CurrentDateTime.Returns(DateTimeOffset.Now);
+                RemoteConfigService.GetJanuary2020CampaignConfiguration().Returns(remoteConfig);
+                OnboardingStorage.WasJanuary2020CampaignShown().Returns(true);
+                LastTimeUsageStorage.LastLogin.Returns(DateTimeOffset.Now - TimeSpan.FromHours(49));
+                InteractorFactory.ObserveAllTimeEntriesVisibleToTheUser().Execute().Returns(twoTEs);
+                DataSource.Preferences.Current.Returns(
+                    new BehaviorSubject<IThreadSafePreferences>(
+                        new MockPreferences { CollapseTimeEntries = false }));
+
+                var vm = CreateViewModel();
+                await vm.Initialize(); // I need to initialize the VM after the arrangements are made
+
+                var task = vm.ViewAppearingAsync();
+                SchedulerProvider.TestScheduler.Start();
+                await task;
+
+                await NavigationService.DidNotReceive().Navigate<January2020CampaignViewModel, Unit, Unit>(Unit.Default, Arg.Any<IView>());
+            }
+
+            [Fact, LogIfTooSlow]
+            public async ThreadingTask DoesNotShowJanuary2020CampaignIfItIsDisabled()
+            {
+                var remoteConfig = new January2020CampaignConfiguration("none");
+                var mockTimeEntry = new MockTimeEntry
+                {
+                    Start = DateTimeOffset.Now,
+                    Duration = 1,
+                    IsDeleted = false,
+                    ServerDeletedAt = null,
+                    TagIds = new long[0],
+                    Workspace = new MockWorkspace { IsInaccessible = false }
+                };
+                var twoTEs = new BehaviorSubject<IEnumerable<IThreadSafeTimeEntry>>(new[] { mockTimeEntry, mockTimeEntry });
+                TimeService.CurrentDateTime.Returns(DateTimeOffset.Now);
+                RemoteConfigService.GetJanuary2020CampaignConfiguration().Returns(remoteConfig);
+                OnboardingStorage.WasJanuary2020CampaignShown().Returns(true);
+                LastTimeUsageStorage.LastLogin.Returns(DateTimeOffset.Now - TimeSpan.FromHours(49));
+                InteractorFactory.ObserveAllTimeEntriesVisibleToTheUser().Execute().Returns(twoTEs);
+                DataSource.Preferences.Current.Returns(
+                    new BehaviorSubject<IThreadSafePreferences>(new MockPreferences { CollapseTimeEntries = false }));
+
+                var vm = CreateViewModel();
+                await vm.Initialize(); // I need to initialize the VM after the arrangements are made
+
+                var task = vm.ViewAppearingAsync();
+                SchedulerProvider.TestScheduler.Start();
+                await task;
+
+                await NavigationService.DidNotReceive().Navigate<January2020CampaignViewModel, Unit, Unit>(Unit.Default, Arg.Any<IView>());
+            }
+
+            [Theory, LogIfTooSlow]
+            [InlineData("A")]
+            [InlineData("B")]
+            public async ThreadingTask DoesNotShowJanuary2020CampaignIfTheUserLoggedInRecently(string group)
+            {
+                var remoteConfig = new January2020CampaignConfiguration(group);
+                var mockTimeEntry = new MockTimeEntry
+                {
+                    Start = DateTimeOffset.Now,
+                    Duration = 1,
+                    IsDeleted = false,
+                    ServerDeletedAt = null,
+                    TagIds = new long[0],
+                    Workspace = new MockWorkspace { IsInaccessible = false }
+                };
+                var twoTEs = new BehaviorSubject<IEnumerable<IThreadSafeTimeEntry>>(new[] { mockTimeEntry, mockTimeEntry });
+                TimeService.CurrentDateTime.Returns(DateTimeOffset.Now);
+                RemoteConfigService.GetJanuary2020CampaignConfiguration().Returns(remoteConfig);
+                OnboardingStorage.WasJanuary2020CampaignShown().Returns(true);
+                LastTimeUsageStorage.LastLogin.Returns(DateTimeOffset.Now - TimeSpan.FromHours(47));
+                InteractorFactory.ObserveAllTimeEntriesVisibleToTheUser().Execute().Returns(twoTEs);
+                DataSource.Preferences.Current.Returns(
+                    new BehaviorSubject<IThreadSafePreferences>(new MockPreferences { CollapseTimeEntries = false }));
+
+                var vm = CreateViewModel();
+                await vm.Initialize(); // I need to initialize the VM after the arrangements are made
+
+                var task = vm.ViewAppearingAsync();
+                SchedulerProvider.TestScheduler.Start();
+                await task;
+
+                await NavigationService.DidNotReceive().Navigate<January2020CampaignViewModel, Unit, Unit>(Unit.Default, Arg.Any<IView>());
+            }
+
+            [Theory, LogIfTooSlow]
+            [InlineData("A")]
+            [InlineData("B")]
+            public async ThreadingTask DoesNotShowJanuary2020CampaignIfTheUserDoesNotHaveEnoughTimeEntries(string group)
+            {
+                var remoteConfig = new January2020CampaignConfiguration(group);
+                var mockTimeEntry = new MockTimeEntry
+                {
+                    Start = DateTimeOffset.Now,
+                    Duration = 1,
+                    IsDeleted = false,
+                    ServerDeletedAt = null,
+                    TagIds = new long[0],
+                    Workspace = new MockWorkspace { IsInaccessible = false }
+                };
+                var singleTELog = new BehaviorSubject<IEnumerable<IThreadSafeTimeEntry>>(new[] { mockTimeEntry });
+                TimeService.CurrentDateTime.Returns(DateTimeOffset.Now);
+                RemoteConfigService.GetJanuary2020CampaignConfiguration().Returns(remoteConfig);
+                OnboardingStorage.WasJanuary2020CampaignShown().Returns(true);
+                LastTimeUsageStorage.LastLogin.Returns(DateTimeOffset.Now - TimeSpan.FromHours(49));
+                InteractorFactory.ObserveAllTimeEntriesVisibleToTheUser().Execute().Returns(singleTELog);
+                DataSource.Preferences.Current.Returns(
+                    new BehaviorSubject<IThreadSafePreferences>(new MockPreferences { CollapseTimeEntries = false }));
+
+                var vm = CreateViewModel();
+                await vm.Initialize(); // I need to initialize the VM after the arrangements are made
+
+                var task = vm.ViewAppearingAsync();
+                SchedulerProvider.TestScheduler.Start();
+                await task;
+
+                await NavigationService.DidNotReceive().Navigate<January2020CampaignViewModel, Unit, Unit>(Unit.Default, Arg.Any<IView>());
             }
         }
 
