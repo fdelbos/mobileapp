@@ -640,9 +640,10 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 InteractorFactory.GetProjectById(Arg.Is(projectId)).Execute()
                     .Returns(Observable.Return(project));
 
-                ViewModel.SelectSuggestion.ExecuteWithCompletion(new ProjectSuggestion(project));
-                ViewModel.SetTextSpans(ImmutableList.Create<ISpan>(querySpan, projectSpan));
-                ViewModel.SelectSuggestion.ExecuteWithCompletion(tagSuggestion);
+                ViewModel.SelectSuggestion.ExecuteWithCompletion(new ProjectSuggestion(project))
+                    .Do(_ => ViewModel.SetTextSpans(ImmutableList.Create<ISpan>(querySpan, projectSpan)))
+                    .PrependAction(ViewModel.SelectSuggestion, tagSuggestion)
+                    .Subscribe();
 
                 TestScheduler.Start();
                 InteractorFactory
