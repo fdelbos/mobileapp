@@ -174,6 +174,7 @@ namespace Toggl.Shared.Extensions
             .SelectUnit();
 
         public static IObservable<string> SelectToString<T>(this IObservable<T> observable)
+            where T : notnull
             => observable.Select(item => item.ToString());
 
         public static IObservable<TOther> SelectLatestFrom<TFirst, TOther>(this IObservable<TFirst> observable, IObservable<TOther> otherObservable)

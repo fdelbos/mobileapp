@@ -3,6 +3,8 @@
 namespace Toggl.Shared
 {
     public sealed class Either<TLeft, TRight>
+        where TLeft : notnull
+        where TRight : notnull
     {
         private readonly bool useLeft;
         private readonly TLeft left;
@@ -19,12 +21,14 @@ namespace Toggl.Shared
         private Either(TLeft left)
         {
             this.left = left;
+            right = default!;
             useLeft = true;
         }
 
         private Either(TRight right)
         {
             this.right = right;
+            left = default!;
             useLeft = false;
         }
 
