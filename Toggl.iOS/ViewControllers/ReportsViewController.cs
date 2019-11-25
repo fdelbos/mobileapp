@@ -48,8 +48,6 @@ namespace Toggl.iOS.ViewControllers
                 .DisposedBy(DisposeBag);
 
             ViewModel.HasMultipleWorkspaces
-                .CombineLatest(ViewModel.CurrentWorkspaceName,
-                    (hasMultipleWorkspaces, name) => hasMultipleWorkspaces && name != string.Empty)
                 .Subscribe(WorkspaceButton.Rx().IsVisible())
                 .DisposedBy(DisposeBag);
 

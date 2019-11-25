@@ -26,8 +26,6 @@ namespace Toggl.Core.UI.ViewModels.Reports
 
         private readonly IInteractorFactory interactorFactory;
 
-        private readonly ISubject<string> currentWorkspaceNameSubject = new Subject<string>();
-
         public IObservable<IImmutableList<IReportElement>> Elements { get; set; }
         public IObservable<bool> HasMultipleWorkspaces { get; set; }
         public IObservable<string> CurrentWorkspaceName { get; private set; }
@@ -59,12 +57,6 @@ namespace Toggl.Core.UI.ViewModels.Reports
                 .DistinctUntilChanged()
                 .AsDriver(schedulerProvider);
 
-            CurrentWorkspaceName = currentWorkspaceNameSubject
-                .AsObservable()
-                .StartWith(string.Empty)
-                .DistinctUntilChanged()
-                .AsDriver(schedulerProvider);
-
             SelectWorkspace = rxActionFactory.FromAsync(selectWorkspace);
             SelectTimeRange = rxActionFactory.FromAsync(selectTimeRange);
 
@@ -75,6 +67,12 @@ namespace Toggl.Core.UI.ViewModels.Reports
             var defaultTimeRange = new DateTimeOffsetRange(DateTimeOffset.Now - TimeSpan.FromDays(7), DateTimeOffset.Now);
 
             var timeRangeSelector = SelectTimeRange.Elements.StartWith(defaultTimeRange);
+
+            CurrentWorkspaceName = workspaceSelector
+                .Select(ws => ws.Name)
+                .StartWith(string.Empty)
+                .DistinctUntilChanged()
+                .AsDriver(string.Empty, schedulerProvider);
 
             Elements = Observable
                 .CombineLatest(workspaceSelector, timeRangeSelector, ReportFilter.Create)
@@ -154,8 +152,6 @@ namespace Toggl.Core.UI.ViewModels.Reports
         {
             try
             {
-                currentWorkspaceNameSubject.OnNext(filter.Workspace.Name);
-
                 var user = await interactorFactory.GetCurrentUser().Execute();
 
                 var reportsTotal = await interactorFactory
