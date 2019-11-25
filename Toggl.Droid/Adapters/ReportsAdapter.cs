@@ -14,9 +14,7 @@ namespace Toggl.Droid.Fragments
         {
             WorkspaceName,
             Summary,
-            BarChartHeader,
             BarChart,
-            BarChartFooter,
             Donut,
             DonutLegendItem,
             NoData,
@@ -42,15 +40,9 @@ namespace Toggl.Droid.Fragments
                 case ReportSummaryElement _:
                     return (int)ViewType.Summary;
 
-                case ReportBarChartHeaderElement _:
-                    return (int)ViewType.BarChartHeader;
-                
-                case ReportBarChartBarsElement _:
+                case ReportBarChartElement _:
                     return (int)ViewType.BarChart;
                 
-                case ReportBarChartFooterElement _:
-                    return (int)ViewType.BarChartFooter;
-
                 case ReportDonutChartDonutElement _:
                     return (int)ViewType.Donut;
 
@@ -80,18 +72,10 @@ namespace Toggl.Droid.Fragments
                     var summaryCell = inflater.Inflate(Resource.Layout.ReportSummaryElement, parent, false);
                     return new ReportSummaryViewHolder(summaryCell);
 
-                case ViewType.BarChartHeader:
-                    var barChartHeaderCell = inflater.Inflate(Resource.Layout.ReportEmptyElement, parent, false);
-                    return new ReportEmptyElementViewHolder(barChartHeaderCell);
-                
                 case ViewType.BarChart:
                     var barChartCell = inflater.Inflate(Resource.Layout.ReportEmptyElement, parent, false);
                     return new ReportEmptyElementViewHolder(barChartCell);
                 
-                case ViewType.BarChartFooter:
-                    var barChartFooterCell = inflater.Inflate(Resource.Layout.ReportEmptyElement, parent, false);
-                    return new ReportEmptyElementViewHolder(barChartFooterCell);
-
                 case ViewType.Donut:
                     var donutCell = inflater.Inflate(Resource.Layout.ReportEmptyElement, parent, false);
                     return new ReportEmptyElementViewHolder(donutCell);

@@ -1,33 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 using Toggl.Shared;
+using Toggl.Shared.Models.Reports;
+using static System.Math;
+
 
 namespace Toggl.Core.UI.ViewModels.Reports
 {
-    public class ReportBarChartElement : CompositeReportElement
+    public class ReportBarChartElement : ReportElementBase
     {
-        private readonly IReportElement barsElement;
-        private readonly ReportBarChartHeaderElement headerElement;
-        private readonly ReportBarChartFooterElement footerElement;
+        private const int maximumLabeledNumberOfDays = 7;
+        private const int roundToMultiplesOf = 2;
+
+        public ImmutableList<Bar> Bars { get; } = ImmutableList<Bar>.Empty;
+        public ImmutableList<DateTimeOffset> HorizontalLegendItems { get; } = ImmutableList<DateTimeOffset>.Empty;
 
         public ReportBarChartElement(
             IEnumerable<Bar> bars,
-            IEnumerable<DateTimeOffset> offsets,
-            Func<IEnumerable<Bar>, ReportBarChartBarsElement> barsSelector = null,
-            Func<IEnumerable<DateTimeOffset>, ReportBarChartFooterElement> footerSelector = null
+            IEnumerable<DateTimeOffset> horizontalLegendItems
         )
             : base(false)
         {
-            headerElement = new ReportBarChartHeaderElement();
-
-            barsSelector = barsSelector ?? defaultBarsSelector;
-            barsElement = barsSelector(bars);
-
-            footerSelector = footerSelector ?? defaultFooterSelector;
-            footerElement = footerSelector(offsets);
-
-            SubElements = ImmutableList.Create(new IReportElement[] {headerElement, barsElement, footerElement});
+            Bars = bars.ToImmutableList();
+            HorizontalLegendItems = horizontalLegendItems.ToImmutableList();
         }
 
         private ReportBarChartElement(bool isLoading)
@@ -38,18 +35,45 @@ namespace Toggl.Core.UI.ViewModels.Reports
         public static ReportBarChartElement LoadingState
             => new ReportBarChartElement(true);
 
-        private static ReportBarChartBarsElement defaultBarsSelector(IEnumerable<Bar> bars)
-            => new ReportBarChartBarsElement(bars.ToImmutableList());
+        protected static IImmutableList<Bar> convertReportTimeEntriesToBars(ITimeEntriesTotals report)
+        {
+            var upperLimit = upperHoursLimit(report);
+            return report.Groups.Select(normalizedBar(upperLimit)).ToImmutableList();
+        }
 
-        private static ReportBarChartFooterElement defaultFooterSelector(IEnumerable<DateTimeOffset> offsets)
-            => new ReportBarChartFooterElement(offsets.ToImmutableList());
+        private static int upperHoursLimit(ITimeEntriesTotals report)
+        {
+            var maximumTotalTrackedTimePerGroup = report.Groups.Max(group => group.Total);
+            var rounded = (int) Ceiling(maximumTotalTrackedTimePerGroup.TotalHours / roundToMultiplesOf) *
+                          roundToMultiplesOf;
+
+            return Max(roundToMultiplesOf, rounded);
+        }
+
+        private static Func<ITimeEntriesTotalsGroup, Bar> normalizedBar(double maxHours)
+            => group =>
+            {
+                var billableHours = group.Billable.TotalHours;
+                var nonBillableHours = group.Total.TotalHours - billableHours;
+
+                return new Bar(billableHours / maxHours, nonBillableHours / maxHours);
+            };
+
+        protected static IImmutableList<DateTimeOffset> convertReportTimeEntriesToOffsets(ITimeEntriesTotals report)
+            => report.Groups.Length <= maximumLabeledNumberOfDays && report.Resolution == Resolution.Day
+                ? daysRange(report.Groups.Length, report.StartDate)
+                : ImmutableList<DateTimeOffset>.Empty;
+
+        private static IImmutableList<DateTimeOffset> daysRange(int numberOfDays, DateTimeOffset startDate)
+            => Enumerable.Range(0, numberOfDays)
+                .Select(i => startDate.AddDays(i))
+                .ToImmutableList();
 
         public override bool Equals(IReportElement other)
             => other is ReportBarChartElement barChartElement
                && barChartElement.IsLoading == IsLoading
-               && barChartElement.barsElement.Equals(barsElement)
-               && barChartElement.headerElement.Equals(headerElement)
-               && barChartElement.footerElement.Equals(footerElement);
+               && barChartElement.Bars.SequenceEqual(Bars)
+               && barChartElement.HorizontalLegendItems.SequenceEqual(HorizontalLegendItems);
 
         public struct Bar
         {
