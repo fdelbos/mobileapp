@@ -19,6 +19,7 @@ namespace Toggl.Droid.Fragments
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             base.OnCreateView(inflater, container, savedInstanceState);
+            Cancelable = false;
             var view = inflater.Inflate(Resource.Layout.January2020CampaignFragment, null);
 
             InitializeViews(view);
