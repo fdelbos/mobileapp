@@ -79,7 +79,7 @@ namespace Toggl.iOS.Views.Reports
                             columnWidth,
                             ReportsDonutChartCollectionViewCell.Height);
                         break;
-                    case ReportsCollectionViewCell.DonutChartLegend:
+                    case ReportsCollectionViewCell.DonutChartLegendItem:
                         attributes.Frame = new CGRect(
                             horizontalCellInset,
                             verticalCellInset

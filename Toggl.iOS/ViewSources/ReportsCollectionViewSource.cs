@@ -14,7 +14,7 @@ namespace Toggl.iOS.ViewSources
         Summary,
         BarChart,
         DonutChart,
-        DonutChartLegend,
+        DonutChartLegendItem,
         Error,
         NoData
     }
@@ -55,29 +55,29 @@ namespace Toggl.iOS.ViewSources
         public override UICollectionViewCell GetCell(UICollectionView collectionView, NSIndexPath indexPath)
         {
             UICollectionViewCell cell;
-            switch (elements[(int)indexPath.Item].GetType().Name)
+            switch (elements[(int)indexPath.Item])
             {
-                case nameof(ReportSummaryElement):
+                case ReportSummaryElement _:
                     cell = collectionView.DequeueReusableCell(summaryCellIdentifier, indexPath) as UICollectionViewCell;
                     // TODO: populate cell
                     cell.BackgroundColor = UIColor.SystemBlueColor;
                     return cell;
-                case nameof(ReportBarChartElement):
+                case ReportBarChartElement _:
                     cell = collectionView.DequeueReusableCell(barChartCellIdentifier, indexPath) as UICollectionViewCell;
                     // TODO: populate cell
                     cell.BackgroundColor = UIColor.SystemGreenColor;
                     return cell;
-                case nameof(ReportDonutChartDonutElement):
+                case ReportDonutChartDonutElement _:
                     cell = collectionView.DequeueReusableCell(donutChartCellIdentifier, indexPath) as UICollectionViewCell;
                     // TODO: populate cell
                     cell.BackgroundColor = UIColor.SystemRedColor;
                     return cell;
-                case nameof(ReportDonutChartLegendItemElement):
+                case ReportDonutChartLegendItemElement _:
                     cell = collectionView.DequeueReusableCell(donutChartLegendCellIdentifier, indexPath) as UICollectionViewCell;
                     // TODO: populate cell
                     cell.BackgroundColor = UIColor.SystemYellowColor;
                     return cell;
-                case nameof(ReportNoDataElement):
+                case ReportNoDataElement _:
                     cell = collectionView.DequeueReusableCell(noDataCellIdentifier, indexPath) as UICollectionViewCell;
                     // TODO: populate cell
                     cell.BackgroundColor = UIColor.SystemPurpleColor;
@@ -98,17 +98,17 @@ namespace Toggl.iOS.ViewSources
 
         public ReportsCollectionViewCell CellTypeAt(NSIndexPath indexPath)
         {
-            switch (elements[(int)indexPath.Item].GetType().Name)
+            switch (elements[(int)indexPath.Item])
             {
-                case nameof(ReportSummaryElement):
+                case ReportSummaryElement _:
                     return ReportsCollectionViewCell.Summary;
-                case nameof(ReportBarChartElement):
+                case ReportBarChartElement _:
                     return ReportsCollectionViewCell.BarChart;
-                case nameof(ReportDonutChartDonutElement):
+                case ReportDonutChartDonutElement _:
                     return ReportsCollectionViewCell.DonutChart;
-                case nameof(ReportDonutChartLegendItemElement):
-                    return ReportsCollectionViewCell.DonutChartLegend;
-                case nameof(ReportNoDataElement):
+                case ReportDonutChartLegendItemElement _:
+                    return ReportsCollectionViewCell.DonutChartLegendItem;
+                case ReportNoDataElement _:
                     return ReportsCollectionViewCell.NoData;
                 default:
                     return ReportsCollectionViewCell.Error;
