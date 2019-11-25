@@ -42,7 +42,7 @@ namespace Toggl.Droid.Fragments
 
                 case ReportBarChartElement _:
                     return (int)ViewType.BarChart;
-                
+
                 case ReportDonutChartDonutElement _:
                     return (int)ViewType.Donut;
 
@@ -75,7 +75,7 @@ namespace Toggl.Droid.Fragments
                 case ViewType.BarChart:
                     var barChartCell = inflater.Inflate(Resource.Layout.ReportEmptyElement, parent, false);
                     return new ReportEmptyElementViewHolder(barChartCell);
-                
+
                 case ViewType.Donut:
                     var donutCell = inflater.Inflate(Resource.Layout.ReportEmptyElement, parent, false);
                     return new ReportEmptyElementViewHolder(donutCell);
