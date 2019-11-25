@@ -718,7 +718,7 @@
     <Compile Include="Views\EditDuration\WheelBackgroundView.cs" />
     <Compile Include="Views\EditDuration\WheelForegroundView.cs" />
     <Compile Include="Views\ReportsCalendarView.cs" />
-    <Compile Include="Adapters\MainRecyclerAdapter.cs" />
+    <Compile Include="Adapters\MainLogRecyclerAdapter.cs" />
     <Compile Include="Extensions\LayoutParamsExtensions.cs" />
     <Compile Include="Extensions\NumberExtensions.cs" />
     <Compile Include="Activities\StartTimeEntryActivity.cs" />

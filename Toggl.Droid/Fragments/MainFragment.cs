@@ -37,7 +37,7 @@ namespace Toggl.Droid.Fragments
     {
         private const int snackbarDuration = 5000;
         private NotificationManager notificationManager;
-        private MainRecyclerAdapter mainRecyclerAdapter;
+        private MainLogRecyclerAdapter mainLogRecyclerAdapter;
         private MainRecyclerViewTouchCallback touchCallback;
         private LinearLayoutManager layoutManager;
         private ISubject<bool> visibilityChangedSubject = new BehaviorSubject<bool>(false);
@@ -135,33 +135,33 @@ namespace Toggl.Droid.Fragments
                 .Subscribe(onSyncChanged)
                 .DisposedBy(DisposeBag);
 
-            mainRecyclerAdapter = new MainRecyclerAdapter()
+            mainLogRecyclerAdapter = new MainLogRecyclerAdapter()
             {
                 UserFeedbackViewModel = ViewModel.RatingViewModel
             };
-            touchCallback = new MainRecyclerViewTouchCallback(mainRecyclerAdapter);
+            touchCallback = new MainRecyclerViewTouchCallback(mainLogRecyclerAdapter);
 
             setupRecycler();
 
-            mainRecyclerAdapter.ToggleGroupExpansion
+            mainLogRecyclerAdapter.ToggleGroupExpansion
                 .Subscribe(ViewModel.TimeEntriesViewModel.ToggleGroupExpansion.Inputs)
                 .DisposedBy(DisposeBag);
 
-            mainRecyclerAdapter.EditTimeEntry
+            mainLogRecyclerAdapter.EditTimeEntry
                 .Select(editEventInfo)
                 .Subscribe(ViewModel.SelectTimeEntry.Inputs)
                 .DisposedBy(DisposeBag);
 
-            mainRecyclerAdapter.ContinueTimeEntry
+            mainLogRecyclerAdapter.ContinueTimeEntry
                 .Subscribe(ViewModel.ContinueTimeEntry.Inputs)
                 .DisposedBy(DisposeBag);
 
-            mainRecyclerAdapter.DeleteTimeEntrySubject
+            mainLogRecyclerAdapter.DeleteTimeEntrySubject
                 .Select(vm => vm.RepresentedTimeEntriesIds)
                 .Subscribe(ViewModel.TimeEntriesViewModel.DelayDeleteTimeEntries.Inputs)
                 .DisposedBy(DisposeBag);
 
-            mainRecyclerAdapter.ContinueSuggestion
+            mainLogRecyclerAdapter.ContinueSuggestion
                 .Select(vm => vm.Suggestion)
                 .Subscribe(ViewModel.SuggestionsViewModel.StartTimeEntry.Inputs)
                 .DisposedBy(DisposeBag);
@@ -179,7 +179,7 @@ namespace Toggl.Droid.Fragments
                  .DisposedBy(DisposeBag);
 
             ViewModel.MainLogItems
-                .Subscribe(mainRecyclerAdapter.UpdateCollection)
+                .Subscribe(mainLogRecyclerAdapter.UpdateCollection)
                 .DisposedBy(DisposeBag);
 
             ViewModel.IsTimeEntryRunning
@@ -249,7 +249,7 @@ namespace Toggl.Droid.Fragments
 
         private void reload()
         {
-            mainRecyclerAdapter.NotifyDataSetChanged();
+            mainLogRecyclerAdapter.NotifyDataSetChanged();
         }
 
         private void setupRecycler()
@@ -258,7 +258,7 @@ namespace Toggl.Droid.Fragments
             layoutManager.ItemPrefetchEnabled = true;
             layoutManager.InitialPrefetchItemCount = 4;
             mainRecyclerView.SetLayoutManager(layoutManager);
-            mainRecyclerView.SetAdapter(mainRecyclerAdapter);
+            mainRecyclerView.SetAdapter(mainLogRecyclerAdapter);
         }
 
         private void setupItemTouchHelper(MainRecyclerViewTouchCallback callback)

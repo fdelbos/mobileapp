@@ -11,14 +11,14 @@ namespace Toggl.Droid.ViewHelpers
 {
     public class MainRecyclerViewTouchCallback : ItemTouchHelper.SimpleCallback
     {
-        private MainRecyclerAdapter adapter;
+        private MainLogRecyclerAdapter adapter;
         public bool AreSwipeActionsEnabled { get; set; }
 
         public MainRecyclerViewTouchCallback(IntPtr javaReference, JniHandleOwnership transfer) : base(javaReference, transfer)
         {
         }
 
-        public MainRecyclerViewTouchCallback(MainRecyclerAdapter adapter) : base(0, ItemTouchHelper.Left | ItemTouchHelper.Right)
+        public MainRecyclerViewTouchCallback(MainLogRecyclerAdapter adapter) : base(0, ItemTouchHelper.Left | ItemTouchHelper.Right)
         {
             this.adapter = adapter;
         }

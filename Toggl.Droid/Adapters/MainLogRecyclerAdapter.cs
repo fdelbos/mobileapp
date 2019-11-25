@@ -18,7 +18,7 @@ namespace Toggl.Droid.Adapters
 {
     using MainLogSection = AnimatableSectionModel<MainLogSectionViewModel, MainLogItemViewModel, IMainLogKey>;
 
-    public class MainRecyclerAdapter : BaseRecyclerAdapter<MainLogItemViewModel>
+    public class MainLogRecyclerAdapter : BaseRecyclerAdapter<MainLogItemViewModel>
     {
         public const int TimeEntryLogItemViewType = 1;
         public const int SuggestionLogItemViewType = 2;
@@ -49,11 +49,11 @@ namespace Toggl.Droid.Adapters
         private readonly Subject<ContinueTimeEntryInfo> continueTimeEntrySubject = new Subject<ContinueTimeEntryInfo>();
         private readonly Subject<SuggestionLogItemViewModel> continueSuggestionSubject = new Subject<SuggestionLogItemViewModel>();
 
-        public MainRecyclerAdapter()
+        public MainLogRecyclerAdapter()
         {
         }
 
-        public MainRecyclerAdapter(IntPtr javaReference, JniHandleOwnership transfer)
+        public MainLogRecyclerAdapter(IntPtr javaReference, JniHandleOwnership transfer)
             : base(javaReference, transfer)
         {
         }

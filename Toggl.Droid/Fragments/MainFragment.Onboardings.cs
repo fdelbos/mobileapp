@@ -163,15 +163,15 @@ namespace Toggl.Droid.Fragments
 
         private MainLogCellViewHolder findOldestTimeEntryView()
         {
-            if (mainRecyclerAdapter == null)
+            if (mainLogRecyclerAdapter == null)
             {
                 return null;
             }
 
             for (var position = layoutManager.FindLastVisibleItemPosition(); position >= 0; position--)
             {
-                var viewType = mainRecyclerAdapter.GetItemViewType(position);
-                if (viewType != MainRecyclerAdapter.TimeEntryLogItemViewType)
+                var viewType = mainLogRecyclerAdapter.GetItemViewType(position);
+                if (viewType != MainLogRecyclerAdapter.TimeEntryLogItemViewType)
                 {
                     continue;
                 }
