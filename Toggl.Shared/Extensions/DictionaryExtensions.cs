@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Toggl.Shared.Extensions
@@ -36,7 +37,7 @@ namespace Toggl.Shared.Extensions
                 return values;
             }
 
-            return null;
+            return new long[0];
         }
 
         public static DateTimeOffset? GetValueAsDateTimeOffset(this Dictionary<string, string> dictionary, string key)
