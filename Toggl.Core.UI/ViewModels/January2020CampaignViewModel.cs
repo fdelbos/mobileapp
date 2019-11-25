@@ -27,8 +27,8 @@ namespace Toggl.Core.UI.ViewModels
 
         public string CampaignMessage
             => remoteConfigService.GetJanuary2020CampaignConfiguration().Option == A
-                ? "Upgrade to any annual plan and pocket some extra cash just in time for the holiday season!"
-                : "Psst... we've got an early gift for you! Sign up for any annual plan between now and January 17th and get 20% off.";
+                ? Resources.January2020CampaignTextVersionA
+                : Resources.January2020CampaignTextVersionB;
 
         public January2020CampaignViewModel(
             IOnboardingStorage onboardingStorage,

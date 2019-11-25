@@ -2469,5 +2469,17 @@ namespace Toggl.Shared {
                 return ResourceManager.GetString("January2020CampaignNegativeButtonText", resourceCulture);
             }
         }
+        
+        public static string January2020CampaignTextVersionA {
+            get {
+                return ResourceManager.GetString("January2020CampaignTextVersionA", resourceCulture);
+            }
+        }
+        
+        public static string January2020CampaignTextVersionB {
+            get {
+                return ResourceManager.GetString("January2020CampaignTextVersionB", resourceCulture);
+            }
+        }
     }
 }
