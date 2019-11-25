@@ -50,7 +50,7 @@ namespace Toggl.Droid.Adapters
         private readonly Subject<ContinueTimeEntryInfo> continueTimeEntrySubject = new Subject<ContinueTimeEntryInfo>();
         private readonly Subject<SuggestionLogItemViewModel> continueSuggestionSubject = new Subject<SuggestionLogItemViewModel>();
 
-        public MainLogRecyclerAdapter(): base(new TypeIdentifierEqualityDiffingStrategy<MainLogItemViewModel>())
+        public MainLogRecyclerAdapter(): base(new TypeIdentifierEqualityDiffingStrategy<MainLogItemViewModel, IMainLogKey>())
         {
         }
 

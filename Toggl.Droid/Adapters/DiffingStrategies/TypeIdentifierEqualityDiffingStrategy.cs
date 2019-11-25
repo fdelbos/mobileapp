@@ -1,12 +1,14 @@
 ﻿using System;
 using Android.Support.V7.Widget;
+using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Interfaces;
 using Toggl.Shared;
 
 namespace Toggl.Droid.Adapters.DiffingStrategies
 {
-    public sealed class TypeIdentifierEqualityDiffingStrategy<T> : IDiffingStrategy<T>
+    public sealed class TypeIdentifierEqualityDiffingStrategy<T, KT> : IDiffingStrategy<T>
         where T : IEquatable<T>
+        where KT : IEquatable<KT>
     {
         public TypeIdentifierEqualityDiffingStrategy()
         {
@@ -22,15 +24,18 @@ namespace Toggl.Droid.Adapters.DiffingStrategies
 
         public bool AreItemsTheSame(T item, T other)
         {
-            if (item.GetType() != other.GetType())
+            var itemDiffable = (IDiffable<KT>) item;
+            var otherDiffable = (IDiffable<KT>) other;
+
+            if (itemDiffable.Identity.GetType() != otherDiffable.Identity.GetType())
             {
                 return false;
             }
 
-            var itemDiffable = (IDiffableByIdentifier<T>)item;
-            var otherDiffable = (IDiffableByIdentifier<T>)item;
+            var itemDiffableById = (IDiffableByIdentifier<T>)item;
+            var otherDiffableById = (IDiffableByIdentifier<T>)item;
 
-            return itemDiffable.Identifier == otherDiffable.Identifier;
+            return itemDiffableById.Identifier == otherDiffableById.Identifier;
         }
 
         public long GetItemId(T item) => RecyclerView.NoId;
