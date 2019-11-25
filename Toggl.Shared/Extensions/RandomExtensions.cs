@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 
 namespace Toggl.Shared.Extensions
@@ -11,7 +12,8 @@ namespace Toggl.Shared.Extensions
         private static readonly ThreadLocal<Random> random =
             new ThreadLocal<Random>(() => new Random(Interlocked.Increment(ref seed)));
 
-        public static T RandomElement<T>(this IList<T> collection)
+        [return: MaybeNull]
+        public static T RandomElement<T>(this IList<T>? collection)
         {
             if (collection == null)
                 throw new ArgumentNullException(nameof(collection));

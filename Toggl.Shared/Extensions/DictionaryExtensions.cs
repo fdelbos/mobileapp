@@ -76,7 +76,7 @@ namespace Toggl.Shared.Extensions
             return null;
         }
 
-        public static string GetValueAsString(this Dictionary<string, string> dictionary, string key)
+        public static string? GetValueAsString(this Dictionary<string, string> dictionary, string key)
         {
             if (dictionary.TryGetValue(key, out var value))
                 return value;
