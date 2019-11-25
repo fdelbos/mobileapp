@@ -1337,4 +1337,16 @@ to project members</value>
     <data name="LoginToShowSuggestions" xml:space="preserve">
         <value>Log in to show suggestions</value>
     </data>
+    <data name="January2020CampaignTitle" xml:space="preserve">
+        <value>Save 20% on Annual Plans</value>
+        <comment>Should not be translated for now.</comment>
+    </data>
+    <data name="January2020CampaignPositiveButtonText" xml:space="preserve">
+        <value>Learn more</value>
+        <comment>Should not be translated for now.</comment>
+    </data>
+    <data name="January2020CampaignNegativeButtonText" xml:space="preserve">
+        <value>Dismiss</value>
+        <comment>Should not be translated for now.</comment>
+    </data>
 </root>

@@ -2463,5 +2463,23 @@ namespace Toggl.Shared {
                 return ResourceManager.GetString("LoginToShowSuggestions", resourceCulture);
             }
         }
+        
+        public static string January2020CampaignTitle {
+            get {
+                return ResourceManager.GetString("January2020CampaignTitle", resourceCulture);
+            }
+        }
+        
+        public static string January2020CampaignPositiveButtonText {
+            get {
+                return ResourceManager.GetString("January2020CampaignPositiveButtonText", resourceCulture);
+            }
+        }
+        
+        public static string January2020CampaignNegativeButtonText {
+            get {
+                return ResourceManager.GetString("January2020CampaignNegativeButtonText", resourceCulture);
+            }
+        }
     }
 }
