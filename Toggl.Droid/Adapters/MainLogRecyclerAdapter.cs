@@ -12,6 +12,7 @@ using Android.Runtime;
 using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels.TimeEntriesLog.Identity;
+using Toggl.Droid.Adapters.DiffingStrategies;
 using Toggl.Droid.ViewHolders;
 
 namespace Toggl.Droid.Adapters
@@ -49,7 +50,7 @@ namespace Toggl.Droid.Adapters
         private readonly Subject<ContinueTimeEntryInfo> continueTimeEntrySubject = new Subject<ContinueTimeEntryInfo>();
         private readonly Subject<SuggestionLogItemViewModel> continueSuggestionSubject = new Subject<SuggestionLogItemViewModel>();
 
-        public MainLogRecyclerAdapter()
+        public MainLogRecyclerAdapter(): base(new TypeIdentifierEqualityDiffingStrategy<MainLogItemViewModel>())
         {
         }
 
