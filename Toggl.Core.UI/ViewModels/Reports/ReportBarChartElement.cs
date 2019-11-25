@@ -53,22 +53,22 @@ namespace Toggl.Core.UI.ViewModels.Reports
 
         public struct Bar
         {
-            public double BillablePercentage { get; }
-            public double NonBillablePercentage { get; }
+            public double FilledValue { get; }
+            public double TransparentValue { get; }
 
-            public Bar(double billablePercentage, double nonBillablePercentage)
+            public Bar(double filledValue, double transparentValue)
             {
-                BillablePercentage = billablePercentage;
-                NonBillablePercentage = nonBillablePercentage;
+                FilledValue = filledValue;
+                TransparentValue = transparentValue;
             }
 
             public override bool Equals(object obj)
                 => obj is Bar bar
-                   && bar.BillablePercentage == BillablePercentage
-                   && bar.NonBillablePercentage == NonBillablePercentage;
+                   && bar.FilledValue == FilledValue
+                   && bar.TransparentValue == TransparentValue;
 
             public override int GetHashCode()
-                => HashCode.From(BillablePercentage, NonBillablePercentage);
+                => HashCode.From(FilledValue, TransparentValue);
 
             public static bool operator ==(Bar left, Bar right)
                 => left.Equals(right);
