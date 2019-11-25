@@ -218,11 +218,21 @@ namespace Toggl.iOS.ViewControllers
             // already contains the same text as the text field info object at this point. Only when we add stuff
             // to the text field info manually, there is an inconsistency at this point.
             bool endsWithShortcutSymbol(string text)
-                => text != null && (text.EndsWith(QuerySymbols.Projects) || text.EndsWith(QuerySymbols.Tags));
+            {
+                if (text == null || text.Length == 0)
+                    return false;
 
-            var likelyASymbolWasAppended =
-                DescriptionTextView.AttributedText.Length == textFieldInfo.Description.Length - 1
-                    && endsWithShortcutSymbol(textFieldInfo.GetSpanWithCurrentTextCursor()?.Text);
+                if (text.Length == 1)
+                    return text.EndsWith(QuerySymbols.Projects) || text.EndsWith(QuerySymbols.Tags);
+
+                return text.EndsWith($" {QuerySymbols.Projects}", StringComparison.Ordinal)
+                    || text.EndsWith($" {QuerySymbols.Tags}", StringComparison.Ordinal);
+            }
+
+            // Unfortunatelly, this will cause a minor glitch when the user has a ` #` or ` @` somewhere in the middle
+            // of the text, holding backspace and deleting text will stop at these symbols, the user has to press the
+            // backspace again and continue deleting. I think that's a minor problem.
+            var likelyASymbolWasAppended = endsWithShortcutSymbol(textFieldInfo.GetSpanWithCurrentTextCursor()?.Text);
 
             // Unless the user adds a token (a tag or a project) or the user tapped a button which appends a `@` or `#`,
             // we want to let the OS handle the rendering (adding a character or removing some characters is easy for iOS)
