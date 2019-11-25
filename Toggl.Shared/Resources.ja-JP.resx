@@ -1328,4 +1328,19 @@
     <data name="LoginToShowSuggestions" xml:space="preserve">
         <value>提案を表示するためにログイン</value>
     </data>
+    <data name="January2020CampaignTitle" xml:space="preserve">
+        <value>年掛けプランは20%OFF</value>
+    </data>
+    <data name="January2020CampaignPositiveButtonText" xml:space="preserve">
+        <value>詳しく</value>
+    </data>
+    <data name="January2020CampaignNegativeButtonText" xml:space="preserve">
+        <value>断る</value>
+    </data>
+    <data name="January2020CampaignTextVersionA" xml:space="preserve">
+        <value>年掛けプランに変更して、お年玉のためひ貯金を貯めます。</value>
+    </data>
+    <data name="January2020CampaignTextVersionB" xml:space="preserve">
+        <value>おーい、少し早いプレゼントをあげますよ。ここから1月17日までに年掛けプランに変更したら20%OFFになります。</value>
+    </data>
 </root>
