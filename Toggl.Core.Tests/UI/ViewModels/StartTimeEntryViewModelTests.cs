@@ -1799,7 +1799,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     var textFieldInfoObserver = TestScheduler.CreateObserver<TextFieldInfo>();
                     ViewModel.TextFieldInfo.Subscribe(textFieldInfoObserver);
                     var spans = new ISpan[] {new QueryTextSpan("#NewTag", 7)}.ToImmutableList();
-                    ViewModel.SetTextSpans.Execute(spans);
+                    ViewModel.SetTextSpans(spans);
                     TestScheduler.Start();
                     var suggestionToTap = suggestionsObserver.LastEmittedValue().First().Items.Single(suggestion => suggestion is CreateEntitySuggestion);
 
