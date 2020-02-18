@@ -149,7 +149,7 @@
 Veuillez réessayer.</value>
     </data>
     <data name="GenericSignUpError" xml:space="preserve">
-        <value>Désolé, nous ne parvenons pas à vous inscrire.Veuillez réessayer.</value>
+        <value>Désolé, nous ne parvenons pas à vous inscrire. Veuillez réessayer.</value>
     </data>
     <data name="StartTimeEntryPlaceholder" xml:space="preserve">
         <value>Sur quoi travaillez-vous?</value>
