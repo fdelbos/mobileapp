@@ -775,30 +775,30 @@ Start the timer and your most used time entries will appear here.</value>
         <value>Be notified about upcoming events before they begin.</value>
     </data>
     <data name="CreateNewWorkspace" xml:space="preserve">
-        <value>Create new workspace</value>
+        <value>Créer un nouvel espace de travail</value>
     </data>
     <data name="UhOh" xml:space="preserve">
         <value>Uh oh.</value>
     </data>
     <data name="NoWorkspaceErrorMessage" xml:space="preserve">
-        <value>Seems someone has removed you from their workspace.
-No worries. Create a new workspace to continue.</value>
+        <value>Il semble que quelqu'un vous ait retiré de son espace de travail.
+Pas de soucis. Créez un nouvel espace de travail pour continuer.</value>
     </data>
     <data name="Skip" xml:space="preserve">
-        <value>Skip</value>
+        <value>Passer</value>
     </data>
     <data name="AppOutdatedMessage" xml:space="preserve">
-        <value>Seems you haven't updated the app for quite some time...
-Please update your app to continue.</value>
+        <value>Il semble que vous n'ayez pas mis à jour l'application depuis un certain temps ...
+Veuillez mettre à jour votre application pour continuer.</value>
     </data>
     <data name="UpdateTheApp" xml:space="preserve">
-        <value>Update the app</value>
+        <value>Mettre à jour l'application</value>
     </data>
     <data name="RatingCallToActionTitle" xml:space="preserve">
         <value>Sure, take me there</value>
     </data>
     <data name="NoThanks" xml:space="preserve">
-        <value>No, thanks</value>
+        <value>Non merci</value>
     </data>
     <data name="Total" xml:space="preserve">
         <value>Total</value>
@@ -807,31 +807,31 @@ Please update your app to continue.</value>
         <value>Clocked hours</value>
     </data>
     <data name="FirstDayOfTheWeek" xml:space="preserve">
-        <value>First day of the week</value>
+        <value>Premier jour de la semaine</value>
     </data>
     <data name="Clients" xml:space="preserve">
         <value>Clients</value>
     </data>
     <data name="ProjectColor" xml:space="preserve">
-        <value>Project color</value>
+        <value>Couleur du projet</value>
     </data>
     <data name="Search" xml:space="preserve">
-        <value>Search</value>
+        <value>Chercher</value>
     </data>
     <data name="DateFormat" xml:space="preserve">
-        <value>Date format</value>
+        <value>Format de la date</value>
     </data>
     <data name="SelectDefaultWorkspaceDescription" xml:space="preserve">
-        <value>Your time will be automatically tracked under this workspace. You can change it later from the Settings.</value>
+        <value>Votre temps sera automatiquement suivi dans cet espace de travail. Vous pouvez le modifier ultérieurement dans les paramètres.</value>
     </data>
     <data name="DurationFormat" xml:space="preserve">
-        <value>Duration format</value>
+        <value>Format de la durée</value>
     </data>
     <data name="Projects" xml:space="preserve">
-        <value>Projects</value>
+        <value>Projets</value>
     </data>
     <data name="Project" xml:space="preserve">
-        <value>Project</value>
+        <value>Projet</value>
     </data>
     <data name="EmptyProjectText" xml:space="preserve">
         <value>Your projects will show up here.
