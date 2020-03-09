@@ -857,93 +857,93 @@ Use them to add keywords to your time entries.</value>
         <value>Editing {0} time entries</value>
     </data>
     <data name="SelectCalendars" xml:space="preserve">
-        <value>Select calendars</value>
+        <value>Sélectionner des calendriers</value>
     </data>
     <data name="SelectCalendarsMessage" xml:space="preserve">
-        <value>Choose the calendars containing events you’d like to log in Toggl</value>
+        <value>Choisissez les calendriers contenant les événements que vous souhaitez connecter à Toggl</value>
     </data>
     <data name="FilterWorkspaces" xml:space="preserve">
-        <value>Filter workspaces</value>
+        <value>filtrer les espaces de travail</value>
     </data>
     <data name="ContactUsSomethingWentWrongTryAgain" xml:space="preserve">
-        <value>Something went wrong. Please try again</value>
+        <value>Une erreur s'est produite. Veuillez réessayer</value>
     </data>
     <data name="ContactUsSend" xml:space="preserve">
-        <value>Send</value>
+        <value>Envoyer</value>
     </data>
     <data name="FeedbackFieldPlaceholder" xml:space="preserve">
-        <value>Let us know what you think. Send us your feedback and questions.
+        <value>Dites-nous ce que vous en pensez. Envoyez-nous vos commentaires et questions.
 
-PS. Our customer support team currently operates in English only. Sorry for any inconvenience!</value>
+PS. Notre équipe de support client fonctionne actuellement en anglais uniquement. Désolé pour le dérangement!</value>
     </data>
     <data name="FeedbackHint" xml:space="preserve">
-        <value>Your message</value>
+        <value>Votre message</value>
     </data>
     <data name="SomethingWentWrongTryAgain" xml:space="preserve">
-        <value>Something went wrong. Please try again</value>
+        <value>Une erreur s'est produite. Veuillez réessayer</value>
     </data>
     <data name="Send" xml:space="preserve">
-        <value>Send</value>
+        <value>Envoyer</value>
     </data>
     <data name="YourProfile" xml:space="preserve">
-        <value>Your Profile</value>
+        <value>Votre profil</value>
     </data>
     <data name="Display" xml:space="preserve">
-        <value>Display</value>
+        <value>Afficher</value>
     </data>
     <data name="Name" xml:space="preserve">
-        <value>Name</value>
+        <value>Nom</value>
     </data>
     <data name="DateAndTime" xml:space="preserve">
-        <value>Date and Time</value>
+        <value>Date et heure</value>
     </data>
     <data name="Use24HourClock" xml:space="preserve">
-        <value>Use 24-hour clock</value>
+        <value>Utiliser une horloge de 24 heures</value>
     </data>
     <data name="SwipeActions" xml:space="preserve">
         <value>Cell Swipe Actions</value>
     </data>
     <data name="ManualMode" xml:space="preserve">
-        <value>Manual mode</value>
+        <value>Mode manuel</value>
     </data>
     <data name="TimerDefaults" xml:space="preserve">
         <value>Timer Defaults</value>
     </data>
     <data name="ManualModeDescription" xml:space="preserve">
-        <value>Sets the default behavior for the start button. Long pressing the button will always activate the alternative mode.</value>
+        <value>Définit le comportement par défaut du bouton de démarrage. Un appui long sur le bouton activera toujours le mode alternatif.</value>
     </data>
     <data name="SmartReminders" xml:space="preserve">
-        <value>Smart alerts</value>
+        <value>Alertes intelligentes</value>
     </data>
     <data name="SubmitFeedback" xml:space="preserve">
-        <value>Submit feedback</value>
+        <value>Soumettre des commentaires</value>
     </data>
     <data name="LoggingOutSecurely" xml:space="preserve">
-        <value>Logging you out securely...</value>
+        <value>Vous déconnecter en toute sécurité ...</value>
     </data>
     <data name="SignOutOfToggl" xml:space="preserve">
-        <value>Sign out of Toggl</value>
+        <value>Se déconnecter de Toggl</value>
     </data>
     <data name="AlreadyHaveAnAccountQuestionMark" xml:space="preserve">
-        <value>Already have an account?</value>
+        <value>Vous avez déjà un compte?</value>
     </data>
     <data name="AddProjectBubbleText" xml:space="preserve">
         <value>Add a project and tags on the fly</value>
     </data>
     <data name="ReviewTheTerms" xml:space="preserve">
-        <value>Review the Terms</value>
+        <value>Consultez les conditions</value>
     </data>
     <data name="IAgree" xml:space="preserve">
-        <value>I agree</value>
+        <value>je suis d'accord</value>
     </data>
     <data name="TokenResetInstruction" xml:space="preserve">
-        <value>Enter your password to log back in to your account</value>
+        <value>Entrez votre mot de passe pour vous reconnecter à votre compte</value>
     </data>
     <data name="OrSignOut" xml:space="preserve">
-        <value>or Sign out</value>
+        <value>ou Déconnectez-vous</value>
     </data>
     <data name="APITokenResetSuccess" xml:space="preserve">
-        <value>Your API token has been reset.</value>
+        <value>Votre jeton d'API a été réinitialisé.</value>
     </data>
     <data name="StartTimerInvocationPhrase" xml:space="preserve">
         <value>Track time</value>
@@ -979,10 +979,10 @@ PS. Our customer support team currently operates in English only. Sorry for any 
         <value>dddd, MMM d</value>
     </data>
     <data name="SiriShortcuts" xml:space="preserve">
-        <value>Siri Shortcuts</value>
+        <value>Raccourcis Siri</value>
     </data>
     <data name="SiriShortcutsDescription" xml:space="preserve">
-        <value>Add shortcuts to control Toggl with Siri and the Shortcuts app</value>
+        <value>Ajouter des raccourcis pour contrôler Toggl avec Siri et l'application Shortcuts</value>
     </data>
     <data name="SiriWorkflowsDescription" xml:space="preserve">
         <value>Chain your Toggl shortcuts with those from other apps</value>
@@ -1003,7 +1003,7 @@ PS. Our customer support team currently operates in English only. Sorry for any 
         <value>Ok</value>
     </data>
     <data name="SiriClipboardInstructionDoNotShowAgain" xml:space="preserve">
-        <value>Don’t show this again</value>
+        <value>Ne plus montrer</value>
     </data>
     <data name="SiriClipboardHintLabel" xml:space="preserve">
         <value>When you run this shortcut, the Description will be pasted from Clipboard</value>
@@ -1012,10 +1012,10 @@ PS. Our customer support team currently operates in English only. Sorry for any 
         <value>Siri Workflows</value>
     </data>
     <data name="CantOpenWorkflowTitle" xml:space="preserve">
-        <value>Can't open Shortcut</value>
+        <value>Impossible d'ouvrir le raccourci</value>
     </data>
     <data name="CantOpenWorkflowDescription" xml:space="preserve">
-        <value>The Shortcuts app is not installed</value>
+        <value>L'application Shortcuts n'est pas installée</value>
     </data>
     <data name="SiriTrackEntrySuggestedInvocationPhrase" xml:space="preserve">
         <value>Track {0}</value>
@@ -1036,7 +1036,7 @@ PS. Our customer support team currently operates in English only. Sorry for any 
         <value>Stop tracking time?</value>
     </data>
     <data name="SiriShortcutLoginToUseShortcut" xml:space="preserve">
-        <value>Log in to use this shortcut.</value>
+        <value>Connectez-vous pour utiliser ce raccourci.</value>
     </data>
     <data name="SiriShortcutOpenTheAppToSync" xml:space="preserve">
         <value>Open the app to sync your data, then try again.</value>
