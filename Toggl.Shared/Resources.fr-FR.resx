@@ -227,11 +227,11 @@ Veuillez réessayer.</value>
         <value>Relâcher pour rafraîchir</value>
     </data>
     <data name="LogEmptyStateTitle" xml:space="preserve">
-        <value>Welcome back!</value>
+        <value>Bon retour!</value>
     </data>
     <data name="LogEmptyStateText" xml:space="preserve">
-        <value>You haven’t tracked time for a while.
-Start the timer and your most used time entries will appear here.</value>
+        <value>Vous n´avez plus suivi depuis un lapse de temps. 
+Mettez en marche le chronomètre et ici s´affichent vos enregistrements les plus utilisés.</value>
     </data>
     <data name="DifferentWorkspaceAlertTitle" xml:space="preserve">
         <value>Vous avez sélectionné un projet dans un autre espace de travail.</value>
@@ -246,7 +246,7 @@ Start the timer and your most used time entries will appear here.</value>
         <value>Télécharger</value>
     </data>
     <data name="ConfirmDeleteNewTETitle" xml:space="preserve">
-        <value>Would you like to discard this time entry?</value>
+        <value>Souhaitez-vous suspendre cette entrée de temps?</value>
     </data>
     <data name="ContinueEditing" xml:space="preserve">
         <value>continuer l'édition</value>
@@ -285,19 +285,19 @@ Start the timer and your most used time entries will appear here.</value>
         <value>Aucun client</value>
     </data>
     <data name="AddFilterTags" xml:space="preserve">
-        <value>Add/filter tags</value>
+        <value>Ajouter/filtrer les mots clés</value>
     </data>
     <data name="AddFilterProjects" xml:space="preserve">
-        <value>Add/filter project</value>
+        <value>Ajouter/filtrer les projets</value>
     </data>
     <data name="AddFilterClients" xml:space="preserve">
-        <value>Add/filter clients</value>
+        <value>Ajouter/filtrer les clients</value>
     </data>
     <data name="CreateTag" xml:space="preserve">
-        <value>Create tag</value>
+        <value>Créer un mot-clé</value>
     </data>
     <data name="CreateProject" xml:space="preserve">
-        <value>créer un projet</value>
+        <value>Créer un projet</value>
     </data>
     <data name="Workspace" xml:space="preserve">
         <value>Espace de travail</value>
@@ -357,7 +357,7 @@ Start the timer and your most used time entries will appear here.</value>
         <value>L'année dernière</value>
     </data>
     <data name="Unknown" xml:space="preserve">
-        <value>Unknown</value>
+        <value>Inconnue</value>
     </data>
     <data name="ReportPeriod" xml:space="preserve">
         <value>Période du rapport</value>
@@ -369,40 +369,40 @@ Start the timer and your most used time entries will appear here.</value>
         <value>Demandez Siri d'afficher un rapport pour cette période</value>
     </data>
     <data name="SiriCustomTimeEntryInstruction" xml:space="preserve">
-        <value>Ask Siri to start a timer with these entry details</value>
+        <value>Demandez à Siri  mettre en marche le chronomètre avec ces données</value>
     </data>
     <data name="WorkingOnThis" xml:space="preserve">
-        <value>Working on this?</value>
+        <value>Vous travaillez là-dessus?</value>
     </data>
     <data name="WorkingOnThese" xml:space="preserve">
-        <value>Working on these?</value>
+        <value>Vous travaillez dessus?</value>
     </data>
     <data name="NoTagsInfoMessage" xml:space="preserve">
-        <value>Add keywords to your time entries with # tags.</value>
+        <value>Ajoutez des mots clés à vos entrées de temps avec # balises.</value>
     </data>
     <data name="NoProjectsInfoMessage" xml:space="preserve">
-        <value>Create a project @ and categorize your tracked time.</value>
+        <value>Créez un projet @ et catégorisez votre temps suivi.</value>
     </data>
     <data name="MondayInitial" xml:space="preserve">
-        <value>M</value>
+        <value>L</value>
     </data>
     <data name="TuesdayInitial" xml:space="preserve">
-        <value>T</value>
+        <value>M</value>
     </data>
     <data name="WednesdayInitial" xml:space="preserve">
-        <value>W</value>
+        <value>M</value>
     </data>
     <data name="ThursdayInitial" xml:space="preserve">
-        <value>T</value>
+        <value>J</value>
     </data>
     <data name="FridayInitial" xml:space="preserve">
-        <value>F</value>
+        <value>V</value>
     </data>
     <data name="SaturdayInitial" xml:space="preserve">
         <value>S</value>
     </data>
     <data name="SundayInitial" xml:space="preserve">
-        <value>S</value>
+        <value>D</value>
     </data>
     <data name="Monday" xml:space="preserve">
         <value>Lundi</value>
@@ -429,10 +429,10 @@ Start the timer and your most used time entries will appear here.</value>
         <value>Aide</value>
     </data>
     <data name="WorkspaceChangedAlertTitle" xml:space="preserve">
-        <value>vous avez changé d'espace de travail.</value>
+        <value>Vous avez changé d'espace de travail.</value>
     </data>
     <data name="WorkspaceChangedAlertMessage" xml:space="preserve">
-        <value>Your project and time entry will be allocated to the selected workspace.</value>
+        <value>Votre projet et entrée de temps seront alloué à l´espace de travail sélectionné</value>
     </data>
     <data name="Reports" xml:space="preserve">
         <value>Rapports</value>
@@ -441,40 +441,40 @@ Start the timer and your most used time entries will appear here.</value>
         <value>Autre</value>
     </data>
     <data name="StartTimeEntry" xml:space="preserve">
-        <value>Start a time entry</value>
+        <value>Démarrez une entrée de temps</value>
     </data>
     <data name="Continue" xml:space="preserve">
         <value>Continuer</value>
     </data>
     <data name="DeleteThisTimeEntry" xml:space="preserve">
-        <value>Delete this time entry?</value>
+        <value>Supprimez cette entrée de temps?</value>
     </data>
     <data name="DeleteMultipleTimeEntries" xml:space="preserve">
-        <value>Permanently delete {0} time entries?</value>
+        <value>Supprimez définitivement {0} entrées de temps?</value>
     </data>
     <data name="DeleteThisEntry" xml:space="preserve">
-        <value>Delete this entry</value>
+        <value>Supprimez cette entrée</value>
     </data>
     <data name="DeleteNTimeEntries" xml:space="preserve">
-        <value>Delete {0} time entries</value>
+        <value>Supprimez {0} entrées de temps</value>
     </data>
     <data name="DiscardThisTimeEntry" xml:space="preserve">
-        <value>Discard this time entry?</value>
+        <value>Suspendre cette entrée de temps?</value>
     </data>
     <data name="DiscardEditingChanges" xml:space="preserve">
         <value>Annuler les modifications?</value>
     </data>
     <data name="DurationFormatClassic" xml:space="preserve">
-        <value>Classic (47:06 min)</value>
+        <value>Classique (47:06 min)</value>
     </data>
     <data name="DurationFormatImproved" xml:space="preserve">
-        <value>Improved (0:47:06)</value>
+        <value>Améliorée (0:47:06)</value>
     </data>
     <data name="DurationFormatDecimal" xml:space="preserve">
-        <value>Decimal (0.79 h)</value>
+        <value>Décimale (0.79 h)</value>
     </data>
     <data name="ContinueLastEntry" xml:space="preserve">
-        <value>Continue last entry</value>
+        <value>Continuez avec la dernière entrée</value>
     </data>
     <data name="TapToRetry" xml:space="preserve">
         <value>Appuyez pour réessayer</value>
@@ -504,7 +504,7 @@ Start the timer and your most used time entries will appear here.</value>
         <value>Obtenir le lien de réinitialisation du mot de passe</value>
     </data>
     <data name="TermsOfServiceDialogMessage" xml:space="preserve">
-        <value>By tapping "I Agree", you understand and agree to Toggl's {0} and {1}</value>
+        <value>Appuyez "J´accepte", vous comprenez et acceptez les {0} et {1} de Toggl</value>
         <comment> This is shown in a popup when the user tries to sign up. {0} is a placeholder for where the words "Terms of Service" will be. {1} is a placeholder for where the words "Privacy Policy" will be. </comment>
     </data>
     <data name="CountryOfResidence" xml:space="preserve">
@@ -553,10 +553,10 @@ Start the timer and your most used time entries will appear here.</value>
         <value>Succès</value>
     </data>
     <data name="EntryDeleted" xml:space="preserve">
-        <value>Time entry was deleted</value>
+        <value>Le temps d´entrée est supprimé</value>
     </data>
     <data name="MultipleEntriesDeleted">
-        <value>{0} time entries deleted</value>
+        <value>{0} entrées de temps supprimées</value>
     </data>
     <data name="UndoButtonTitle" xml:space="preserve">
         <value>ANNULER</value>
@@ -571,10 +571,10 @@ Start the timer and your most used time entries will appear here.</value>
         <value>Off</value>
     </data>
     <data name="NewTimeEntry" xml:space="preserve">
-        <value>New Time Entry</value>
+        <value>La nouvelle entrée de temps</value>
     </data>
     <data name="EventReminder" xml:space="preserve">
-        <value>Event reminder</value>
+        <value>Rappel d´événemnt</value>
     </data>
     <data name="Oops" xml:space="preserve">
         <value>Oops</value>
@@ -589,7 +589,7 @@ Start the timer and your most used time entries will appear here.</value>
         <value>Quand l'événement commence</value>
     </data>
     <data name="FiveMinutes" xml:space="preserve">
-        <value>5 minutes before</value>
+        <value>5 minutes avant</value>
     </data>
     <data name="TenMinutes" xml:space="preserve">
         <value>10 minutes avant</value>
@@ -610,10 +610,10 @@ Start the timer and your most used time entries will appear here.</value>
         <value>Notifications</value>
     </data>
     <data name="NotificationsRunningTimer" xml:space="preserve">
-        <value>Running timer</value>
+        <value>Le chronomètre en cours d´exécution</value>
     </data>
     <data name="NotificationsStoppedTimer" xml:space="preserve">
-        <value>Stopped timer</value>
+        <value>Le chronomètre arrêté</value>
     </data>
     <data name="General" xml:space="preserve">
         <value>Général</value>
@@ -628,10 +628,10 @@ Start the timer and your most used time entries will appear here.</value>
         <value>Ouvrez l'application et commencez</value>
     </data>
     <data name="StartInBackgroundAction" xml:space="preserve">
-        <value>Start in background</value>
+        <value>Commencez en arrière-plan</value>
     </data>
     <data name="OpenAppAction" xml:space="preserve">
-        <value>Open app</value>
+        <value>Ouvrez application</value>
     </data>
     <data name="IdleTimerNotification" xml:space="preserve">
         <value>Sur quoi travaillez-vous?</value>
@@ -640,10 +640,10 @@ Start the timer and your most used time entries will appear here.</value>
         <value>Supprimer le message?</value>
     </data>
     <data name="InaccessibleTimeEntryErrorMessage" xml:space="preserve">
-        <value>This time entry belongs to a workspace that you don't have access to anymore and it can't be synced. Move it to a different workspace by changing the project or delete it.</value>
+        <value>Cette entrée de temps appartient à un espace de travail auquel vous n´avez plus accès et elle ne peut pas être synchronisée. Déplacez-le dans un autre espace de travail en modifiant le projet ou supprimez-le.</value>
     </data>
     <data name="TimeEntriesGroupSyncErrorMessage" xml:space="preserve">
-        <value>{0} out of {1} time entries in this group failed to sync. Open specific time entries for details.</value>
+        <value>{0} sur {1} entrées de temps dans ce groupe n'ont pas pu être synchronisées. Ouvrez les entrées d'heure spécifiques pour plus de détails.</value>
     </data>
     <data name="Calendar" xml:space="preserve">
         <value>Calendrier</value>
@@ -655,10 +655,10 @@ Start the timer and your most used time entries will appear here.</value>
         <value>Commencer maintenant</value>
     </data>
     <data name="CalendarStartWhenTheEventStarts" xml:space="preserve">
-        <value>Start at event start</value>
+        <value>Commencez à l´événement</value>
     </data>
     <data name="CalendarCopyEventToTimeEntry" xml:space="preserve">
-        <value>Copy as a time entry</value>
+        <value>Copiez comme entrée de temps</value>
     </data>
     <data name="CreateClient" xml:space="preserve">
         <value>Créer un client</value>
@@ -730,7 +730,7 @@ Start the timer and your most used time entries will appear here.</value>
         <value>Classifiez votre temps avec des projets</value>
     </data>
     <data name="AddTags" xml:space="preserve">
-        <value>Add tags</value>
+        <value>Ajoutez les mots-clés</value>
     </data>
     <data name="EmailAddress" xml:space="preserve">
         <value>Adresse e-mail</value>
@@ -745,16 +745,16 @@ Start the timer and your most used time entries will appear here.</value>
         <value>Vous n'avez pas de compte?</value>
     </data>
     <data name="YouHaveCreatedYourFirstTimeEntry" xml:space="preserve">
-        <value>You've created your first time entry</value>
+        <value>Vous avez créé votre entrée pour la première fois</value>
     </data>
     <data name="TapToEditIt" xml:space="preserve">
-        <value>Tap to edit it</value>
+        <value>Appuyez pour le modifier</value>
     </data>
     <data name="TapToStartTimer" xml:space="preserve">
-        <value>Tap to start timer</value>
+        <value>Appuez pour démarrer le chronomètre</value>
     </data>
     <data name="TapToStopTimer" xml:space="preserve">
-        <value>Tap to stop timer</value>
+        <value>Appuez pour arrêter le chronomètre</value>
     </data>
     <data name="DoneWithExclamationMark" xml:space="preserve">
         <value>Terminé!</value>
@@ -763,16 +763,16 @@ Start the timer and your most used time entries will appear here.</value>
         <value>Merci pour votre retour. Si vous avez des questions, nous vous répondrons bientôt.</value>
     </data>
     <data name="NotificationDisabledNotice" xml:space="preserve">
-        <value>Notifications are currently disabled. If you’d like to recieve notifications, please enable them in the Settings app.</value>
+        <value>Les notifications sont actuellement désactivées. Si vous souhaitez recevoir des notifications, veuillez les activer dans les paramètres.</value>
     </data>
     <data name="OpenSettingsApp" xml:space="preserve">
-        <value>Open Settings App</value>
+        <value>Ouvrez l'application des paramètres</value>
     </data>
     <data name="UpcomingEvent" xml:space="preserve">
-        <value>Upcoming event</value>
+        <value>Événement à venir</value>
     </data>
     <data name="NotificationSettingExplaination" xml:space="preserve">
-        <value>Be notified about upcoming events before they begin.</value>
+        <value>Soyez informé des événements à venir avant qu´ils ne commencent.</value>
     </data>
     <data name="CreateNewWorkspace" xml:space="preserve">
         <value>Créer un nouvel espace de travail</value>
@@ -795,22 +795,22 @@ Veuillez mettre à jour votre application pour continuer.</value>
         <value>Mettre à jour l'application</value>
     </data>
     <data name="RatingCallToActionTitle" xml:space="preserve">
-        <value>Sure, take me there</value>
+        <value>Bien sur, emmène-moi là-bas</value>
     </data>
     <data name="NoThanks" xml:space="preserve">
         <value>Non merci</value>
     </data>
     <data name="Total" xml:space="preserve">
-        <value>Total</value>
+        <value>Totale</value>
     </data>
     <data name="ClockedHours" xml:space="preserve">
-        <value>Clocked hours</value>
+        <value>Heures cadencées</value>
     </data>
     <data name="FirstDayOfTheWeek" xml:space="preserve">
         <value>Premier jour de la semaine</value>
     </data>
     <data name="Clients" xml:space="preserve">
-        <value>Clients</value>
+        <value>Clientes</value>
     </data>
     <data name="ProjectColor" xml:space="preserve">
         <value>Couleur du projet</value>
@@ -834,27 +834,27 @@ Veuillez mettre à jour votre application pour continuer.</value>
         <value>Projet</value>
     </data>
     <data name="EmptyProjectText" xml:space="preserve">
-        <value>Your projects will show up here.
-Use them to categorize your time.</value>
+        <value>Vos projets s´afficheront ici.
+Utilisez-les pour classer votre temps.</value>
     </data>
     <data name="Tags" xml:space="preserve">
-        <value>Tags</value>
+        <value>Mots clés</value>
     </data>
     <data name="TagsList" xml:space="preserve">
-        <value>Tags: {0}</value>
+        <value>Mots clés: {0}</value>
     </data>
     <data name="NoTags" xml:space="preserve">
-        <value>No tags</value>
+        <value>Pas de mots clés</value>
     </data>
     <data name="EmptyTagText" xml:space="preserve">
-        <value>Your tags will show up here.
-Use them to add keywords to your time entries.</value>
+        <value>Vos mots clés s´afficheront ici. 
+    Utilisez-les pour ajouter des mots clés à vos entrées de temps</value>
     </data>
     <data name="GroupTimeEntries" xml:space="preserve">
-        <value>Group similar time entries</value>
+        <value>Regroupez les entrées de temps similaires</value>
     </data>
     <data name="EditingTimeEntryGroup" xml:space="preserve">
-        <value>Editing {0} time entries</value>
+        <value>Modification {0} entrées de temps</value>
     </data>
     <data name="SelectCalendars" xml:space="preserve">
         <value>Sélectionner des calendriers</value>
@@ -901,13 +901,13 @@ PS. Notre équipe de support client fonctionne actuellement en anglais uniquemen
         <value>Utiliser une horloge de 24 heures</value>
     </data>
     <data name="SwipeActions" xml:space="preserve">
-        <value>Cell Swipe Actions</value>
+        <value>Actions de balayage</value>
     </data>
     <data name="ManualMode" xml:space="preserve">
         <value>Mode manuel</value>
     </data>
     <data name="TimerDefaults" xml:space="preserve">
-        <value>Timer Defaults</value>
+        <value>Valeurs par défaut de la minuterie</value>
     </data>
     <data name="ManualModeDescription" xml:space="preserve">
         <value>Définit le comportement par défaut du bouton de démarrage. Un appui long sur le bouton activera toujours le mode alternatif.</value>
@@ -928,7 +928,7 @@ PS. Notre équipe de support client fonctionne actuellement en anglais uniquemen
         <value>Vous avez déjà un compte?</value>
     </data>
     <data name="AddProjectBubbleText" xml:space="preserve">
-        <value>Add a project and tags on the fly</value>
+        <value>Ajouter un projet et des tags à la volée</value>
     </data>
     <data name="ReviewTheTerms" xml:space="preserve">
         <value>Consultez les conditions</value>
@@ -946,22 +946,22 @@ PS. Notre équipe de support client fonctionne actuellement en anglais uniquemen
         <value>Votre jeton d'API a été réinitialisé.</value>
     </data>
     <data name="StartTimerInvocationPhrase" xml:space="preserve">
-        <value>Track time</value>
+        <value>Suivre temps</value>
     </data>
     <data name="StopTimerInvocationPhrase" xml:space="preserve">
-        <value>Stop tracking</value>
+        <value>Arrêter le suivi</value>
     </data>
     <data name="ShowReportsInvocationPhrase" xml:space="preserve">
-        <value>Show my time</value>
+        <value>Motrer mon temps</value>
     </data>
     <data name="ContinueTimerInvocationPhrase">
-        <value>Continue timer</value>
+        <value>Continuer la minuterie</value>
     </data>
     <data name="NumberOfTasksPlural" xml:space="preserve">
-        <value>{0} Tasks</value>
+        <value>{0} Tâches</value>
     </data>
     <data name="NumberOfTasksSingular" xml:space="preserve">
-        <value>{0} Task</value>
+        <value>{0} Tâche</value>
     </data>
     <data name="TwelveHoursFormat">
         <value>h tt</value>
@@ -985,19 +985,19 @@ PS. Notre équipe de support client fonctionne actuellement en anglais uniquemen
         <value>Ajouter des raccourcis pour contrôler Toggl avec Siri et l'application Shortcuts</value>
     </data>
     <data name="SiriWorkflowsDescription" xml:space="preserve">
-        <value>Chain your Toggl shortcuts with those from other apps</value>
+        <value>Enchainez vos raccourcis Toggl avec ceux d´autres applications</value>
     </data>
     <data name="SiriShortcutCustomTimeEntryTitle" xml:space="preserve">
-        <value>Time entry details</value>
+        <value>Les details d´entrée de temps</value>
     </data>
     <data name="SiriShortcutDescriptionFromClipboard" xml:space="preserve">
-        <value>Description from Clipboard</value>
+        <value>Description du Presse-papiers</value>
     </data>
     <data name="SiriClipboardInstructionTitle" xml:space="preserve">
-        <value>Paste Description from Clipboard</value>
+        <value>Coller la description depuis le Presse-papiers</value>
     </data>
     <data name="SiriClipboardInstructionDescription" xml:space="preserve">
-        <value>When you choose this option, whatever text has been copied to the system’s clipboard will be used as the description for the time entry.</value>
+        <value>Lorsque vous choisissez cette option, le texte copié dans le Presse-papiers du système sera utilisé comme description pour saisi du temps.</value>
     </data>
     <data name="SiriClipboardInstructionConfirm" xml:space="preserve">
         <value>Ok</value>
@@ -1006,7 +1006,7 @@ PS. Notre équipe de support client fonctionne actuellement en anglais uniquemen
         <value>Ne plus montrer</value>
     </data>
     <data name="SiriClipboardHintLabel" xml:space="preserve">
-        <value>When you run this shortcut, the Description will be pasted from Clipboard</value>
+        <value>Lorsque vous exécutez ce raccourci, la description sera collée à partir du Presse-papiers.</value>
     </data>
     <data name="SiriWorkflows" xml:space="preserve">
         <value>Siri Workflows</value>
@@ -1018,246 +1018,244 @@ PS. Notre équipe de support client fonctionne actuellement en anglais uniquemen
         <value>L'application Shortcuts n'est pas installée</value>
     </data>
     <data name="SiriTrackEntrySuggestedInvocationPhrase" xml:space="preserve">
-        <value>Track {0}</value>
+        <value>Suivi {0}</value>
     </data>
     <data name="SiriShowReportSuggestedInvocationPhrase" xml:space="preserve">
-        <value>Show {0}'s time</value>
+        <value>Montrer l´heure</value>
     </data>
     <data name="SiriStartTimerConfirmationMessage" xml:space="preserve">
-        <value>Start tracking {0}?</value>
+        <value>Commencer le suivi {0}?</value>
     </data>
     <data name="SiriStartTimerWithEmptyDescConfirmationMessage" xml:space="preserve">
-        <value>Start tracking time?</value>
+        <value>Commencer le suivi du temps?</value>
     </data>
     <data name="SiriStopTimerConfirmationMessage" xml:space="preserve">
-        <value>Stop tracking {0}?</value>
+        <value>Arrêter le suivi {0}?</value>
     </data>
     <data name="SiriStopTimerWithEmptyDescConfirmationMessage" xml:space="preserve">
-        <value>Stop tracking time?</value>
+        <value>Arrêter le suivi du temps?</value>
     </data>
     <data name="SiriShortcutLoginToUseShortcut" xml:space="preserve">
         <value>Connectez-vous pour utiliser ce raccourci.</value>
     </data>
     <data name="SiriShortcutOpenTheAppToSync" xml:space="preserve">
-        <value>Open the app to sync your data, then try again.</value>
+        <value>Ouvrez l'application pour synchroniser vos données, et puis réessayez.</value>
     </data>
     <data name="SiriDurationWithSeconds" xml:space="preserve">
-        <value>{0} seconds</value>
+        <value>{0} secondes</value>
     </data>
     <data name="SiriDurationWithMinutesAndSeconds" xml:space="preserve">
-        <value>{0} minutes and {1} seconds</value>
+        <value>{0} minutes et {1} secondes</value>
     </data>
     <data name="SiriDurationWithHoursAndSeconds" xml:space="preserve">
-        <value>{0} hours and {1} seconds</value>
+        <value>{0} heures et {1} secondes</value>
     </data>
     <data name="SiriDurationWithHoursMinutesAndSeconds" xml:space="preserve">
-        <value>{0} hours and {1} minutes and {2} seconds</value>
+        <value>{0} heures et {1} minutes et {2} secondes</value>
     </data>
     <data name="SiriNoCurrentEntryRunning" xml:space="preserve">
-        <value>There's no entry currently running.</value>
+        <value>Il n'y a aucune entrée en cours d'exécution.</value>
     </data>
     <data name="WidgetLogInToTrackTime" xml:space="preserve">
-        <value>Log in to track time.</value>
+        <value>Connectez-vous pour suivre le temps.</value>
     </data>
     <data name="WidgetApiError" xml:space="preserve">
-        <value>Network connection failed.
-Open app to track offline.</value>
+        <value>La connexion réseau a échoué. 
+Ouvrez l'application pour suivre hors ligne.</value>
     </data>
     <data name="WidgetNoRunningTimeEntryError" xml:space="preserve">
-        <value>No running time entry found.
-Open app to start a new one.</value>
+        <value>Aucune entrée de durée d'exécution trouvée. 
+Ouvrez l'application pour en démarrer une nouvelle.</value>
     </data>
     <data name="WidgetGenericError" xml:space="preserve">
-        <value>An error occured.
-Open app to track time.</value>
+        <value>Une erreur s'est produite. 
+Ouvrez l'application pour suivre le temps.</value>
     </data>
     <data name="Heading" xml:space="preserve">
-        <value>Heading</value>
+        <value>Titre</value>
     </data>
     <data name="SuggestionAccessibilityHint" xml:space="preserve">
-        <value>Starts a time entry</value>
+        <value>Commence une entrée de temps</value>
     </data>
     <data name="TimeEntryRowAccessibilityHint" xml:space="preserve">
-        <value>Edits the time entry</value>
+        <value>Modifie l'entrée de temps</value>
     </data>
     <data name="Suggestion" xml:space="preserve">
-        <value>Suggestion</value>
+        <value>La suggestion</value>
     </data>
     <data name="TrackedTime" xml:space="preserve">
-        <value>tracked time</value>
+        <value>le temps suivi</value>
     </data>
     <data name="HasTags" xml:space="preserve">
-        <value>Has tags</value>
+        <value>il ya des mots clés</value>
     </data>
     <data name="Task" xml:space="preserve">
-        <value>Task</value>
+        <value>tâche</value>
     </data>
     <data name="Client" xml:space="preserve">
-        <value>Client</value>
+        <value>Cliente</value>
     </data>
     <data name="TimeEntries" xml:space="preserve">
-        <value>Time entries</value>
+        <value>Les entrées de temps</value>
     </data>
     <data name="TimeEntry" xml:space="preserve">
-        <value>Time entry</value>
+        <value>L´entrée de temps</value>
     </data>
     <data name="ExpandTimeEntryGroup" xml:space="preserve">
-        <value>Expand time entry group</value>
+        <value>Développer le groupe d'entrée de temps</value>
     </data>
     <data name="CollapseTimeEntryGroup" xml:space="preserve">
-        <value>Collapse time entry group</value>
+        <value>Réduire le groupe d'entrée de temps</value>
     </data>
     <data name="Timer" xml:space="preserve">
-        <value>Timer</value>
+        <value>Minuterie</value>
     </data>
     <data name="CurrentlyRunningTimeEntry" xml:space="preserve">
-        <value>Currently Running Time Entry</value>
+        <value>Saisie de l´heure en cours d´exécution</value>
     </data>
     <data name="StopCurrentlyRunningTimeEntry" xml:space="preserve">
-        <value>Stop currently running time entry</value>
+        <value>Arrêtez d´entrer l´heure en cours</value>
     </data>
     <data name="IsBillable" xml:space="preserve">
-        <value>Is billable</value>
+        <value>Facturable</value>
     </data>
     <data name="SyncFailed" xml:space="preserve">
-        <value>Syncing failed</value>
+        <value>Échec de la synchronisation</value>
     </data>
     <data name="SyncFailedOffline" xml:space="preserve">
-        <value>Syncing failed, you are offline</value>
+        <value>La synchronisation a échoué, vous êtes hors ligne</value>
     </data>
     <data name="SuccessfullySyncedData" xml:space="preserve">
-        <value>Successfully synced data</value>
+        <value>Données synchronisées avec succès</value>
     </data>
     <data name="UndoDeletedTimeEntry" xml:space="preserve">
-        <value>Undo deleted time entry</value>
+        <value>L'entrée de temps supprimée</value>
     </data>
     <data name="CalendarPermissionDeniedOr" xml:space="preserve">
-        <value>or {0}</value>
+        <value>ou {0}</value>
     </data>
     <data name="CalendarPermissionDeniedEnableButton" xml:space="preserve">
-        <value>enable access to see events</value>
+        <value>permettre l'accès pour voir les événements</value>
     </data>
     <data name="SelectCalendarsDescription" xml:space="preserve">
-        <value>Events are visible to you only and won’t appear in Reports.</value>
+        <value>Les événements ne sont visibles que pour vous et n'apparaîtront pas dans les rapports.</value>
     </data>
     <data name="NoWorkspaceOr" xml:space="preserve">
-        <value>Or {0}</value>
+        <value>ou {0}</value>
     </data>
     <data name="NoWorkspaceTryAgain" xml:space="preserve">
-        <value>Try again</value>
+        <value>Réessayez</value>
     </data>
     <data name="OutdatedAppTryTogglCom" xml:space="preserve">
-        <value>try toggl.com</value>
+        <value>essayer toggl.com </value>
     </data>
     <data name="RatingTitle" xml:space="preserve">
-        <value>Enjoying Toggl?</value>
+        <value>Vous aimez Toggl?</value>
     </data>
     <data name="RatingYes" xml:space="preserve">
-        <value>Yes!</value>
+        <value>Oui!</value>
     </data>
     <data name="RatingNotReally" xml:space="preserve">
-        <value>Not really</value>
+        <value>Pas vraiment</value>
     </data>
     <data name="ReportsEmptyStateTitle" xml:space="preserve">
-        <value>Nothing here</value>
+        <value>Rien ici</value>
     </data>
     <data name="ReportsEmptyStateDescription" xml:space="preserve">
-        <value>You have no time entries for
-the selected time period.</value>
+        <value>Vous n'avez aucune entrée de temps pour la période sélectionnée.</value>
     </data>
     <data name="SiriShortcutCellAdd" xml:space="preserve">
-        <value>Add</value>
+        <value>Ajouter</value>
     </data>
     <data name="CustomSiriShortcutCellIn" xml:space="preserve">
-        <value>in {0}</value>
+        <value>en {0}</value>
     </data>
     <data name="SiriShortcutsStartTimer" xml:space="preserve">
-        <value>Start timer</value>
+        <value>Démarrer la minuterie</value>
     </data>
     <data name="SiriShortcutsStartTimerWithName" xml:space="preserve">
-        <value>Start timer: {0}</value>
+        <value>Démarrer la minuterie: {0}</value>
     </data>
     <data name="SiriShortcutsStartFromClipboard" xml:space="preserve">
-        <value>Start from clipboard</value>
+        <value>Commencer à partir du planchette</value>
     </data>
     <data name="SiriShortcutsContinueTracking" xml:space="preserve">
-        <value>Continue tracking</value>
+        <value>Continuer le suivi</value>
     </data>
     <data name="SiriShortcutsStopRunningEntry" xml:space="preserve">
-        <value>Stop running entry</value>
+        <value>Arrêter l'exécution de l'entrée</value>
     </data>
     <data name="SiriShortcutsStartTimerWithCustomDetails" xml:space="preserve">
-        <value>Start timer with custom details</value>
+        <value>Démarrer la minuterie avec des détails personnalisés</value>
     </data>
     <data name="SiriShortcutsShowReport" xml:space="preserve">
-        <value>Show report</value>
+        <value>Afficher le rapport</value>
     </data>
     <data name="SiriShortcutsShowCustomReport" xml:space="preserve">
-        <value>Show custom report</value>
+        <value>Afficher le rapport personnalisé</value>
     </data>
     <data name="SiriShortcutsTimerShortcuts" xml:space="preserve">
-        <value>Timer shortcuts</value>
+        <value>Les raccourcis du temp</value>
     </data>
     <data name="SiriShortcutsReportsShortcuts" xml:space="preserve">
-        <value>Reports shortcuts</value>
+        <value>Les raccourcis des rapports</value>
     </data>
     <data name="CalendarEvents" xml:space="preserve">
-        <value>Calendar events</value>
+        <value>Événements sur le Calendrier </value>
     </data>
     <data name="CalendarOnboardingTitle" xml:space="preserve">
-        <value>Get started with Calendar</value>
+        <value>Commencer par le calendrier</value>
     </data>
     <data name="CalendarOnboardingMessage" xml:space="preserve">
-        <value>View your calendar events in Toggl and turn them into time entries with a tap</value>
+        <value>Affichez vos événements d'agenda dans Toggl et transformez-les en entrées d'heure d'un simple toucher.</value>
     </data>
     <data name="LinkCalendars" xml:space="preserve">
-        <value>Link calendars</value>
+        <value>Connecter des calendriers</value>
     </data>
     <data name="LinkYourCalendars" xml:space="preserve">
-        <value>Link your calendars</value>
+        <value>Connectez vos calendriers</value>
     </data>
     <data name="LinkCalendarsMessage" xml:space="preserve">
-        <value>View your calendar events in Toggl and log them with a single tap</value>
+        <value>Affichez vos événements d'agenda dans Toggl et enregistrez-les d'une simple touche.</value>
     </data>
     <data name="AllowAccess" xml:space="preserve">
-        <value>Allow access</value>
+        <value>Permettre l'accès</value>
     </data>
     <data name="PrivateProjectHint" xml:space="preserve">
-        <value>Private projects are only accessible
-to project members</value>
+        <value>Les projets privés sont accessibles qu'aux membres du projet</value>
     </data>
     <data name="Username" xml:space="preserve">
-        <value>Username</value>
+        <value>Identifiant</value>
     </data>
     <data name="Email" xml:space="preserve">
         <value>Email</value>
     </data>
     <data name="DefaultWorkspace" xml:space="preserve">
-        <value>Default Workspace</value>
+        <value>Espace de travail par défaut</value>
     </data>
     <data name="StartTimeAfterCurrentTimeWarning" xml:space="preserve">
-        <value>Start time must be before current time!</value>
+        <value>L'heure de début doit être antérieure à l'heure actuelle!</value>
     </data>
     <data name="StartTimeAfterStopTimeWarning" xml:space="preserve">
-        <value>Start time must be before Stop time!</value>
+        <value>L'heure de début doit être antérieure à l'heure d'arrêt!</value>
     </data>
     <data name="StopTimeBeforeStartTimeWarning" xml:space="preserve">
-        <value>Stop time must be after Start time!</value>
+        <value>L'heure d'arrêt doit être postérieure à l'heure de début!</value>
     </data>
     <data name="DurationTooLong" xml:space="preserve">
-        <value>Duration can't exceed 999 hours!</value>
+        <value>La durée ne peut pas dépasser 999 heures!</value>
     </data>
     <data name="CategorizeWithProjects" xml:space="preserve">
-        <value>Categorize your time by adding a project</value>
+        <value>Classez votre temps en ajoutant un projet</value>
     </data>
     <data name="GenericInternetConnectionErrorMessage" xml:space="preserve">
-        <value>No internet connection. Please try again.</value>
+        <value>Pas de connexion Internet. Veuillez réessayer.</value>
     </data>
     <data name="TotalEvents" xml:space="preserve">
-        <value>{0} events</value>
+        <value>{0} événements</value>
     </data>
     <data name="SendFeedbackSuccessMessage" xml:space="preserve">
-        <value>Message sent. Thank you for your feedback. If you had any questions, we'll get back to you soon.</value>
+        <value>Message envoyé. Merci pour votre avis. Si vous avez des questions, nous vous répondrons dès que possible.</value>
     </data>
     <data name="SiriWorkflowsProductionURL" xml:space="preserve">
         <value>https://toggl-mobile.firebaseapp.com/</value>
@@ -1269,66 +1267,66 @@ to project members</value>
         <value>https://toggl-mobile.firebaseapp.com/adhoc/</value>
     </data>
     <data name="SiriWorkflowDictateTimeEntryTitle" xml:space="preserve">
-        <value>Dictate time entry</value>
+        <value>Dictez la saisie du temps</value>
     </data>
     <data name="SiriWorkflowDictateTimeEntryDescription" xml:space="preserve">
-        <value>Tell Siri to start a time entry with a custom description you can dictate.</value>
+        <value>Dites à Siri de commencer une entrée de temps avec une description personnalisée que vous pouvez dicter.</value>
     </data>
     <data name="SiriWorkflowDoneForTheDayTitle" xml:space="preserve">
-        <value>Done for the day</value>
+        <value>C´est tout pour aujourd´hui</value>
     </data>
     <data name="SiriWorkflowDoneForTheDayDescription" xml:space="preserve">
-        <value>Stop the running timer and view a custom Summary Report.</value>
+        <value>Arrêtez le chronomètre en cours d'exécution et affichez un rapport de synthèse personnalisé.</value>
     </data>
     <data name="SiriWorkflowStartAPomodoroTitle" xml:space="preserve">
-        <value>Start a Pomodoro</value>
+        <value>Démarrer un Pomodoro</value>
     </data>
     <data name="SiriWorkflowStartAPomodoroDescription" xml:space="preserve">
-        <value>Start a Time Entry and set an alarm for 25 minutes.</value>
+        <value>Commencez une entrée de temps et définissez une alarme pour 25 minutes.</value>
     </data>
     <data name="SiriWorkflowFocusModeTitle" xml:space="preserve">
-        <value>Focus mode</value>
+        <value>Mode de mise au point</value>
     </data>
     <data name="SiriWorkflowFocusModeDescription" xml:space="preserve">
-        <value>Start a Time Entry, select a music playlist and turn on do not disturb.</value>
+        <value>Démarrez une entrée de temps, sélectionnez une liste de lecture de musique et activez Ne pas déranger.</value>
     </data>
     <data name="SystemDefault" xml:space="preserve">
-        <value>System Default</value>
+        <value>Défaut du système</value>
     </data>
     <data name="Light" xml:space="preserve">
-        <value>Light</value>
+        <value>Claire</value>
     </data>
     <data name="Dark" xml:space="preserve">
-        <value>Dark</value>
+        <value>Foncé</value>
     </data>
     <data name="RestartNeeded" xml:space="preserve">
-        <value> Restart needed</value>
+        <value>Redémarrage est nécessaire</value>
     </data>
     <data name="RestartNeededMessage" xml:space="preserve">
-        <value>The app needs to be restarted for changes to take effect. Restart now?</value>
+        <value>L'application doit être redémarrée pour que les modifications prennent effet. Redémarrez maintenant?</value>
     </data>
     <data name="AppTheme" xml:space="preserve">
-        <value>App Theme</value>
+        <value>Thème de l'application</value>
     </data>
     <data name="Yes" xml:space="preserve">
-        <value>Yes</value>
+        <value>Oui</value>
     </data>
     <data name="No" xml:space="preserve">
-        <value>No</value>
+        <value>Non</value>
     </data>
     <data name="Now" xml:space="preserve">
-        <value>now</value>
+        <value>Maintenant</value>
     </data>
     <data name="LoginToTrack" xml:space="preserve">
-        <value>Log in to track time</value>
+        <value>Connectez-vous pour suivre le temps</value>
     </data>
     <data name="NoSuggestionsAvailable" xml:space="preserve">
-        <value>No suggestions available</value>
+        <value>Aucune suggestion disponible</value>
     </data>
     <data name="ShowAllTimEntries" xml:space="preserve">
-        <value>Show all time entries</value>
+        <value>Afficher toutes entrées de temps</value>
     </data>
     <data name="LoginToShowSuggestions" xml:space="preserve">
-        <value>Log in to show suggestions</value>
+        <value>Connectez-vous pour afficher les suggestions</value>
     </data>
 </root>
