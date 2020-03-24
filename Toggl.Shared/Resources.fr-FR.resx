@@ -247,7 +247,7 @@ Mettez en marche le chronomètre et ici s´affichent vos enregistrements les plu
         <value>Télécharger</value>
     </data>
     <data name="ConfirmDeleteNewTETitle" xml:space="preserve">
-        <value>Souhaitez-vous suspendre cette entrée de temps?</value>
+        <value>Souhaitez-vous suspendre cette entrée?</value>
     </data>
     <data name="ContinueEditing" xml:space="preserve">
         <value>continuer l'édition</value>
@@ -433,7 +433,7 @@ Mettez en marche le chronomètre et ici s´affichent vos enregistrements les plu
         <value>Vous avez changé d'espace de travail.</value>
     </data>
     <data name="WorkspaceChangedAlertMessage" xml:space="preserve">
-        <value>Votre projet et entrée de temps seront alloué à l´espace de travail sélectionné</value>
+        <value>Votre projet et entrée seront alloué à l´espace de travail sélectionné</value>
     </data>
     <data name="Reports" xml:space="preserve">
         <value>Rapports</value>
@@ -442,13 +442,13 @@ Mettez en marche le chronomètre et ici s´affichent vos enregistrements les plu
         <value>Autre</value>
     </data>
     <data name="StartTimeEntry" xml:space="preserve">
-        <value>Démarrez une entrée de temps</value>
+        <value>Démarrez une entrée</value>
     </data>
     <data name="Continue" xml:space="preserve">
         <value>Continuer</value>
     </data>
     <data name="DeleteThisTimeEntry" xml:space="preserve">
-        <value>Supprimez cette entrée de temps?</value>
+        <value>Supprimez cette entrée?</value>
     </data>
     <data name="DeleteMultipleTimeEntries" xml:space="preserve">
         <value>Supprimez définitivement {0} entrées de temps?</value>
@@ -460,7 +460,7 @@ Mettez en marche le chronomètre et ici s´affichent vos enregistrements les plu
         <value>Supprimez {0} entrées de temps</value>
     </data>
     <data name="DiscardThisTimeEntry" xml:space="preserve">
-        <value>Suspendre cette entrée de temps?</value>
+        <value>Suspendre cette entrée?</value>
     </data>
     <data name="DiscardEditingChanges" xml:space="preserve">
         <value>Annuler les modifications?</value>
@@ -505,7 +505,7 @@ Mettez en marche le chronomètre et ici s´affichent vos enregistrements les plu
         <value>Obtenir le lien de réinitialisation du mot de passe</value>
     </data>
     <data name="TermsOfServiceDialogMessage" xml:space="preserve">
-        <value>Appuyez "J´accepte", vous comprenez et acceptez les {0} et {1} de Toggl</value>
+        <value>Si vous appuyez sur "J´accepte", vous comprenez et acceptez les {0} et {1} de Toggl</value>
         <comment> This is shown in a popup when the user tries to sign up. {0} is a placeholder for where the words "Terms of Service" will be. {1} is a placeholder for where the words "Privacy Policy" will be. </comment>
     </data>
     <data name="CountryOfResidence" xml:space="preserve">
@@ -572,7 +572,7 @@ Mettez en marche le chronomètre et ici s´affichent vos enregistrements les plu
         <value>Off</value>
     </data>
     <data name="NewTimeEntry" xml:space="preserve">
-        <value>La nouvelle entrée de temps</value>
+        <value>La nouvelle entrée</value>
     </data>
     <data name="EventReminder" xml:space="preserve">
         <value>Rappel d´événemnt</value>
@@ -641,7 +641,7 @@ Mettez en marche le chronomètre et ici s´affichent vos enregistrements les plu
         <value>Supprimer le message?</value>
     </data>
     <data name="InaccessibleTimeEntryErrorMessage" xml:space="preserve">
-        <value>Cette entrée de temps appartient à un espace de travail auquel vous n´avez plus accès et elle ne peut pas être synchronisée. Déplacez-la dans un autre espace de travail en modifiant le projet ou supprimez-la.</value>
+        <value>Cette entrée appartient à un espace de travail auquel vous n´avez plus accès et elle ne peut pas être synchronisée. Déplacez-la dans un autre espace de travail en modifiant le projet ou supprimez-la.</value>
     </data>
     <data name="TimeEntriesGroupSyncErrorMessage" xml:space="preserve">
         <value>{0} sur {1} entrées de temps dans ce groupe n'ont pas pu être synchronisées. Ouvrez les entrées d'heure spécifiques pour plus de détails.</value>
@@ -659,7 +659,7 @@ Mettez en marche le chronomètre et ici s´affichent vos enregistrements les plu
         <value>Commencez à l´événement</value>
     </data>
     <data name="CalendarCopyEventToTimeEntry" xml:space="preserve">
-        <value>Copiez comme entrée de temps</value>
+        <value>Copiez comme entrée</value>
     </data>
     <data name="CreateClient" xml:space="preserve">
         <value>Créer un client</value>
@@ -989,7 +989,7 @@ PS. Notre équipe de support client fonctionne actuellement en anglais uniquemen
         <value>Enchainez vos raccourcis Toggl avec ceux d´autres applications</value>
     </data>
     <data name="SiriShortcutCustomTimeEntryTitle" xml:space="preserve">
-        <value>Details de l'entrée de temps</value>
+        <value>Details de l'entrée</value>
     </data>
     <data name="SiriShortcutDescriptionFromClipboard" xml:space="preserve">
         <value>Description du Presse-papiers</value>
@@ -1076,10 +1076,10 @@ Ouvrez l'application pour suivre le temps.</value>
         <value>Titre</value>
     </data>
     <data name="SuggestionAccessibilityHint" xml:space="preserve">
-        <value>Commence une entrée de temps</value>
+        <value>Commence une entrée</value>
     </data>
     <data name="TimeEntryRowAccessibilityHint" xml:space="preserve">
-        <value>Modifie l'entrée de temps</value>
+        <value>Modifie l'entrée</value>
     </data>
     <data name="Suggestion" xml:space="preserve">
         <value>La suggestion</value>
@@ -1100,13 +1100,13 @@ Ouvrez l'application pour suivre le temps.</value>
         <value>Les entrées de temps</value>
     </data>
     <data name="TimeEntry" xml:space="preserve">
-        <value>L´entrée de temps</value>
+        <value>L´entrée</value>
     </data>
     <data name="ExpandTimeEntryGroup" xml:space="preserve">
-        <value>Développer le groupe d'entrée de temps</value>
+        <value>Développer le groupe d'entrée</value>
     </data>
     <data name="CollapseTimeEntryGroup" xml:space="preserve">
-        <value>Réduire le groupe d'entrée de temps</value>
+        <value>Réduire le groupe d'entrée</value>
     </data>
     <data name="Timer" xml:space="preserve">
         <value>Minuterie</value>
@@ -1130,7 +1130,7 @@ Ouvrez l'application pour suivre le temps.</value>
         <value>Données synchronisées avec succès</value>
     </data>
     <data name="UndoDeletedTimeEntry" xml:space="preserve">
-        <value>L'entrée de temps supprimée</value>
+        <value>L'entrée supprimée</value>
     </data>
     <data name="CalendarPermissionDeniedOr" xml:space="preserve">
         <value>ou {0}</value>
@@ -1163,7 +1163,7 @@ Ouvrez l'application pour suivre le temps.</value>
         <value>Rien ici</value>
     </data>
     <data name="ReportsEmptyStateDescription" xml:space="preserve">
-        <value>Vous n'avez aucune entrée de temps pour la période sélectionnée.</value>
+        <value>Vous n'avez aucune entrée pour la période sélectionnée.</value>
     </data>
     <data name="SiriShortcutCellAdd" xml:space="preserve">
         <value>Ajouter</value>
@@ -1271,7 +1271,7 @@ Ouvrez l'application pour suivre le temps.</value>
         <value>Dictez la saisie du temps</value>
     </data>
     <data name="SiriWorkflowDictateTimeEntryDescription" xml:space="preserve">
-        <value>Dites à Siri de commencer une entrée de temps avec une description personnalisée que vous pouvez dicter.</value>
+        <value>Dites à Siri de commencer une entrée avec une description personnalisée que vous pouvez dicter.</value>
     </data>
     <data name="SiriWorkflowDoneForTheDayTitle" xml:space="preserve">
         <value>C´est tout pour aujourd´hui</value>
@@ -1283,13 +1283,13 @@ Ouvrez l'application pour suivre le temps.</value>
         <value>Démarrer un Pomodoro</value>
     </data>
     <data name="SiriWorkflowStartAPomodoroDescription" xml:space="preserve">
-        <value>Commencez une entrée de temps et définissez une alarme pour 25 minutes.</value>
+        <value>Commencez une entrée et définissez une alarme pour 25 minutes.</value>
     </data>
     <data name="SiriWorkflowFocusModeTitle" xml:space="preserve">
         <value>Mode de mise au point</value>
     </data>
     <data name="SiriWorkflowFocusModeDescription" xml:space="preserve">
-        <value>Démarrez une entrée de temps, sélectionnez une liste de lecture de musique et activez Ne pas déranger.</value>
+        <value>Démarrez une entrée, sélectionnez une liste de lecture de musique et activez Ne pas déranger.</value>
     </data>
     <data name="SystemDefault" xml:space="preserve">
         <value>Défaut du système</value>
