@@ -149,7 +149,8 @@
 Veuillez réessayer.</value>
     </data>
     <data name="GenericSignUpError" xml:space="preserve">
-        <value>Désolé, nous ne parvenons pas à vous inscrire. Veuillez réessayer.</value>
+        <value>Désolé, nous ne parvenons pas à vous inscrire. 
+Veuillez réessayer.</value>
     </data>
     <data name="StartTimeEntryPlaceholder" xml:space="preserve">
         <value>Sur quoi travaillez-vous?</value>
@@ -227,10 +228,10 @@ Veuillez réessayer.</value>
         <value>Relâcher pour rafraîchir</value>
     </data>
     <data name="LogEmptyStateTitle" xml:space="preserve">
-        <value>Bon retour!</value>
+        <value>Content de vous revoir!</value>
     </data>
     <data name="LogEmptyStateText" xml:space="preserve">
-        <value>Vous n´avez plus suivi depuis un lapse de temps. 
+        <value>Vous n'avez plus enregistré votre temps depuis un moment. 
 Mettez en marche le chronomètre et ici s´affichent vos enregistrements les plus utilisés.</value>
     </data>
     <data name="DifferentWorkspaceAlertTitle" xml:space="preserve">
@@ -285,7 +286,7 @@ Mettez en marche le chronomètre et ici s´affichent vos enregistrements les plu
         <value>Aucun client</value>
     </data>
     <data name="AddFilterTags" xml:space="preserve">
-        <value>Ajouter/filtrer les mots clés</value>
+        <value>Ajouter/filtrer les labels</value>
     </data>
     <data name="AddFilterProjects" xml:space="preserve">
         <value>Ajouter/filtrer les projets</value>
@@ -294,7 +295,7 @@ Mettez en marche le chronomètre et ici s´affichent vos enregistrements les plu
         <value>Ajouter/filtrer les clients</value>
     </data>
     <data name="CreateTag" xml:space="preserve">
-        <value>Créer un mot-clé</value>
+        <value>Créer un label</value>
     </data>
     <data name="CreateProject" xml:space="preserve">
         <value>Créer un projet</value>
@@ -375,10 +376,10 @@ Mettez en marche le chronomètre et ici s´affichent vos enregistrements les plu
         <value>Vous travaillez là-dessus?</value>
     </data>
     <data name="WorkingOnThese" xml:space="preserve">
-        <value>Vous travaillez dessus?</value>
+        <value>Travaillez-vous là-dessus?</value>
     </data>
     <data name="NoTagsInfoMessage" xml:space="preserve">
-        <value>Ajoutez des mots clés à vos entrées de temps avec # balises.</value>
+        <value>Ajoutez des labels à vos entrées de temps avec # balises.</value>
     </data>
     <data name="NoProjectsInfoMessage" xml:space="preserve">
         <value>Créez un projet @ et catégorisez votre temps suivi.</value>
@@ -613,7 +614,7 @@ Mettez en marche le chronomètre et ici s´affichent vos enregistrements les plu
         <value>Le chronomètre en cours d´exécution</value>
     </data>
     <data name="NotificationsStoppedTimer" xml:space="preserve">
-        <value>Le chronomètre arrêté</value>
+        <value>Le chronomètre est arrêté</value>
     </data>
     <data name="General" xml:space="preserve">
         <value>Général</value>
@@ -640,7 +641,7 @@ Mettez en marche le chronomètre et ici s´affichent vos enregistrements les plu
         <value>Supprimer le message?</value>
     </data>
     <data name="InaccessibleTimeEntryErrorMessage" xml:space="preserve">
-        <value>Cette entrée de temps appartient à un espace de travail auquel vous n´avez plus accès et elle ne peut pas être synchronisée. Déplacez-le dans un autre espace de travail en modifiant le projet ou supprimez-le.</value>
+        <value>Cette entrée de temps appartient à un espace de travail auquel vous n´avez plus accès et elle ne peut pas être synchronisée. Déplacez-la dans un autre espace de travail en modifiant le projet ou supprimez-la.</value>
     </data>
     <data name="TimeEntriesGroupSyncErrorMessage" xml:space="preserve">
         <value>{0} sur {1} entrées de temps dans ce groupe n'ont pas pu être synchronisées. Ouvrez les entrées d'heure spécifiques pour plus de détails.</value>
@@ -649,7 +650,7 @@ Mettez en marche le chronomètre et ici s´affichent vos enregistrements les plu
         <value>Calendrier</value>
     </data>
     <data name="CalendarWhatToDoWithCalendarEvent" xml:space="preserve">
-        <value>Que shouaitez-vous fair avec cet événement de calendrier?</value>
+        <value>Que shouaitez-vous faire avec cet événement de calendrier?</value>
     </data>
     <data name="CalendarStartNow" xml:space="preserve">
         <value>Commencer maintenant</value>
@@ -730,7 +731,7 @@ Mettez en marche le chronomètre et ici s´affichent vos enregistrements les plu
         <value>Classifiez votre temps avec des projets</value>
     </data>
     <data name="AddTags" xml:space="preserve">
-        <value>Ajoutez les mots-clés</value>
+        <value>Ajoutez les labels</value>
     </data>
     <data name="EmailAddress" xml:space="preserve">
         <value>Adresse e-mail</value>
@@ -801,7 +802,7 @@ Veuillez mettre à jour votre application pour continuer.</value>
         <value>Non merci</value>
     </data>
     <data name="Total" xml:space="preserve">
-        <value>Totale</value>
+        <value>Total</value>
     </data>
     <data name="ClockedHours" xml:space="preserve">
         <value>Heures cadencées</value>
@@ -810,7 +811,7 @@ Veuillez mettre à jour votre application pour continuer.</value>
         <value>Premier jour de la semaine</value>
     </data>
     <data name="Clients" xml:space="preserve">
-        <value>Clientes</value>
+        <value>Clients</value>
     </data>
     <data name="ProjectColor" xml:space="preserve">
         <value>Couleur du projet</value>
@@ -838,23 +839,23 @@ Veuillez mettre à jour votre application pour continuer.</value>
 Utilisez-les pour classer votre temps.</value>
     </data>
     <data name="Tags" xml:space="preserve">
-        <value>Mots clés</value>
+        <value>Labels</value>
     </data>
     <data name="TagsList" xml:space="preserve">
-        <value>Mots clés: {0}</value>
+        <value>Labels: {0}</value>
     </data>
     <data name="NoTags" xml:space="preserve">
-        <value>Pas de mots clés</value>
+        <value>Pas de labels</value>
     </data>
     <data name="EmptyTagText" xml:space="preserve">
-        <value>Vos mots clés s´afficheront ici. 
-    Utilisez-les pour ajouter des mots clés à vos entrées de temps</value>
+        <value>Vos labels s´afficheront ici. 
+    Utilisez-les pour ajouter des labels à vos entrées de temps</value>
     </data>
     <data name="GroupTimeEntries" xml:space="preserve">
         <value>Regroupez les entrées de temps similaires</value>
     </data>
     <data name="EditingTimeEntryGroup" xml:space="preserve">
-        <value>Modification {0} entrées de temps</value>
+        <value>Edition en cours de {0} entrées de temps</value>
     </data>
     <data name="SelectCalendars" xml:space="preserve">
         <value>Sélectionner des calendriers</value>
@@ -919,7 +920,7 @@ PS. Notre équipe de support client fonctionne actuellement en anglais uniquemen
         <value>Soumettre des commentaires</value>
     </data>
     <data name="LoggingOutSecurely" xml:space="preserve">
-        <value>Vous déconnecter en toute sécurité ...</value>
+        <value>Déconnectez-vous en toute sécurité ...</value>
     </data>
     <data name="SignOutOfToggl" xml:space="preserve">
         <value>Se déconnecter de Toggl</value>
@@ -946,13 +947,13 @@ PS. Notre équipe de support client fonctionne actuellement en anglais uniquemen
         <value>Votre jeton d'API a été réinitialisé.</value>
     </data>
     <data name="StartTimerInvocationPhrase" xml:space="preserve">
-        <value>Suivre temps</value>
+        <value>Suivez votre temps</value>
     </data>
     <data name="StopTimerInvocationPhrase" xml:space="preserve">
         <value>Arrêter le suivi</value>
     </data>
     <data name="ShowReportsInvocationPhrase" xml:space="preserve">
-        <value>Motrer mon temps</value>
+        <value>Montrer mon temps</value>
     </data>
     <data name="ContinueTimerInvocationPhrase">
         <value>Continuer la minuterie</value>
@@ -988,7 +989,7 @@ PS. Notre équipe de support client fonctionne actuellement en anglais uniquemen
         <value>Enchainez vos raccourcis Toggl avec ceux d´autres applications</value>
     </data>
     <data name="SiriShortcutCustomTimeEntryTitle" xml:space="preserve">
-        <value>Les details d´entrée de temps</value>
+        <value>Details de l'entrée de temps</value>
     </data>
     <data name="SiriShortcutDescriptionFromClipboard" xml:space="preserve">
         <value>Description du Presse-papiers</value>
@@ -1084,16 +1085,16 @@ Ouvrez l'application pour suivre le temps.</value>
         <value>La suggestion</value>
     </data>
     <data name="TrackedTime" xml:space="preserve">
-        <value>le temps suivi</value>
+        <value>temps suivi</value>
     </data>
     <data name="HasTags" xml:space="preserve">
-        <value>il ya des mots clés</value>
+        <value>il ya des labels</value>
     </data>
     <data name="Task" xml:space="preserve">
         <value>tâche</value>
     </data>
     <data name="Client" xml:space="preserve">
-        <value>Cliente</value>
+        <value>Client</value>
     </data>
     <data name="TimeEntries" xml:space="preserve">
         <value>Les entrées de temps</value>
@@ -1123,7 +1124,7 @@ Ouvrez l'application pour suivre le temps.</value>
         <value>Échec de la synchronisation</value>
     </data>
     <data name="SyncFailedOffline" xml:space="preserve">
-        <value>La synchronisation a échoué, vous êtes hors ligne</value>
+        <value>La synchronisation a échouée, vous êtes hors ligne</value>
     </data>
     <data name="SuccessfullySyncedData" xml:space="preserve">
         <value>Données synchronisées avec succès</value>
@@ -1177,7 +1178,7 @@ Ouvrez l'application pour suivre le temps.</value>
         <value>Démarrer la minuterie: {0}</value>
     </data>
     <data name="SiriShortcutsStartFromClipboard" xml:space="preserve">
-        <value>Commencer à partir du planchette</value>
+        <value>Commencer à partir du presse-papier</value>
     </data>
     <data name="SiriShortcutsContinueTracking" xml:space="preserve">
         <value>Continuer le suivi</value>
@@ -1294,13 +1295,13 @@ Ouvrez l'application pour suivre le temps.</value>
         <value>Défaut du système</value>
     </data>
     <data name="Light" xml:space="preserve">
-        <value>Claire</value>
+        <value>Clair</value>
     </data>
     <data name="Dark" xml:space="preserve">
         <value>Foncé</value>
     </data>
     <data name="RestartNeeded" xml:space="preserve">
-        <value>Redémarrage est nécessaire</value>
+        <value>Redémarrage nécessaire</value>
     </data>
     <data name="RestartNeededMessage" xml:space="preserve">
         <value>L'application doit être redémarrée pour que les modifications prennent effet. Redémarrez maintenant?</value>
