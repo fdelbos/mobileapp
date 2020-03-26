@@ -20,6 +20,8 @@ using Toggl.Core.UI.ViewModels.Calendar;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using Xunit;
+using Toggl.Core.UI.Helper;
+using System.Globalization;
 
 namespace Toggl.Core.Tests.UI.ViewModels
 {
@@ -37,6 +39,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                     BackgroundService,
                     InteractorFactory,
                     SchedulerProvider,
+                    OnboardingStorage,
+                    PermissionsChecker,
                     NavigationService
                 );
 
@@ -79,6 +83,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 bool useBackgroundService,
                 bool useInteractorFactory,
                 bool useSchedulerProvider,
+                bool useOnboardingStorage,
+                bool usePermissionChecker,
                 bool useNavigationService,
                 bool useRxActionFactory)
             {
@@ -90,6 +96,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 var backgroundService = useBackgroundService ? BackgroundService : null;
                 var interactorFactory = useInteractorFactory ? InteractorFactory : null;
                 var schedulerProvider = useSchedulerProvider ? SchedulerProvider : null;
+                var onboardingStorage = useOnboardingStorage ? OnboardingStorage : null;
+                var permissionChecker = usePermissionChecker ? PermissionsChecker : null;
                 var navigationService = useNavigationService ? NavigationService : null;
 
                 Action tryingToConstructWithEmptyParameters =
@@ -102,6 +110,8 @@ namespace Toggl.Core.Tests.UI.ViewModels
                         backgroundService,
                         interactorFactory,
                         schedulerProvider,
+                        onboardingStorage,
+                        permissionChecker,
                         navigationService);
 
                 tryingToConstructWithEmptyParameters.Should().Throw<ArgumentNullException>();
@@ -114,10 +124,11 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
             public TheCurrentlyShownDateStringObservable()
             {
+                DateFormatCultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
                 TimeService.CurrentDateTime.Returns(now);
             }
 
-            [Fact, LogIfTooSlow]
+            [Fact, LogIfTooSlow, DiscardCultureChanges]
             public async Task StartsWithTheCurrentDate()
             {
                 var preferences = Substitute.For<IThreadSafePreferences>();
@@ -133,7 +144,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 observer.Values().Should().BeEquivalentTo(new[] { expectedResult });
             }
 
-            [Theory, LogIfTooSlow]
+            [Theory, LogIfTooSlow, DiscardCultureChanges]
             [InlineData(-1, "Wednesday, Jan 1")]
             [InlineData(-2, "Tuesday, Dec 31")]
             [InlineData(-7, "Thursday, Dec 26")]
@@ -156,7 +167,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 observer.Values().Should().BeEquivalentTo(expectedResults);
             }
 
-            [Theory, LogIfTooSlow]
+            [Theory, LogIfTooSlow, DiscardCultureChanges]
             [InlineData(4, 5, 2020, "Monday, May 4")]
             [InlineData(30, 9, 1995, "Saturday, Sep 30")]
             public void EmitsNewDateWhenAnItemInWeekViewIsTapped(int day, int month, int year, string expectedDateString)

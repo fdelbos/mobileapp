@@ -43,7 +43,7 @@ namespace Toggl.iOS
                 case ShowReportPeriodIntent periodIntent:
                     long? parseLong(string val) => long.TryParse(val, out var i) ? i : (long?)null;
                     long? workspaceId = parseLong(periodIntent.Workspace?.Identifier);
-                    var period = periodIntent.Period.ToReportPeriod();
+                    var period = periodIntent.Period.ToDateRangePeriod();
                     var viewPresenter = IosDependencyContainer.Instance.ViewPresenter;
                     var change = new ShowReportsPresentationChange(workspaceId, period);
                     viewPresenter.ChangePresentation(change);
@@ -71,6 +71,7 @@ namespace Toggl.iOS
                 string.IsNullOrEmpty(intent.Workspace?.Identifier) ? null : (long?)Convert.ToDouble(intent.Workspace?.Identifier),
                 intent.EntryDescription ?? "",
                 string.IsNullOrEmpty(intent.ProjectId?.Identifier) ? null : (long?)Convert.ToDouble(intent.ProjectId?.Identifier),
+                string.IsNullOrEmpty(intent.TaskId?.Identifier) ? null : (long?)Convert.ToDouble(intent.TaskId?.Identifier),
                 tags,
                 TimeEntryStartOrigin.Siri
             );

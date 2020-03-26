@@ -19,5 +19,16 @@ namespace Toggl.Droid.Extensions
             => OreoApis.AreAvailable
                 ? PendingIntent.GetForegroundService(context, requestCode, intent, flags)
                 : PendingIntent.GetService(context, requestCode, intent, flags);
+
+        public static int GetDimen(this Context context, int dimenId)
+            => context.Resources.GetDimensionPixelSize(dimenId);
+
+        public static PendingIntent GetOpenAppPendingIntent(this Context context)
+        {
+            var intent = context.PackageManager.GetLaunchIntentForPackage(context.PackageName);
+            intent.SetPackage(null);
+            intent.SetFlags(ActivityFlags.NewTask | ActivityFlags.ResetTaskIfNeeded | ActivityFlags.TaskOnHome);
+            return PendingIntent.GetActivity(context, 0, intent, PendingIntentFlags.UpdateCurrent);
+        }
     }
 }

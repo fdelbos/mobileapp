@@ -2,6 +2,7 @@ using System;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Toggl.Core.UI.Helper;
 using static Toggl.Core.Helper.Constants;
 
@@ -42,7 +43,7 @@ namespace Toggl.Core.UI
                         cultureInfo = new CultureInfo(twoLettersLanguageCode);
                 }
 
-                if (SupportedLanguageCodes.Contains(cultureInfo.Name))
+                if (SupportedTwoLettersLanguageCodes.Contains(cultureInfo.TwoLetterISOLanguageName, StringComparer.InvariantCultureIgnoreCase))
                 {
                     dateFormatCultureInfo = cultureInfo;
                 }
@@ -103,10 +104,12 @@ namespace Toggl.Core.UI
             dependencyContainer.OnboardingStorage.SetIsNewUser(false);
         }
 
-        public void ForceFullSync()
-        {
-            dependencyContainer.SyncManager.ForceFullSync().Subscribe();
-        }
+        public Task ForceFullSync() =>
+            Task.Run(() => dependencyContainer
+                .SyncManager
+                .ForceFullSync()
+                .Subscribe()
+            );
 
         private string getTwoLettersLanguageCode(string dotNetLanguageCode)
             => dotNetLanguageCode.Split(dotNetLanguageCodeSeparator)[0];
@@ -116,8 +119,8 @@ namespace Toggl.Core.UI
 
         private void setLocale(CultureInfo cultureInfo, CultureInfo dateFormatCultureInfo)
         {
-            Thread.CurrentThread.CurrentCulture = cultureInfo;
-            Thread.CurrentThread.CurrentUICulture = cultureInfo;
+            CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+            CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
             DateFormatCultureInfo.CurrentCulture = dateFormatCultureInfo;
         }
     }

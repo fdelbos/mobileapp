@@ -214,10 +214,15 @@ about: A manual testing checklist that can be assigned to a release to track the
 - [ ] Set timezone to UK and start and stop an entry (does it show up correctly?)
 - [ ] Does it show up correctly on web?
 
-## Testing onboarding
+## Testing onboarding (have a fresh install to test this)
 
-- [ ] Check that steps are being displayed correctly for first entry
-- [ ] Check that steps to edit first entry are being displayed correctly
+- [ ] Does the "Tap to start timer" onboarding step shows up after login?
+- [ ] Does the "Tap to stop timer" onboarding step shows up after starting a time entry?
+- [ ] Does the "Tap to edit time entry" onboarding step shows up after stopping a time entry?
+- [ ] Does the "Categorize your time with projects" onboarding step shows up after opening the edit view for the first time?
+
+- [ ] Can onboarding steps be dismissed by tapping on them?
+- [ ] Can onboarding steps be dismissed by taking the offered action?
 
 ## Testing Handoff
 - [ ] Test Handoff to web from the timer page
@@ -233,6 +238,10 @@ about: A manual testing checklist that can be assigned to a release to track the
 - [ ] Make sure the time entry appears in the main log
 - [ ] Install the suggestions widget (Android) or expand the timer widget (iOS)
 - [ ] Continue a suggestion
+
+## Testing Push Notifications
+- [ ] Open the app, go to the web app, start a TE in the web app, does the mobile app sync automatically and show the running TE?
+- [ ] Go to the widget with a running TE, stop the TE in the web app, does the widget automatically update the UI?
 
 ## Testing app restriction UI
 

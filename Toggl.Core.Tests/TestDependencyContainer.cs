@@ -1,10 +1,12 @@
-﻿using Toggl.Core.Analytics;
+﻿using System.Net.Http;
+using Toggl.Core.Analytics;
 using Toggl.Core.DataSources;
 using Toggl.Core.Interactors;
 using Toggl.Core.Login;
 using Toggl.Core.Services;
 using Toggl.Core.Shortcuts;
 using Toggl.Core.Sync;
+using Toggl.Core.UI;
 using Toggl.Core.UI.Navigation;
 using Toggl.Core.UI.Services;
 using Toggl.Networking;
@@ -14,7 +16,7 @@ using Toggl.Storage;
 using Toggl.Storage.Queries;
 using Toggl.Storage.Settings;
 
-namespace Toggl.Core.UI
+namespace Toggl.Core.Tests
 {
     public class TestDependencyContainer : UIDependencyContainer
     {
@@ -149,5 +151,11 @@ namespace Toggl.Core.UI
         internal IWidgetsService MockWidgetsService { get; set; }
         protected override IWidgetsService CreateWidgetsService()
             => MockWidgetsService;
+
+        internal IDateRangeShortcutsService MockDateRangeShortcutsService { get; set; }
+        protected override IDateRangeShortcutsService CreateDateRangeShortcutsService()
+            => MockDateRangeShortcutsService;
+        protected override HttpClient CreateHttpClient()
+            => new HttpClient();
     }
 }

@@ -37,6 +37,16 @@ namespace Toggl.iOS.Extensions
         public static readonly UIColor CalendarUnselectedTodayText = UIColor.FromName("CalendarUnselectedTodayText");
         public static readonly UIColor CalendarHeaderLabel = UIColor.FromName("CalendarHeaderLabel");
 
+        public static readonly UIColor ReportsBarChartFilled = UIColor.FromName("ReportsBarChartFilled");
+        public static readonly UIColor ReportsBarChartTotal = UIColor.FromName("ReportsBarChartTotal");
+        public static readonly UIColor ReportsBarChartFilledPlaceholder = UIColor.FromName("ReportsBarChartFilledPlaceholder");
+        public static readonly UIColor ReportsBarChartTotalPlaceholder = UIColor.FromName("ReportsBarChartTotalPlaceholder");
+
         public static readonly UIColor LightishGreen = UIColor.FromRGB(76, 217, 100);
+
+        public static readonly UIColor OnboardingPage1BackgroundColor = UIColor.FromName("OnboardingPage1BackgroundColor");
+        public static readonly UIColor OnboardingPage2BackgroundColor = UIColor.FromName("OnboardingPage2BackgroundColor");
+        public static readonly UIColor OnboardingPage3BackgroundColor = UIColor.FromName("OnboardingPage3BackgroundColor");
+
     }
 }

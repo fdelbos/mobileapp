@@ -1,6 +1,7 @@
 using Android.Widget;
 using AndroidX.RecyclerView.Widget;
 using Toggl.Droid.Adapters;
+using Toggl.Droid.Extensions;
 using Toggl.Droid.LayoutManagers;
 
 namespace Toggl.Droid.Activities
@@ -17,13 +18,14 @@ namespace Toggl.Droid.Activities
             textField = FindViewById<EditText>(Resource.Id.TextField);
             selectTagsRecyclerView = FindViewById<RecyclerView>(Resource.Id.SelectTagsRecyclerView);
 
-            textField.Hint = Shared.Resources.AddTags;
+            textField.Hint = Shared.Resources.AddFilterTags;
             var layoutManager = new UnpredictiveLinearLayoutManager(this);
             layoutManager.ItemPrefetchEnabled = true;
             layoutManager.InitialPrefetchItemCount = 4;
             selectTagsRecyclerView.SetLayoutManager(layoutManager);
             selectTagsRecyclerView.SetAdapter(selectTagsRecyclerAdapter);
-            
+            selectTagsRecyclerView.FitBottomMarginInset();
+
             SetupToolbar();
         }
     }

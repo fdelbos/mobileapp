@@ -2,11 +2,12 @@ using Android.App;
 using Android.Appwidget;
 using Android.Content;
 using Android.OS;
-using Toggl.Droid.Widgets.Services;
+using AndroidX.Work;
+using Toggl.Droid.SystemServices;
 
 namespace Toggl.Droid.Widgets
 {
-    [BroadcastReceiver(Label = "Toggl Time Entry Widget", Exported = true)]
+    [BroadcastReceiver(Label = "@string/running_time_entry", Exported = true)]
     [IntentFilter(new string[] { AppWidgetManager.ActionAppwidgetUpdate })]
     [MetaData("android.appwidget.provider", Resource = "@xml/timeentrywidgetprovider")]
     public class TimeEntryWidget : AppWidgetProvider
@@ -54,18 +55,22 @@ namespace Toggl.Droid.Widgets
 
         private void reportInstallationState(Context context, bool installed)
         {
-            var intent = new Intent(context, typeof(WidgetsAnalyticsService));
-            intent.SetAction(WidgetsAnalyticsService.TimerWidgetInstallAction);
-            intent.PutExtra(WidgetsAnalyticsService.TimerWidgetInstallStateParameter, installed);
-            WidgetsAnalyticsService.EnqueueWork(context, intent);
+            var inputData = new Data.Builder()
+                .PutString(WidgetsAnalyticsWorker.WidgetsAnalyticsWorkerAction, WidgetsAnalyticsWorker.TimerWidgetInstallAction)
+                .PutBoolean(WidgetsAnalyticsWorker.TimerWidgetInstallStateParameter, installed)
+                .Build();
+
+            WidgetsAnalyticsWorker.EnqueueWork(context, inputData);
         }
 
         private void reportSize(Context context, int columnCount)
         {
-            var intent = new Intent(context, typeof(WidgetsAnalyticsService));
-            intent.SetAction(WidgetsAnalyticsService.TimerWidgetResizeAction);
-            intent.PutExtra(WidgetsAnalyticsService.TimerWidgetSizeParameter, columnCount);
-            WidgetsAnalyticsService.EnqueueWork(context, intent);
+            var inputData = new Data.Builder()
+                .PutString(WidgetsAnalyticsWorker.WidgetsAnalyticsWorkerAction, WidgetsAnalyticsWorker.TimerWidgetResizeAction)
+                .PutInt(WidgetsAnalyticsWorker.TimerWidgetSizeParameter, columnCount)
+                .Build();
+
+            WidgetsAnalyticsWorker.EnqueueWork(context, inputData);
         }
     }
 }

@@ -7,8 +7,10 @@ using Toggl.Core.Login;
 using Toggl.Core.Services;
 using Toggl.Core.Shortcuts;
 using Toggl.Core.Sync;
+using Toggl.Core.Tests.UI;
 using Toggl.Networking;
 using Toggl.Networking.Network;
+using Toggl.Shared;
 using Toggl.Storage;
 using Toggl.Storage.Settings;
 
@@ -22,6 +24,7 @@ namespace Toggl.Core.Tests
         protected ITogglApi Api { get; } = Substitute.For<ITogglApi>();
         protected IUserPreferences UserPreferences { get; } = Substitute.For<IUserPreferences>();
         protected IAnalyticsService AnalyticsService { get; } = Substitute.For<IAnalyticsService>();
+        protected IOnboardingStorage OnboardingStorage { get; } = Substitute.For<IOnboardingStorage>();
         protected IPlatformInfo PlatformInfo { get; } = Substitute.For<IPlatformInfo>();
         protected INotificationService NotificationService { get; } = Substitute.For<INotificationService>();
         protected ILastTimeUsageStorage LastTimeUsageStorage { get; } = Substitute.For<ILastTimeUsageStorage>();
@@ -42,6 +45,8 @@ namespace Toggl.Core.Tests
             Substitute.For<IPushNotificationsTokenStorage>();
 
         protected IInteractorFactory InteractorFactory { get; }
+        
+        protected TestSchedulerProvider SchedulerProvider { get; } = new TestSchedulerProvider();
 
         protected BaseInteractorTests()
         {
@@ -57,6 +62,7 @@ namespace Toggl.Core.Tests
                 new Lazy<ICalendarService>(() => CalendarService),
                 new Lazy<IUserPreferences>(() => UserPreferences),
                 new Lazy<IAnalyticsService>(() => AnalyticsService),
+                new Lazy<IOnboardingStorage>(() => OnboardingStorage), 
                 new Lazy<INotificationService>(() => NotificationService),
                 new Lazy<ILastTimeUsageStorage>(() => LastTimeUsageStorage),
                 new Lazy<IApplicationShortcutCreator>(() => ApplicationShortcutCreator),

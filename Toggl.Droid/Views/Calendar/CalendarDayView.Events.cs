@@ -33,7 +33,6 @@ namespace Toggl.Droid.Views.Calendar
         private float leftPadding;
         private float rightPadding;
         private float itemSpacing;
-        private float minHourHeight;
         private float runningTimeEntryStripesSpacing;
         private float runningTimeEntryThinStripeWidth;
         private int shortCalendarItemHeight;
@@ -46,7 +45,8 @@ namespace Toggl.Droid.Views.Calendar
         private int? runningTimeEntryIndex = null;
         private int editingHandlesHorizontalMargins;
         private int editingHandlesRadius;
-        private Bitmap calendarIconBitmap;
+        private Bitmap normalCalendarIconBitmap;
+        private Bitmap smallCalendarIconBitmap;
         private int runningTimeEntryDashedHourTopPadding;
         private int calendarEventBottomLineHeight;
         private int calendarIconRightInsetMargin;
@@ -54,6 +54,8 @@ namespace Toggl.Droid.Views.Calendar
         private int calendarIconSize;
         private Color lastCalendarItemBackgroundColor;
         private CalendarItemEditInfo itemEditInEditMode = CalendarItemEditInfo.None;
+
+        private float minHourHeight => hourHeight / 4f;
 
         public void UpdateItems(ObservableGroupedOrderedCollection<CalendarItem> calendarItems)
         {
@@ -67,56 +69,63 @@ namespace Toggl.Droid.Views.Calendar
 
         partial void initEventDrawingBackingFields()
         {
-            minHourHeight = hourHeight / 4f;
-            leftMargin = 68.DpToPixels(Context);
-            leftPadding = 4.DpToPixels(Context);
-            rightPadding = 4.DpToPixels(Context);
-            itemSpacing = 4.DpToPixels(Context);
+            leftMargin = Context.GetDimen(Resource.Dimension.calendarEventsStartMargin);
+            leftPadding = Context.GetDimen(Resource.Dimension.calendarEventsLeftPadding);
+            rightPadding = Context.GetDimen(Resource.Dimension.calendarEventsRightPadding);
+            itemSpacing = Context.GetDimen(Resource.Dimension.calendarEventsItemsSpacing);
             availableWidth = Width - leftMargin;
 
-            shortCalendarItemHeight = 18.DpToPixels(Context);
-            regularCalendarItemVerticalPadding = 2.DpToPixels(Context);
-            regularCalendarItemHorizontalPadding = 4.DpToPixels(Context);
-            shortCalendarItemVerticalPadding = 0.5f.DpToPixels(Context);
-            shortCalendarItemHorizontalPadding = 2.DpToPixels(Context);
-            regularCalendarItemFontSize = 12.DpToPixels(Context);
-            shortCalendarItemFontSize = 10.DpToPixels(Context);
+            shortCalendarItemHeight = Context.GetDimen(Resource.Dimension.shortCalendarItemHeight);
+            regularCalendarItemVerticalPadding = Context.GetDimen(Resource.Dimension.regularCalendarItemVerticalPadding);
+            regularCalendarItemHorizontalPadding = Context.GetDimen(Resource.Dimension.regularCalendarItemHorizontalPadding);
+            shortCalendarItemVerticalPadding = Context.GetDimen(Resource.Dimension.shortCalendarItemVerticalPadding);
+            shortCalendarItemHorizontalPadding = Context.GetDimen(Resource.Dimension.shortCalendarItemHorizontalPadding);
+            regularCalendarItemFontSize = Context.GetDimen(Resource.Dimension.regularCalendarItemFontSize);
+            shortCalendarItemFontSize = Context.GetDimen(Resource.Dimension.shortCalendarItemFontSize);
 
             eventsPaint.SetStyle(Paint.Style.FillAndStroke);
-            textEventsPaint.TextSize = 12.SpToPixels(Context);
+            textEventsPaint.TextSize = Context.GetDimen(Resource.Dimension.textEventsPaintTextSize);
             editingHoursLabelPaint.Color = Context.SafeGetColor(Resource.Color.accent);
             editingHoursLabelPaint.TextAlign = Paint.Align.Right;
-            editingHoursLabelPaint.TextSize = 12.SpToPixels(Context);
-            editingHandlesHorizontalMargins = 8.DpToPixels(Context);
-            editingHandlesRadius = 3.DpToPixels(Context);
-            runningTimeEntryStripesSpacing = 12.DpToPixels(Context);
-            runningTimeEntryThinStripeWidth = 2.DpToPixels(Context);
+            editingHoursLabelPaint.TextSize = Context.GetDimen(Resource.Dimension.editingHoursLabelPaintTextSize);
+            editingHandlesHorizontalMargins = Context.GetDimen(Resource.Dimension.editingHandlesHorizontalMargins);
+            editingHandlesRadius = Context.GetDimen(Resource.Dimension.editingHandlesRadius);
+            runningTimeEntryStripesSpacing = Context.GetDimen(Resource.Dimension.calendarRunningTimeEntryStripesSpacing);
+            runningTimeEntryThinStripeWidth = Context.GetDimen(Resource.Dimension.calendarRunningTimeEntryThinStripeWidth);
             commonRoundRectRadius = leftPadding / 2;
-            runningTimeEntryDashedHourTopPadding = 4.DpToPixels(Context);
-            calendarEventBottomLineHeight = 2.DpToPixels(Context);
-            calendarIconSize = 24.DpToPixels(Context);
-            calendarIconRightInsetMargin = 4.DpToPixels(Context);
-            calendarIconBitmap = Context.GetVectorDrawable(Resource.Drawable.ic_calendar).ToBitmap(calendarIconSize, calendarIconSize);
+            runningTimeEntryDashedHourTopPadding = Context.GetDimen(Resource.Dimension.calendarRunningTimeEntryDashedHourTopPadding);
+            calendarEventBottomLineHeight = Context.GetDimen(Resource.Dimension.calendarEventBottomLineHeight);
+            calendarIconSize = Context.GetDimen(Resource.Dimension.calendarIconSize);
+            calendarIconRightInsetMargin = Context.GetDimen(Resource.Dimension.calendarIconRightInsetMargin);
+            normalCalendarIconBitmap = Context.GetVectorDrawable(Resource.Drawable.ic_calendar).ToBitmap(calendarIconSize, calendarIconSize);
+            smallCalendarIconBitmap = Context.GetVectorDrawable(Resource.Drawable.ic_calendar).ToBitmap(calendarIconSize / 2, calendarIconSize / 2);
         }
 
         private void updateItemsAndRecalculateEventsAttrs(ImmutableList<CalendarItem> newItems)
         {
+            var validItems = newItems;
+            var invalidItemsCount = calendarItems.Count(item => item.Id == "");
+            if (!itemEditInEditMode.IsValid && invalidItemsCount > 0)
+            {
+                validItems = calendarItems.Where(item => item.Id != "").ToImmutableList();
+            }
+
             if (availableWidth > 0)
             {
                 if (itemEditInEditMode.IsValid && itemEditInEditMode.HasChanged)
-                    newItems = newItems.Sort(calendarItemComparer);
+                    validItems = validItems.Sort(calendarItemComparer);
 
                 calendarItemLayoutAttributes = calendarLayoutCalculator
-                    .CalculateLayoutAttributes(newItems)
+                    .CalculateLayoutAttributes(validItems)
                     .Select(calculateCalendarItemRect)
                     .ToImmutableList();
 
                 textLayouts.Clear();
             }
 
-            var runningIndex = newItems.IndexOf(item => item.Duration == null);
+            var runningIndex = validItems.IndexOf(item => item.Duration == null);
             runningTimeEntryIndex = runningIndex >= 0 ? runningIndex : (int?)null;
-            calendarItems = newItems;
+            calendarItems = validItems;
             updateItemInEditMode();
 
             PostInvalidate();
@@ -149,10 +158,9 @@ namespace Toggl.Droid.Views.Calendar
             }
         }
 
-        partial void processEventsOnLayout(bool changed, int left, int top, int right, int bottom)
+        partial void processEventsOnLayout()
         {
-            if (changed)
-                updateItemsAndRecalculateEventsAttrs(calendarItems);
+            updateItemsAndRecalculateEventsAttrs(calendarItems);
         }
 
         private CalendarItemRectAttributes calculateCalendarItemRect(CalendarItemLayoutAttributes attrs)
@@ -253,8 +261,24 @@ namespace Toggl.Droid.Views.Calendar
             eventsPaint.Color = originalColor;
             canvas.DrawRoundRect(calendarItemRect.Left, calendarItemRect.Bottom - calendarEventBottomLineHeight, calendarItemRect.Right, calendarItemRect.Bottom, commonRoundRectRadius, commonRoundRectRadius, eventsPaint);
 
+            var calendarBitmap = getProperlySizedCalendarBitmap(calendarItemRect);
+            if (calendarBitmap == null)
+                return;
+
             calendarIconPaint.SetColorFilter(new PorterDuffColorFilter(originalColor, PorterDuff.Mode.SrcIn));
-            canvas.DrawBitmap(calendarIconBitmap, calendarItemRect.Left, calendarItemRect.Top, calendarIconPaint);
+            canvas.DrawBitmap(calendarBitmap, calendarItemRect.Left, calendarItemRect.Top, calendarIconPaint);
+        }
+
+        private Bitmap getProperlySizedCalendarBitmap(RectF calendarItemRect)
+        {
+            var containerHeight = calendarItemRect.Height();
+            if (containerHeight > normalCalendarIconBitmap.Height)
+                return normalCalendarIconBitmap;
+
+            if (containerHeight > smallCalendarIconBitmap.Height)
+                return smallCalendarIconBitmap;
+
+            return null;
         }
 
         private void drawCalendarTimeEntryItemShape(Canvas canvas, CalendarItem item, RectF calendarItemRect)

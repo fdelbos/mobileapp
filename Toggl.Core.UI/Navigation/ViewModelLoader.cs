@@ -1,6 +1,8 @@
 ﻿using System;
+using Toggl.Core.UI.Parameters;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.Calendar;
+using Toggl.Core.UI.ViewModels.DateRangePicker;
 using Toggl.Core.UI.ViewModels.Reports;
 using Toggl.Core.UI.ViewModels.Settings;
 using Toggl.Core.UI.ViewModels.Settings.Siri;
@@ -84,30 +86,24 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.InteractorFactory);
             }
 
+            if (viewModelType == typeof(LoginViewModel))
+            {
+                return new LoginViewModel(
+                    dependencyContainer.UserAccessManager,
+                    dependencyContainer.AnalyticsService,
+                    dependencyContainer.OnboardingStorage,
+                    dependencyContainer.NavigationService,
+                    dependencyContainer.ErrorHandlingService,
+                    dependencyContainer.LastTimeUsageStorage,
+                    dependencyContainer.TimeService,
+                    dependencyContainer.SchedulerProvider,
+                    dependencyContainer.RxActionFactory,
+                    dependencyContainer.InteractorFactory);
+            }
+
             if (viewModelType == typeof(MainTabBarViewModel))
             {
-                return new MainTabBarViewModel(
-                    dependencyContainer.TimeService,
-                    dependencyContainer.DataSource,
-                    dependencyContainer.SyncManager,
-                    dependencyContainer.RatingService,
-                    dependencyContainer.UserPreferences,
-                    dependencyContainer.AnalyticsService,
-                    dependencyContainer.BackgroundService,
-                    dependencyContainer.InteractorFactory,
-                    dependencyContainer.OnboardingStorage,
-                    dependencyContainer.SchedulerProvider,
-                    dependencyContainer.PermissionsChecker,
-                    dependencyContainer.NavigationService,
-                    dependencyContainer.RemoteConfigService,
-                    dependencyContainer.AccessibilityService,
-                    dependencyContainer.UpdateRemoteConfigCacheService,
-                    dependencyContainer.AccessRestrictionStorage,
-                    dependencyContainer.RxActionFactory,
-                    dependencyContainer.UserAccessManager,
-                    dependencyContainer.PrivateSharedStorageService,
-                    dependencyContainer.PlatformInfo,
-                    dependencyContainer.WidgetsService);
+                return new MainTabBarViewModel(dependencyContainer);
             }
 
             if (viewModelType == typeof(MainViewModel))
@@ -163,16 +159,6 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.NavigationService,
                     dependencyContainer.SchedulerProvider,
                     dependencyContainer.RxActionFactory);
-            }
-
-            if (viewModelType == typeof(ReportsCalendarViewModel))
-            {
-                return new ReportsCalendarViewModel(
-                    dependencyContainer.TimeService,
-                    dependencyContainer.DataSource,
-                    dependencyContainer.RxActionFactory,
-                    dependencyContainer.NavigationService,
-                    dependencyContainer.SchedulerProvider);
             }
 
             if (viewModelType == typeof(SelectClientViewModel))
@@ -235,20 +221,20 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.RxActionFactory);
             }
 
-            if (viewModelType == typeof(SignupViewModel))
+            if (viewModelType == typeof(SignUpViewModel))
             {
-                return new SignupViewModel(
-                    dependencyContainer.ApiFactory,
-                    dependencyContainer.UserAccessManager,
-                    dependencyContainer.AnalyticsService,
-                    dependencyContainer.OnboardingStorage,
-                    dependencyContainer.NavigationService,
-                    dependencyContainer.ErrorHandlingService,
-                    dependencyContainer.LastTimeUsageStorage,
+                return new SignUpViewModel(
                     dependencyContainer.TimeService,
-                    dependencyContainer.SchedulerProvider,
+                    dependencyContainer.PlatformInfo,
                     dependencyContainer.RxActionFactory,
-                    dependencyContainer.PlatformInfo);
+                    dependencyContainer.AnalyticsService,
+                    dependencyContainer.UserAccessManager,
+                    dependencyContainer.SchedulerProvider,
+                    dependencyContainer.InteractorFactory,
+                    dependencyContainer.NavigationService,
+                    dependencyContainer.OnboardingStorage,
+                    dependencyContainer.LastTimeUsageStorage,
+                    dependencyContainer.ErrorHandlingService);
             }
 
             if (viewModelType == typeof(StartTimeEntryViewModel))
@@ -317,6 +303,19 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.RxActionFactory);
             }
 
+            if (viewModelType == typeof(IndependentCalendarSettingsViewModel))
+            {
+                return new IndependentCalendarSettingsViewModel(
+                    dependencyContainer.UserPreferences,
+                    dependencyContainer.InteractorFactory,
+                    dependencyContainer.OnboardingStorage,
+                    dependencyContainer.AnalyticsService,
+                    dependencyContainer.NavigationService,
+                    dependencyContainer.RxActionFactory,
+                    dependencyContainer.PermissionsChecker,
+                    dependencyContainer.SchedulerProvider);
+            }
+
             if (viewModelType == typeof(CalendarViewModel))
             {
                 return new CalendarViewModel(
@@ -328,19 +327,32 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.BackgroundService,
                     dependencyContainer.InteractorFactory,
                     dependencyContainer.SchedulerProvider,
+                    dependencyContainer.OnboardingStorage,
+                    dependencyContainer.PermissionsChecker,
                     dependencyContainer.NavigationService);
+            }
+
+            if (viewModelType == typeof(DateRangePickerViewModel))
+            {
+                return new DateRangePickerViewModel(
+                    dependencyContainer.NavigationService,
+                    dependencyContainer.InteractorFactory,
+                    dependencyContainer.RxActionFactory,
+                    dependencyContainer.SchedulerProvider,
+                    dependencyContainer.DateRangeShortcutsService);
             }
 
             if (viewModelType == typeof(ReportsViewModel))
             {
                 return new ReportsViewModel(
                     dependencyContainer.DataSource,
-                    dependencyContainer.TimeService,
                     dependencyContainer.NavigationService,
                     dependencyContainer.InteractorFactory,
-                    dependencyContainer.AnalyticsService,
                     dependencyContainer.SchedulerProvider,
-                    dependencyContainer.RxActionFactory);
+                    dependencyContainer.RxActionFactory,
+                    dependencyContainer.AnalyticsService,
+                    dependencyContainer.TimeService,
+                    dependencyContainer.DateRangeShortcutsService);
             }
 
             if (viewModelType == typeof(AboutViewModel))
@@ -432,11 +444,6 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.NavigationService);
             }
 
-            if (viewModelType == typeof(SiriWorkflowsViewModel))
-            {
-                return new SiriWorkflowsViewModel(dependencyContainer.NavigationService);
-            }
-
             if (viewModelType == typeof(SiriShortcutsCustomTimeEntryViewModel))
             {
                 return new SiriShortcutsCustomTimeEntryViewModel(
@@ -454,6 +461,31 @@ namespace Toggl.Core.UI.Navigation
                     dependencyContainer.RxActionFactory,
                     dependencyContainer.OnboardingStorage,
                     dependencyContainer.NavigationService);
+            }
+
+            if (viewModelType == typeof(OnboardingViewModel))
+            {
+                return new OnboardingViewModel(
+                    dependencyContainer.SchedulerProvider,
+                    dependencyContainer.PlatformInfo,
+                    dependencyContainer.TimeService,
+                    dependencyContainer.AnalyticsService,
+                    dependencyContainer.UserAccessManager,
+                    dependencyContainer.LastTimeUsageStorage,
+                    dependencyContainer.RxActionFactory,
+                    dependencyContainer.InteractorFactory,
+                    dependencyContainer.NavigationService);
+            }
+
+            if (viewModelType == typeof(TermsAndCountryViewModel))
+            {
+                return new TermsAndCountryViewModel(
+                    dependencyContainer.ApiFactory,
+                    dependencyContainer.TimeService,
+                    dependencyContainer.SchedulerProvider,
+                    dependencyContainer.RxActionFactory,
+                    dependencyContainer.NavigationService,
+                    dependencyContainer.AnalyticsService);
             }
 
             throw new InvalidOperationException($"Trying to locate ViewModel {viewModelType.Name} failed.");

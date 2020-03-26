@@ -2,6 +2,7 @@
 using Foundation;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
@@ -60,6 +61,7 @@ namespace Toggl.iOS.Views.Calendar
         public IObservable<CalendarItem> ItemUpdated  => itemUpdatedSubject.AsObservable();
 
         public InputAction<CalendarItem?> StartEditingItem { get; }
+        public ViewAction StopEditing { get; }
 
         public CalendarCollectionViewEditItemHelper(
             UICollectionView CollectionView,
@@ -76,15 +78,12 @@ namespace Toggl.iOS.Views.Calendar
             this.dataSource = dataSource;
 
             StartEditingItem = rxActionFactory.FromAction<CalendarItem?>(startEditingItem);
+            StopEditing = rxActionFactory.FromAction(stopEditingCurrentCell);
 
             panGestureRecognizer = new UIPanGestureRecognizer(onPan)
             {
                 Delegate = this
             };
-
-            Layout.ScalingEnded
-                .Subscribe(onLayoutScalingEnded)
-                .DisposedBy(disposeBag);
         }
 
         public CalendarCollectionViewEditItemHelper(IntPtr handle) : base(handle)
@@ -141,11 +140,17 @@ namespace Toggl.iOS.Views.Calendar
                     return true;
 
                 var point = touch.LocationInView(CollectionView);
-                var thereIsAnItemAtPoint = dataSource.CalendarItemAtPoint(point) != null;
-                return thereIsAnItemAtPoint;
+                return CollectionView.VisibleCells.Any(cell => cellContainsPoint(cell as CalendarItemView, point));
             }
 
             return true;
+        }
+
+        private bool cellContainsPoint(CalendarItemView cell, CGPoint point)
+        {
+            var topDragRect = CollectionView.ConvertRectFromView(cell.TopDragTouchArea, cell);
+            var bottomDragRect = CollectionView.ConvertRectFromView(cell.BottomDragTouchArea, cell);
+            return cell.Frame.Contains(point) || topDragRect.Contains(point) || bottomDragRect.Contains(point);
         }
 
         private void onPan(UIPanGestureRecognizer gesture)
@@ -181,7 +186,12 @@ namespace Toggl.iOS.Views.Calendar
             previousStartTime = calendarItem.StartTime;
             previousEndTime = calendarItem.EndTime;
 
-            var itemIndexPath = dataSource.IndexPathForEditingItem();
+            var itemIndexPath = dataSource.IndexPathForSelectedItem;
+            if (itemIndexPath == null)
+            {
+                stopEditingCurrentCell();
+                return;
+            }
             var cell = CollectionView.CellForItem(itemIndexPath) as CalendarItemView;
             if (cell == null)
             {
@@ -227,7 +237,6 @@ namespace Toggl.iOS.Views.Calendar
 
             onCurrentPointChanged(null);
             StopAutoScroll();
-            stopEditingCurrentCellIfNotVisible();
         }
 
         private void changeOffset(CGPoint point)
@@ -375,27 +384,10 @@ namespace Toggl.iOS.Views.Calendar
             }
         }
 
-        private void onLayoutScalingEnded()
-        {
-            if (!isActive) return;
-
-            stopEditingCurrentCellIfNotVisible();
-        }
-
-        public void stopEditingCurrentCell()
+        private void stopEditingCurrentCell()
         {
             resignActive();
             dataSource.StopEditing();
-        }
-
-        private void stopEditingCurrentCellIfNotVisible()
-        {
-            var itemIndexPath = dataSource.IndexPathForEditingItem();
-            var cellNotVisible = CollectionView.CellForItem(itemIndexPath) == null;
-            if (cellNotVisible)
-            {
-                stopEditingCurrentCell();
-            }
         }
     }
 }

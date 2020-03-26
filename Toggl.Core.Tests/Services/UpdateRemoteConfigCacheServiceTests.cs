@@ -57,6 +57,7 @@ namespace Toggl.Core.Tests.Services
             [Theory, LogIfTooSlow]
             [InlineData(1, RatingViewCriterion.Continue, true, false)]
             [InlineData(4, RatingViewCriterion.Start, false, true)]
+            [InlineData(5, RatingViewCriterion.None, true, true)]
             public void ShouldUpdateTheCacheWhenFetchingSucceeds(int ratingViewDayCount, RatingViewCriterion ratingViewCriterion, bool registerPushes, bool handlePushes)
             {
                 var expectedRatingViewConfiguration = new RatingViewConfiguration(ratingViewDayCount, ratingViewCriterion);
@@ -180,8 +181,8 @@ namespace Toggl.Core.Tests.Services
                 bool shouldSucceed = true,
                 bool shouldFail = false,
                 Exception exceptionOnFailure = null,
-                RatingViewConfiguration ratingViewConfigurationToReturn = default(RatingViewConfiguration),
-                PushNotificationsConfiguration pushNotificationsConfigurationReturn = default(PushNotificationsConfiguration))
+                RatingViewConfiguration ratingViewConfigurationToReturn = default,
+                PushNotificationsConfiguration pushNotificationsConfigurationReturn = default)
             {
                 this.shouldSucceed = shouldSucceed;
                 this.shouldFail = shouldFail;

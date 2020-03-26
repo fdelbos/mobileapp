@@ -105,8 +105,11 @@ namespace Toggl.iOS.ViewControllers.Settings
             return IosDependencyContainer.Instance.IntentDonationService.GetCurrentShortcuts()
                 .CombineLatest(ViewModel.GetUserWorkspaces(), filterByWorkspace)
                 .SelectMany(filterByProject)
-                .Select(shortcuts => SiriShortcut.DefaultShortcuts.Concat(shortcuts));
+                .Select(shortcuts => SiriShortcut.DefaultShortcuts.Where(notClipboardShortcutOnIOS13).Concat(shortcuts));
         }
+
+        private bool notClipboardShortcutOnIOS13(SiriShortcut shortcut)
+            => !(UIDevice.CurrentDevice.CheckSystemVersion(13, 0) && shortcut.Type == SiriShortcutType.StartFromClipboard);
 
         private IEnumerable<SiriShortcut> filterByWorkspace(IEnumerable<SiriShortcut> shortcuts, IEnumerable<IThreadSafeWorkspace> userWorkspaces)
         {
@@ -148,8 +151,18 @@ namespace Toggl.iOS.ViewControllers.Settings
                 {
                     if (shortcut.VoiceShortcut != null && shortcut.Parameters.ProjectId.HasValue)
                     {
-                        return ViewModel.GetProject(shortcut.Parameters.ProjectId.Value)
-                            .Select(project => new SiriShortcutViewModel(shortcut, project));
+                        if (shortcut.Parameters.TaskId.HasValue)
+                        {
+                            return ViewModel.GetProject(shortcut.Parameters.ProjectId.Value)
+                                .CombineLatest(ViewModel.GetTask(shortcut.Parameters.TaskId.Value),
+                                    (project, task) => (project, task))
+                                .Select(pair => new SiriShortcutViewModel(shortcut, pair.project, pair.task));
+                        }
+                        else
+                        {
+                            return ViewModel.GetProject(shortcut.Parameters.ProjectId.Value)
+                               .Select(project => new SiriShortcutViewModel(shortcut, project));
+                        }
                     }
 
                     return Observable.Return(new SiriShortcutViewModel(shortcut));

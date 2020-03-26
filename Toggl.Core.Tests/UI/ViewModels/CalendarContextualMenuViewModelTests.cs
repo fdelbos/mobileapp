@@ -2,12 +2,14 @@ using System;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
 using Toggl.Core.Analytics;
 using Toggl.Core.Calendar;
 using Toggl.Core.DTOs;
+using Toggl.Core.Interactors;
 using Toggl.Core.Models;
 using Toggl.Core.Models.Interfaces;
 using Toggl.Core.Tests.Generators;
@@ -503,8 +505,9 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 => CreateDummyTimeEntryCalendarItem(isRunning: true);
 
             [Fact]
-            public void TheDiscardActionDeletesTheRunningTimeEntry()
+            public void TheDiscardActionDeletesTheRunningTimeEntryIfTheUsersConfirmsTheDialog()
             {
+                View.ConfirmDestructiveAction(Arg.Any<ActionType>()).ReturnsObservableOf(true);
                 var discardAction = ContextualMenu.Actions.First(action => action.ActionKind == CalendarMenuActionKind.Discard);
                 var runningTimeEntryId = 10;
                 var runningTimeEntry = CreateDummyTimeEntryCalendarItem(isRunning: true, timeEntryId: runningTimeEntryId);
@@ -516,10 +519,26 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 TestScheduler.Start();
                 InteractorFactory.Received().DeleteTimeEntry(runningTimeEntryId);
             }
-            
+
+            [Fact]
+            public void TheDiscardActionDoesNotDeleteTheRunningTimeEntryIfTheUsersDoesNotConfirmTheDialog()
+            {
+                View.ConfirmDestructiveAction(Arg.Any<ActionType>()).ReturnsObservableOf(false);
+                var discardAction = ContextualMenu.Actions.First(action => action.ActionKind == CalendarMenuActionKind.Discard);
+                var runningTimeEntryId = 10;
+                var runningTimeEntry = CreateDummyTimeEntryCalendarItem(isRunning: true, timeEntryId: runningTimeEntryId);
+                ViewModel.OnCalendarItemUpdated.Inputs.OnNext(runningTimeEntry);
+                TestScheduler.Start();
+
+                discardAction.MenuItemAction.Execute();
+
+                TestScheduler.Start();
+                InteractorFactory.DidNotReceive().DeleteTimeEntry(runningTimeEntryId);
+            }
+
             [Fact]
             public void TheDiscardActionExecutesActionAndClosesMenu()
-                => ExecutesActionAndClosesMenu(TheDiscardActionDeletesTheRunningTimeEntry);
+                => ExecutesActionAndClosesMenu(TheDiscardActionDeletesTheRunningTimeEntryIfTheUsersConfirmsTheDialog);
 
             [Fact]
             public void TheEditActionNavigatesToTheEditTimeEntryViewModelWithTheRightId()
@@ -613,8 +632,9 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 => CreateDummyTimeEntryCalendarItem(isRunning: false);
 
             [Fact]
-            public void TheDeleteActionDeletesTheRunningTimeEntry()
+            public void TheDeleteActionDeletesTheTimeEntryIfTheUserConfirmsTheDialog()
             {
+                View.ConfirmDestructiveAction(ActionType.DeleteExistingTimeEntry).ReturnsObservableOf(true);
                 var deleteAction = ContextualMenu.Actions.First(action => action.ActionKind == CalendarMenuActionKind.Delete);
                 var stoppedTimeEntryId = 10;
                 var stoppedTimeEntry = CreateDummyTimeEntryCalendarItem(isRunning: false, timeEntryId: stoppedTimeEntryId);
@@ -626,10 +646,26 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 TestScheduler.Start();
                 InteractorFactory.Received().DeleteTimeEntry(stoppedTimeEntryId);
             }
-            
+
+            [Fact]
+            public void TheDeleteActionDoesNotDeleteTheTimeEntryIfTheUserConfirmsDoesNotConfirmTheDialog()
+            {
+                View.ConfirmDestructiveAction(ActionType.DeleteExistingTimeEntry).ReturnsObservableOf(false);
+                var deleteAction = ContextualMenu.Actions.First(action => action.ActionKind == CalendarMenuActionKind.Delete);
+                var stoppedTimeEntryId = 10;
+                var stoppedTimeEntry = CreateDummyTimeEntryCalendarItem(isRunning: false, timeEntryId: stoppedTimeEntryId);
+                ViewModel.OnCalendarItemUpdated.Inputs.OnNext(stoppedTimeEntry);
+                TestScheduler.Start();
+
+                deleteAction.MenuItemAction.Execute();
+
+                TestScheduler.Start();
+                InteractorFactory.DidNotReceive().DeleteTimeEntry(stoppedTimeEntryId);
+            }
+
             [Fact]
             public void TheDeleteActionExecutesActionAndClosesMenu()
-                => ExecutesActionAndClosesMenu(TheDeleteActionDeletesTheRunningTimeEntry);
+                => ExecutesActionAndClosesMenu(TheDeleteActionDeletesTheTimeEntryIfTheUserConfirmsTheDialog);
 
             [Fact]
             public void TheEditActionNavigatesToTheEditTimeEntryViewModelWithTheRightId()
@@ -1236,6 +1272,15 @@ namespace Toggl.Core.Tests.UI.ViewModels
 
         public sealed class TheTimeEntryPeriodObservable : CalendarContextualMenuViewModelTest
         {
+
+            public TheTimeEntryPeriodObservable()
+            {
+                var preferences = new MockPreferences { TimeOfDayFormat = TimeFormat.TwelveHoursFormat };
+                var interactor = Substitute.For<IInteractor<IObservable<IThreadSafePreferences>>>();
+                interactor.Execute().ReturnsObservableOf(preferences);
+                InteractorFactory.ObserveCurrentPreferences().Returns(interactor);
+            }
+
             [Fact]
             public void StartsWithThePeriodFromCalendarItemPassedFirstOnCalendarItemUpdated()
             {
@@ -1259,8 +1304,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.OnCalendarItemUpdated.Execute(calendarItem);
                 TestScheduler.Start();
 
-                observer.Messages.Should().HaveCount(1);
-                observer.Messages.First().Value.Value
+                observer.LastEmittedValue()
                     .ToLower()
                     .Should()
                     .Be($"{calendarItem.StartTime.ToLocalTime().ToString(Resources.EditingTwelveHoursFormat)} - {calendarItem.EndTime.Value.ToLocalTime().ToString(Resources.EditingTwelveHoursFormat)}".ToLower());
@@ -1292,8 +1336,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.OnCalendarItemUpdated.Execute(newCalendarItem);
                 TestScheduler.Start();
 
-                observer.Messages.Should().HaveCount(2);
-                observer.Messages.Last().Value.Value
+                observer.LastEmittedValue()
                     .ToLower()
                     .Should()
                     .Be($"{newCalendarItem.StartTime.ToLocalTime().ToString(Resources.EditingTwelveHoursFormat)} - {newCalendarItem.EndTime.Value.ToLocalTime().ToString(Resources.EditingTwelveHoursFormat)}".ToLower());
@@ -1325,8 +1368,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.OnCalendarItemUpdated.Execute(newCalendarItem);
                 TestScheduler.Start();
 
-                observer.Messages.Should().HaveCount(2);
-                observer.Messages.Last().Value.Value
+                observer.LastEmittedValue()
                     .ToLower()
                     .Should()
                     .Be($"{newCalendarItem.StartTime.ToLocalTime().ToString(Resources.EditingTwelveHoursFormat)} - {newCalendarItem.EndTime.Value.ToLocalTime().ToString(Resources.EditingTwelveHoursFormat)}".ToLower());
@@ -1364,10 +1406,14 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.OnCalendarItemUpdated.Execute(calendarItem);
                 TestScheduler.Start();
 
+                var beforeCount = observer.Messages.Count();
+
                 ViewModel.OnCalendarItemUpdated.Execute(newCalendarItem);
                 TestScheduler.Start();
 
-                observer.Messages.Should().HaveCount(1);
+                var afterCount = observer.Messages.Count();
+
+                beforeCount.Should().Be(afterCount);
             }
 
             [Fact]
@@ -1396,8 +1442,7 @@ namespace Toggl.Core.Tests.UI.ViewModels
                 ViewModel.OnCalendarItemUpdated.Execute(newCalendarItem);
                 TestScheduler.Start();
 
-                observer.Messages.Should().HaveCount(2);
-                observer.Messages.Last().Value.Value
+                observer.LastEmittedValue()
                     .ToLower()
                     .Should()
                     .Be($"{newCalendarItem.StartTime.ToLocalTime().ToString(Resources.EditingTwelveHoursFormat)} - {Shared.Resources.Now}".ToLower());

@@ -133,7 +133,7 @@ namespace Toggl.Core.Interactors
 
         #region Preferences
 
-        IInteractor<IObservable<IThreadSafePreferences>> GetPreferences();
+        IInteractor<IObservable<IThreadSafePreferences>> ObserveCurrentPreferences();
 
         IInteractor<IObservable<IThreadSafePreferences>> UpdatePreferences(EditPreferencesDTO dto);
 
@@ -179,6 +179,8 @@ namespace Toggl.Core.Interactors
 
         IInteractor<IObservable<Unit>> ScheduleEventNotificationsForNextWeek();
 
+        IInteractor<Task> UpdateEventNotificationsSchedules();
+
         #endregion
 
         #region Clients
@@ -222,7 +224,7 @@ namespace Toggl.Core.Interactors
         #region Reports
 
         IInteractor<IObservable<ITimeEntriesTotals>> GetReportsTotals(
-            long userId, long workspaceId, DateTimeOffset startDate, DateTimeOffset endDate);
+            long userId, long workspaceId, DateTimeOffsetRange timeRange);
 
         IInteractor<IObservable<ProjectSummaryReport>> GetProjectSummary(
             long workspaceId, DateTimeOffset startDate, DateTimeOffset? endDate);

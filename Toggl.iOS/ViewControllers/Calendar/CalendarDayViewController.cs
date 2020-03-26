@@ -29,7 +29,6 @@ namespace Toggl.iOS.ViewControllers
         private const double minimumOffsetOfCurrentTimeIndicatorFromScreenEdge = 0.2;
         private const double middleOfTheDay = 12;
         private const float collectionViewDefaultInset = 20;
-        private const float maxWidth = 834;
         private const float additionalContentOffsetWhenContextualMenuIsVisible = 128;
 
         private readonly ITimeService timeService;
@@ -86,7 +85,7 @@ namespace Toggl.iOS.ViewControllers
             ContextualMenu.Layer.ShadowOpacity = 0.1f;
             ContextualMenu.Layer.ShadowOffset = new CGSize(0, -2);
 
-            ContextualMenuBottonConstraint.Constant = -ContextualMenu.Frame.Height;
+            ContextualMenuBottonConstraint.Constant = -ContextualMenu.Frame.Height - 10;
 
             ContextualMenuFadeView.FadeLeft = true;
             ContextualMenuFadeView.FadeRight = true;
@@ -116,6 +115,12 @@ namespace Toggl.iOS.ViewControllers
 
             ViewModel.ContextualMenuViewModel.CalendarItemInEditMode
                 .Subscribe(editItemHelper.StartEditingItem.Inputs)
+                .DisposedBy(DisposeBag);
+
+            ViewModel.ContextualMenuViewModel.MenuVisible
+                .Where(isVisible => !isVisible)
+                .SelectUnit()
+                .Subscribe(editItemHelper.StopEditing.Inputs)
                 .DisposedBy(DisposeBag);
 
             editItemHelper.ItemUpdated
@@ -149,6 +154,10 @@ namespace Toggl.iOS.ViewControllers
 
             ViewModel.ContextualMenuViewModel.CalendarItemRemoved
                 .Subscribe(dataSource.RemoveItemView)
+                .DisposedBy(DisposeBag);
+
+            ViewModel.ContextualMenuViewModel.CalendarItemUpdated
+                .Subscribe(dataSource.UpdateItemView)
                 .DisposedBy(DisposeBag);
 
             ContextualMenuCloseButton.Rx().Tap()
@@ -189,10 +198,12 @@ namespace Toggl.iOS.ViewControllers
             base.ViewDidLayoutSubviews();
 
             updateContentInset();
+            layout.InvalidateLayoutForVisibleItems();
 
             if (contextualMenuInitialised) return;
             contextualMenuInitialised = true;
-            ContextualMenuBottonConstraint.Constant = -ContextualMenu.Frame.Height;
+            ContextualMenuBottonConstraint.Constant = -ContextualMenu.Frame.Height - 10;
+            ContextualMenu.Layer.ShadowPath = CGPath.FromRect(ContextualMenu.Layer.Bounds);
             View.LayoutIfNeeded();
         }
 
@@ -227,7 +238,7 @@ namespace Toggl.iOS.ViewControllers
         {
             if (!contextualMenuInitialised) return;
 
-            ContextualMenuBottonConstraint.Constant = -ContextualMenu.Frame.Height;
+            ContextualMenuBottonConstraint.Constant = -ContextualMenu.Frame.Height - 10;
             AnimationExtensions.Animate(
                 Animation.Timings.EnterTiming,
                 Animation.Curves.EaseOut,
@@ -269,12 +280,7 @@ namespace Toggl.iOS.ViewControllers
         private void updateContentInset(bool animate = false)
         {
             var topInset = collectionViewDefaultInset;
-
-            var leftInset = CalendarCollectionView.Frame.Width <= maxWidth
-                ? collectionViewDefaultInset
-                : (CalendarCollectionView.Frame.Width - maxWidth) / 2;
-
-            var rightInset = leftInset;
+            var sideInset = 0;
 
             var bottomInset = contextualMenuVisible.Value
                 ? collectionViewDefaultInset * 2 + ContextualMenu.Frame.Height
@@ -286,13 +292,13 @@ namespace Toggl.iOS.ViewControllers
                     Animation.Timings.EnterTiming,
                     Animation.Curves.EaseOut,
                     () => CalendarCollectionView.ContentInset = new UIEdgeInsets(
-                        topInset, leftInset, bottomInset, rightInset)
+                        topInset, sideInset, bottomInset, sideInset)
                     );
             }
             else
             {
                 CalendarCollectionView.ContentInset = new UIEdgeInsets(
-                    topInset, leftInset, bottomInset, rightInset);
+                    topInset, sideInset, bottomInset, sideInset);
             }
         }
 

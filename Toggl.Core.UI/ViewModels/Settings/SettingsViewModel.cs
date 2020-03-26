@@ -82,7 +82,6 @@ namespace Toggl.Core.UI.ViewModels
         public ViewAction TryLogout { get; }
         public ViewAction OpenAboutView { get; }
         public ViewAction OpenSiriShortcuts { get; }
-        public ViewAction OpenSiriWorkflows { get; }
         public ViewAction SubmitFeedback { get; }
         public ViewAction SelectDateFormat { get; }
         public ViewAction PickDefaultWorkspace { get; }
@@ -91,6 +90,8 @@ namespace Toggl.Core.UI.ViewModels
         public ViewAction SelectBeginningOfWeek { get; }
         public ViewAction ToggleManualMode { get; }
         public ViewAction ToggleSwipeActions { get; }
+        public ViewAction ToggleRunningTimerNotifications { get; }
+        public ViewAction ToggleStoppedTimerNotifications { get; }
 
         public SettingsViewModel(
             ITogglDataSource dataSource,
@@ -249,7 +250,6 @@ namespace Toggl.Core.UI.ViewModels
             TryLogout = rxActionFactory.FromAsync(tryLogout);
             OpenAboutView = rxActionFactory.FromAsync(openAboutView);
             OpenSiriShortcuts = rxActionFactory.FromAsync(openSiriShorcuts);
-            OpenSiriWorkflows = rxActionFactory.FromAsync(openSiriWorkflows);
             SubmitFeedback = rxActionFactory.FromAsync(submitFeedback);
             SelectDateFormat = rxActionFactory.FromAsync(selectDateFormat);
             PickDefaultWorkspace = rxActionFactory.FromAsync(pickDefaultWorkspace);
@@ -258,6 +258,8 @@ namespace Toggl.Core.UI.ViewModels
             ToggleTimeEntriesGrouping = rxActionFactory.FromAsync(toggleTimeEntriesGrouping);
             ToggleManualMode = rxActionFactory.FromAction(toggleManualMode);
             ToggleSwipeActions = rxActionFactory.FromAction(toggleSwipeActions);
+            ToggleRunningTimerNotifications = rxActionFactory.FromAction(toggleRunningTimerNotifications);
+            ToggleStoppedTimerNotifications = rxActionFactory.FromAction(toggleStoppedTimerNotifications);
         }
 
         public override async Task Initialize()
@@ -298,26 +300,36 @@ namespace Toggl.Core.UI.ViewModels
             }
         }
 
-        public void ToggleRunningTimerNotifications()
+        private void toggleRunningTimerNotifications()
         {
             var newState = !userPreferences.AreRunningTimerNotificationsEnabled;
             userPreferences.SetRunningTimerNotifications(newState);
         }
 
-        public void ToggleStoppedTimerNotifications()
+        private void toggleStoppedTimerNotifications()
         {
             var newState = !userPreferences.AreStoppedTimerNotificationsEnabled;
             userPreferences.SetStoppedTimerNotifications(newState);
         }
 
-        private Task openCalendarSettings()
-            => Navigate<CalendarSettingsViewModel, bool, string[]>(false);
+        private async Task openCalendarSettings()
+        {
+            await Navigate<CalendarSettingsViewModel>();
+            interactorFactory.UpdateEventNotificationsSchedules().Execute();
+        }
 
-        private Task openCalendarSmartReminders()
-            => Navigate<UpcomingEventsNotificationSettingsViewModel, Unit>();
+        private async Task openCalendarSmartReminders()
+        {
+            await Navigate<UpcomingEventsNotificationSettingsViewModel, Unit>();
+            interactorFactory.UpdateEventNotificationsSchedules().Execute();
+        }
 
-        private Task openNotificationSettings()
-            => Navigate<NotificationSettingsViewModel>();
+        private async Task openNotificationSettings()
+        {
+            await Navigate<NotificationSettingsViewModel>();
+            interactorFactory.UpdateEventNotificationsSchedules().Execute();
+        }
+
 
         private IObservable<Unit> logout()
         {
@@ -326,7 +338,7 @@ namespace Toggl.Core.UI.ViewModels
 
             return interactorFactory.Logout(LogoutSource.Settings)
                 .Execute()
-                .Do(_ => Navigate<LoginViewModel, CredentialsParameter>(CredentialsParameter.Empty));
+                .Do(_ => Navigate<OnboardingViewModel>());
         }
 
         private IObservable<bool> isSynced()
@@ -388,9 +400,6 @@ namespace Toggl.Core.UI.ViewModels
 
         private Task openSiriShorcuts()
             => Navigate<SiriShortcutsViewModel>();
-
-        private Task openSiriWorkflows()
-            => Navigate<SiriWorkflowsViewModel>();
 
         private async Task submitFeedback()
         {

@@ -16,7 +16,8 @@ namespace Toggl.iOS.Models
         public bool Billable;
         public IEnumerable<long> Tags;
         public long? ProjectId;
-        public ReportPeriod ReportPeriod;
+        public long? TaskId;
+        public DateRangePeriod DateRangePeriod;
     }
 
     public class SiriShortcut
@@ -39,7 +40,7 @@ namespace Toggl.iOS.Models
             {
                 Parameters.WorkspaceId = stringToLong(showReportPeriodIntent.Workspace?.Identifier);
                 Parameters.WorkspaceName = showReportPeriodIntent.Workspace?.DisplayString;
-                Parameters.ReportPeriod = showReportPeriodIntent.Period.ToReportPeriod();
+                Parameters.DateRangePeriod = showReportPeriodIntent.Period.ToDateRangePeriod();
             }
 
             if (Intent is StartTimerIntent startTimerIntent)
@@ -52,6 +53,7 @@ namespace Toggl.iOS.Models
                     ? null
                     : stringToLongCollection(startTimerIntent.Tags.Select(tag => tag.Identifier));
                 Parameters.ProjectId = stringToLong(startTimerIntent.ProjectId?.Identifier);
+                Parameters.TaskId = stringToLong(startTimerIntent.TaskId?.Identifier);
             }
 
             if (Intent is StartTimerFromClipboardIntent startTimerFromClipboardIntent)
@@ -63,6 +65,7 @@ namespace Toggl.iOS.Models
                     ? null
                     : stringToLongCollection(startTimerFromClipboardIntent.Tags.Select(tag => tag.Identifier));
                 Parameters.ProjectId = stringToLong(startTimerFromClipboardIntent.ProjectId?.Identifier);
+                Parameters.TaskId = stringToLong(startTimerFromClipboardIntent.TaskId?.Identifier);
             }
         }
 

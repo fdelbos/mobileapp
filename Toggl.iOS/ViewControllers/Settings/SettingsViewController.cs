@@ -9,11 +9,11 @@ using Toggl.Core.UI.Collections;
 using Toggl.Core.UI.Extensions;
 using Toggl.Core.UI.Helper;
 using Toggl.Core.UI.ViewModels;
+using Toggl.Core.UI.Views.Settings;
 using Toggl.iOS.Extensions;
 using Toggl.iOS.Extensions.Reactive;
 using Toggl.iOS.Helper;
 using Toggl.iOS.Presentation.Transition;
-using Toggl.iOS.ViewControllers.Settings.Models;
 using Toggl.iOS.ViewSources;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
@@ -25,6 +25,8 @@ namespace Toggl.iOS.ViewControllers
 
     public partial class SettingsViewController : ReactiveViewController<SettingsViewModel>
     {
+        protected override bool AcceptsCancelKeyCommand { get; } = true;
+        
         private readonly float bottomInset = 24;
 
         public SettingsViewController(SettingsViewModel viewModel)
@@ -40,9 +42,8 @@ namespace Toggl.iOS.ViewControllers
             ((ReactiveNavigationController)NavigationController).SetBackgroundColor(ColorAssets.TableBackground);
 
             NavigationItem.RightBarButtonItem = ReactiveNavigationController.CreateSystemItem(
-                UIBarButtonSystemItem.Done,
-                () => ViewModel.Close()
-            );
+                Resources.Done, UIBarButtonItemStyle.Done, ViewModel.Close);
+            NavigationItem.BackBarButtonItem.Title = Resources.Back;
 
             var source = new SettingsTableViewSource(tableView);
             tableView.Source = source;

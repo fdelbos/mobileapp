@@ -4,8 +4,10 @@ using AndroidX.AppCompat.App;
 using AndroidX.Fragment.App;
 using Toggl.Core.UI.ViewModels;
 using Toggl.Core.UI.ViewModels.Calendar;
+using Toggl.Core.UI.ViewModels.DateRangePicker;
 using Toggl.Core.UI.ViewModels.Settings;
 using Toggl.Core.UI.Views;
+using Toggl.Droid.Extensions;
 using Toggl.Droid.Fragments;
 
 namespace Toggl.Droid.Presentation
@@ -19,14 +21,18 @@ namespace Toggl.Droid.Presentation
             typeof(SelectColorViewModel),
             typeof(SelectDefaultWorkspaceViewModel),
             typeof(TermsOfServiceViewModel),
-            typeof(UpcomingEventsNotificationSettingsViewModel)
+            typeof(UpcomingEventsNotificationSettingsViewModel),
+            typeof(DateRangePickerViewModel),
         };
 
         protected override void PresentOnMainThread<TInput, TOutput>(ViewModel<TInput, TOutput> viewModel, IView sourceView)
         {
             var fragmentManager = tryGetFragmentManager(sourceView);
             if (fragmentManager == null)
-                throw new Exception($"Parent ViewModel's view trying to present {viewModel.GetType().Name} doesn't have a FragmentManager");
+            {
+                viewModel.CloseWithDefaultResult();
+                return;
+            }
 
             var dialog = createReactiveDialog(viewModel);
 
@@ -58,6 +64,9 @@ namespace Toggl.Droid.Presentation
 
                 case UpcomingEventsNotificationSettingsViewModel _:
                     return new UpcomingEventsNotificationSettingsFragment();
+
+                case DateRangePickerViewModel _:
+                    return new DateRangePickerFragment();
             }
 
             throw new InvalidOperationException($"There's no reactive dialog implementation for {viewModel.GetType().Name}");
@@ -65,10 +74,10 @@ namespace Toggl.Droid.Presentation
 
         private FragmentManager tryGetFragmentManager(IView sourceView)
         {
-            if (sourceView is AppCompatActivity activity)
+            if (sourceView is AppCompatActivity activity && activity.IsResumed())
                 return activity.SupportFragmentManager;
 
-            if (sourceView is Fragment fragment)
+            if (sourceView is Fragment fragment && fragment.IsResumed())
                 return fragment.FragmentManager;
 
             return null;

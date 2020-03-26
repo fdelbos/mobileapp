@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using Accord.Statistics.Kernels;
 using Toggl.Core.Extensions;
 using Toggl.Core.Suggestions;
 using Toggl.Core.Sync;
@@ -19,6 +17,8 @@ namespace Toggl.Core.Analytics
         public IAnalyticsEvent<AuthenticationMethod> SignUp { get; }
 
         public IAnalyticsEvent<SignUpErrorSource> SignUpError { get; }
+
+        public IAnalyticsEvent ContinueWithGoogle { get; }
 
         public IAnalyticsEvent<LoginSignupAuthenticationMethod> UserIsMissingApiToken { get; }
 
@@ -66,9 +66,9 @@ namespace Toggl.Core.Analytics
 
         public IAnalyticsEvent RatingViewSecondStepDontSendFeedback { get; }
 
-        public IAnalyticsEvent<ReportsSource, int, int, double> ReportsSuccess { get; }
+        public IAnalyticsEvent<DateRangeSelectionSource, int, int, double> ReportsSuccess { get; }
 
-        public IAnalyticsEvent<ReportsSource, int, double> ReportsFailure { get; }
+        public IAnalyticsEvent<DateRangeSelectionSource, int, double> ReportsFailure { get; }
 
         public IAnalyticsEvent OfflineModeDetected { get; }
 
@@ -156,6 +156,36 @@ namespace Toggl.Core.Analytics
 
         public IAnalyticsEvent BackgroundSyncMustStopExcecution { get; }
 
+        public IAnalyticsEvent EmailIsAlreadyInUsedSignUpFailure { get; }
+
+        public IAnalyticsEvent<bool> LocalEmailValidationSignUpCheck { get; }
+
+        public IAnalyticsEvent<bool> LocalPasswordValidationSignUpCheck { get; }
+
+        public IAnalyticsEvent<bool> LocalCountryValidationSignUpCheck { get; }
+
+        public IAnalyticsEvent IncorrectEmailOrPasswordSignUpFailure { get; }
+
+        public IAnalyticsEvent IncorrectEmailOrPasswordLoginFailure { get; }
+
+        public IAnalyticsEvent<bool> LocalEmailValidationLoginCheck { get; }
+
+        public IAnalyticsEvent<bool> LocalPasswordValidationLoginCheck { get; }
+
+        public IAnalyticsEvent OnboardingCountryNotSelected { get; }
+
+        public IAnalyticsEvent<string> OnboardingSelectedCountry { get; }
+
+        public IAnalyticsEvent OnboardingPrivacyPolicyOpened { get; }
+
+        public IAnalyticsEvent OnboardingTermsOfServiceOpened { get; }
+
+        public IAnalyticsEvent OnboardingAgreeButtonTapped { get; }
+
+        public IAnalyticsEvent<OnboardingScrollAction, OnboardingScrollDirection, int> OnboardingPageScroll { get; }
+
+        public IAnalyticsEvent<bool, bool, bool> OnboardingPagesViewed { get; }
+
         public IAnalyticsEvent<string, string> UnknownLoginFailure { get; }
 
         public IAnalyticsEvent<string, string> UnknownSignUpFailure { get; }
@@ -228,6 +258,7 @@ namespace Toggl.Core.Analytics
             LoginError = new AnalyticsEvent<LoginErrorSource>(this, nameof(LoginError), "Source");
             SignUp = new AnalyticsEvent<AuthenticationMethod>(this, nameof(SignUp), "AuthenticationMethod");
             SignUpError = new AnalyticsEvent<SignUpErrorSource>(this, nameof(SignUpError), "Source");
+            ContinueWithGoogle = new AnalyticsEvent(this, nameof(ContinueWithGoogle));
             UserIsMissingApiToken = new AnalyticsEvent<LoginSignupAuthenticationMethod>(this, nameof(UserIsMissingApiToken), "AuthenticationMethod");
             OnboardingSkip = new AnalyticsEvent<string>(this, nameof(OnboardingSkip), "PageWhenSkipWasClicked");
             Logout = new AnalyticsEvent<LogoutSource>(this, nameof(Logout), "Source");
@@ -251,8 +282,8 @@ namespace Toggl.Core.Analytics
             RatingViewSecondStepDontRate = new AnalyticsEvent(this, nameof(RatingViewSecondStepDontRate));
             RatingViewSecondStepSendFeedback = new AnalyticsEvent(this, nameof(RatingViewSecondStepSendFeedback));
             RatingViewSecondStepDontSendFeedback = new AnalyticsEvent(this, nameof(RatingViewSecondStepDontSendFeedback));
-            ReportsSuccess = new AnalyticsEvent<ReportsSource, int, int, double>(this, nameof(ReportsSuccess), "Source", "TotalDays", "ProjectsNotSynced", "LoadingTime");
-            ReportsFailure = new AnalyticsEvent<ReportsSource, int, double>(this, nameof(ReportsFailure), "Source", "TotalDays", "LoadingTime");
+            ReportsSuccess = new AnalyticsEvent<DateRangeSelectionSource, int, int, double>(this, nameof(ReportsSuccess), "Source", "TotalDays", "ProjectsNotSynced", "LoadingTime");
+            ReportsFailure = new AnalyticsEvent<DateRangeSelectionSource, int, double>(this, nameof(ReportsFailure), "Source", "TotalDays", "LoadingTime");
             OfflineModeDetected = new AnalyticsEvent(this, nameof(OfflineModeDetected));
             EditViewTapped = new AnalyticsEvent<EditViewTapSource>(this, nameof(EditViewTapped), "TapSource");
             EditViewClosed = new AnalyticsEvent<EditViewCloseReason>(this, nameof(EditViewClosed), "Reason");
@@ -296,6 +327,21 @@ namespace Toggl.Core.Analytics
             BackgroundSyncFinished = new AnalyticsEvent<string>(this, nameof(BackgroundSyncFinished), "BackgroundSyncFinishedWithOutcome");
             BackgroundSyncFailed = new AnalyticsEvent<string, string, string>(this, nameof(BackgroundSyncFailed), "Type", "Message", "StackTrace");
             BackgroundSyncMustStopExcecution = new AnalyticsEvent(this, nameof(BackgroundSyncMustStopExcecution));
+            EmailIsAlreadyInUsedSignUpFailure = new AnalyticsEvent(this, nameof(EmailIsAlreadyInUsedSignUpFailure));
+            LocalEmailValidationSignUpCheck = new AnalyticsEvent<bool>(this, nameof(LocalEmailValidationSignUpCheck), "IsValid");
+            LocalPasswordValidationSignUpCheck = new AnalyticsEvent<bool>(this, nameof(LocalPasswordValidationSignUpCheck), "IsValid");
+            LocalCountryValidationSignUpCheck = new AnalyticsEvent<bool>(this, nameof(LocalCountryValidationSignUpCheck), "IsProvided");
+            IncorrectEmailOrPasswordSignUpFailure = new AnalyticsEvent(this, nameof(IncorrectEmailOrPasswordSignUpFailure));
+            IncorrectEmailOrPasswordLoginFailure = new AnalyticsEvent(this, nameof(IncorrectEmailOrPasswordLoginFailure));
+            LocalEmailValidationLoginCheck = new AnalyticsEvent<bool>(this, nameof(LocalEmailValidationLoginCheck), "IsValid");
+            LocalPasswordValidationLoginCheck = new AnalyticsEvent<bool>(this, nameof(LocalPasswordValidationLoginCheck), "IsValid");
+            OnboardingCountryNotSelected = new AnalyticsEvent(this, nameof(OnboardingCountryNotSelected));
+            OnboardingSelectedCountry = new AnalyticsEvent<string>(this, nameof(OnboardingSelectedCountry), "Country");
+            OnboardingPrivacyPolicyOpened = new AnalyticsEvent(this, nameof(OnboardingPrivacyPolicyOpened));
+            OnboardingTermsOfServiceOpened = new AnalyticsEvent(this, nameof(OnboardingTermsOfServiceOpened));
+            OnboardingAgreeButtonTapped = new AnalyticsEvent(this, nameof(OnboardingAgreeButtonTapped));
+            OnboardingPageScroll = new AnalyticsEvent<OnboardingScrollAction, OnboardingScrollDirection, int>(this, nameof(OnboardingPageScroll), "Action", "Direction", "PageViewed");
+            OnboardingPagesViewed = new AnalyticsEvent<bool, bool, bool>(this, nameof(OnboardingPagesViewed), "Page1", "Page2", "Page3");
             UnknownLoginFailure = new AnalyticsEvent<string, string>(this, nameof(UnknownLoginFailure), "Type", "Message");
             UnknownSignUpFailure = new AnalyticsEvent<string, string>(this, nameof(UnknownSignUpFailure), "Type", "Message");
             RateLimitingDelayDuringSyncing = new AnalyticsEvent<int>(this, nameof(RateLimitingDelayDuringSyncing), "DelayDurationSeconds");
@@ -354,7 +400,7 @@ namespace Toggl.Core.Analytics
 
         protected abstract void TrackException(Exception exception);
 
-        public abstract void SetAppCenterUserId(long id);
-        public abstract void ResetAppCenterUserId();
+        public abstract void SetUserId(long id);
+        public abstract void ResetUserId();
     }
 }

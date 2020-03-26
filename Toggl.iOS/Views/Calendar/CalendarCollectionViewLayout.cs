@@ -7,10 +7,8 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using System.Threading;
 using Toggl.Core;
 using Toggl.Core.UI.Calendar;
-using Toggl.Core.UI.Extensions;
 using Toggl.Shared;
 using Toggl.Shared.Extensions;
 using UIKit;
@@ -24,17 +22,19 @@ namespace Toggl.iOS.Views.Calendar
         private const int hoursPerDay = Constants.HoursPerDay;
         private float minHourHeight = 28;
         private float maxHourHeight = 28 * 4;
+        private const float maxWidth = 834;
 
         public float HourHeight { get; private set; } = 56;
-
-        private ISubject<Unit> scalingEndedSubject = new Subject<Unit>();
-        public IObservable<Unit> ScalingEnded => scalingEndedSubject.AsObservable();
 
         private static readonly nfloat leftPadding = 76;
         private static readonly nfloat hourSupplementaryLabelHeight = 20;
         private static readonly nfloat currentTimeSupplementaryLeftOffset = -18;
         private static readonly nfloat verticalItemSpacing = 1;
 
+        private nfloat sideMargin
+            => CollectionView.Frame.Width >= maxWidth
+                ? (CollectionView.Frame.Width - maxWidth) / 2
+                : 0;
         private nfloat rightPadding
             => CollectionView.TraitCollection.HorizontalSizeClass == UIUserInterfaceSizeClass.Regular
                 ? 20
@@ -56,6 +56,9 @@ namespace Toggl.iOS.Views.Calendar
         public nfloat ContentViewHeight => hoursPerDay * HourHeight;
 
         private UICollectionViewLayoutAttributes currentTimeLayoutAttributes;
+
+        private Dictionary<NSIndexPath, UICollectionViewLayoutAttributes> itemLayoutAttributes = new Dictionary<NSIndexPath, UICollectionViewLayoutAttributes>();
+        private Dictionary<NSString, Dictionary<NSIndexPath, UICollectionViewLayoutAttributes>> supplementaryViewLayoutAttributes = new Dictionary<NSString, Dictionary<NSIndexPath, UICollectionViewLayoutAttributes>>();
 
         private bool isToday => date.ToLocalTime().Date == timeService.CurrentDateTime.ToLocalTime().Date;
 
@@ -105,6 +108,35 @@ namespace Toggl.iOS.Views.Calendar
 
             minHourHeight = (float)CollectionView.Bounds.Height / 26;
             maxHourHeight = minHourHeight * 5;
+        }
+
+        public override void InvalidateLayout()
+        {
+            itemLayoutAttributes = new Dictionary<NSIndexPath, UICollectionViewLayoutAttributes>();
+            supplementaryViewLayoutAttributes = new Dictionary<NSString, Dictionary<NSIndexPath, UICollectionViewLayoutAttributes>>();
+            base.InvalidateLayout();
+        }
+
+        public override void InvalidateLayout(UICollectionViewLayoutInvalidationContext context)
+        {
+            if (context.InvalidatedItemIndexPaths != null)
+                context.InvalidatedItemIndexPaths.ForEach(indexPath => itemLayoutAttributes.Remove(indexPath));
+
+            if (context.InvalidatedSupplementaryIndexPaths != null)
+                context.InvalidatedSupplementaryIndexPaths.ForEach(pair =>
+                {
+                    if (!supplementaryViewLayoutAttributes.ContainsKey((NSString)pair.Key))
+                        return;
+
+                    var indexPaths = (NSArray) pair.Value;
+                    for(nuint i = 0; i < indexPaths.Count; i++)
+                    {
+                        var indexPath = indexPaths.GetItem<NSIndexPath>(i);
+                        supplementaryViewLayoutAttributes[(NSString)pair.Key].Remove(indexPath);
+                    }
+                });
+
+            base.InvalidateLayout(context);
         }
 
         public override CGSize CollectionViewContentSize
@@ -169,8 +201,9 @@ namespace Toggl.iOS.Views.Calendar
             InvalidateLayout(context);
         }
 
+        // We should invalidate the whole layout only when the collectionview's width changes
         public override bool ShouldInvalidateLayoutForBoundsChange(CGRect newBounds)
-            => true;
+            => CollectionView.Bounds.Width != newBounds.Width;
 
         public override UICollectionViewLayoutAttributes[] LayoutAttributesForElementsInRect(CGRect rect)
         {
@@ -197,22 +230,32 @@ namespace Toggl.iOS.Views.Calendar
 
         public override UICollectionViewLayoutAttributes LayoutAttributesForItem(NSIndexPath indexPath)
         {
+            if (itemLayoutAttributes.ContainsKey(indexPath))
+                return itemLayoutAttributes[indexPath];
+
             var calendarItemLayoutAttributes = dataSource.LayoutAttributesForItemAtIndexPath(indexPath);
 
             var attributes = UICollectionViewLayoutAttributes.CreateForCell(indexPath);
             attributes.Frame = frameForItemWithLayoutAttributes(calendarItemLayoutAttributes);
             attributes.ZIndex = zIndexForItemAtIndexPath(indexPath);
 
+            itemLayoutAttributes[indexPath] = attributes;
+
             return attributes;
         }
 
         public override UICollectionViewLayoutAttributes LayoutAttributesForSupplementaryView(NSString kind, NSIndexPath indexPath)
         {
+            if (supplementaryViewLayoutAttributes.ContainsKey(kind)
+                && supplementaryViewLayoutAttributes[kind].ContainsKey(indexPath))
+                return supplementaryViewLayoutAttributes[kind][indexPath];
+
             if (kind == HourSupplementaryViewKind)
             {
                 var attributes = UICollectionViewLayoutAttributes.CreateForSupplementaryView(kind, indexPath);
                 attributes.Frame = frameForHour((int)indexPath.Item);
                 attributes.ZIndex = 0;
+                cacheSupplementaryItemAttributes(kind, indexPath, attributes);
                 return attributes;
             }
             else if (kind == EditingHourSupplementaryViewKind)
@@ -220,6 +263,7 @@ namespace Toggl.iOS.Views.Calendar
                 var attributes = UICollectionViewLayoutAttributes.CreateForSupplementaryView(kind, indexPath);
                 attributes.Frame = frameForEditingHour(indexPath);
                 attributes.ZIndex = 200;
+                cacheSupplementaryItemAttributes(kind, indexPath, attributes);
                 return attributes;
             }
             else
@@ -237,9 +281,6 @@ namespace Toggl.iOS.Views.Calendar
             }
         }
 
-        public void OnScalingEnded()
-            => scalingEndedSubject.OnNext(Unit.Default);
-
         internal CGRect FrameForCurrentTime()
         {
             var now = timeService.CurrentDateTime.LocalDateTime;
@@ -247,9 +288,9 @@ namespace Toggl.iOS.Views.Calendar
             var yHour = HourHeight * now.Hour;
             var yMins = HourHeight * now.Minute / 60;
 
-            var width = CollectionViewContentSize.Width - leftPadding - rightPadding - currentTimeSupplementaryLeftOffset;
+            var width = CollectionViewContentSize.Width - leftPadding - rightPadding - currentTimeSupplementaryLeftOffset - (sideMargin * 2);
             var height = 8;
-            var x = leftPadding + currentTimeSupplementaryLeftOffset;
+            var x = sideMargin + leftPadding + currentTimeSupplementaryLeftOffset;
             var y = yHour + yMins - height / 2;
 
             return new CGRect(x, y, width, height);
@@ -260,7 +301,7 @@ namespace Toggl.iOS.Views.Calendar
 
         private nint zIndexForItemAtIndexPath(NSIndexPath indexPath)
         {
-            var editingIndexIndexPath = dataSource.IndexPathForEditingItem();
+            var editingIndexIndexPath = dataSource.IndexPathForSelectedItem;
             var isEditing = editingIndexIndexPath != null && editingIndexIndexPath.Item == indexPath.Item;
             return isEditing ? 150 : 100;
         }
@@ -291,8 +332,8 @@ namespace Toggl.iOS.Views.Calendar
         {
             if (IsEditing)
             {
-                var editingItemIndexPath = dataSource.IndexPathForEditingItem();
-                var runningTimeEntryIndexPath = dataSource.IndexPathForRunningTimeEntry();
+                var editingItemIndexPath = dataSource.IndexPathForSelectedItem;
+                var runningTimeEntryIndexPath = dataSource.IndexPathForRunningTimeEntry;
                 var isEditingRunningTimeEntry = editingItemIndexPath != null && runningTimeEntryIndexPath != null
                                                 && runningTimeEntryIndexPath.Item == editingItemIndexPath.Item;
                 return isEditingRunningTimeEntry
@@ -312,9 +353,9 @@ namespace Toggl.iOS.Views.Calendar
             var yMins = HourHeight * startTime.Minute / 60;
 
             var totalInterItemSpacing = (attrs.TotalColumns - 1) * horizontalItemSpacing;
-            var width = (CollectionViewContentSize.Width - leftPadding - rightPadding - totalInterItemSpacing) / attrs.TotalColumns;
+            var width = (CollectionViewContentSize.Width - leftPadding - rightPadding - totalInterItemSpacing - (sideMargin * 2)) / attrs.TotalColumns;
             var height = Math.Max(minItemHeight(), HourHeight * duration.TotalMinutes / 60) - verticalItemSpacing;
-            var x = leftPadding + (width + horizontalItemSpacing) * attrs.ColumnIndex;
+            var x = sideMargin + leftPadding + (width + horizontalItemSpacing) * attrs.ColumnIndex;
             var y = yHour + yMins + verticalItemSpacing;
 
             return new CGRect(x, y, width, height);
@@ -322,9 +363,9 @@ namespace Toggl.iOS.Views.Calendar
 
         private CGRect frameForHour(int hour)
         {
-            var width = CollectionViewContentSize.Width - rightPadding;
+            var width = CollectionViewContentSize.Width - rightPadding - (sideMargin * 2);
             var height = hourSupplementaryLabelHeight;
-            var x = 0;
+            var x = sideMargin;
             var y = HourHeight * hour - height / 2;
 
             return new CGRect(x, y, width, height);
@@ -332,16 +373,26 @@ namespace Toggl.iOS.Views.Calendar
 
         private CGRect frameForEditingHour(NSIndexPath indexPath)
         {
-            var editingItemIndexPath = dataSource.IndexPathForEditingItem();
-            var attrs = dataSource.LayoutAttributesForItemAtIndexPath(editingItemIndexPath);
+            var selectedIndexPath = dataSource.IndexPathForSelectedItem;
+            if (selectedIndexPath == null)
+            {
+                return CGRect.Empty;
+            }
+            var attrs = dataSource.LayoutAttributesForItemAtIndexPath(selectedIndexPath);
 
-            var time = (int)indexPath.Item == 0 ? attrs.StartTime : attrs.EndTime;
+            var isStartTime = (int)indexPath.Item == 0;
+            var time = isStartTime ? attrs.StartTime : attrs.EndTime;
             var yHour = HourHeight * time.Hour;
             var yMins = HourHeight * time.Minute / 60;
 
-            var width = CollectionViewContentSize.Width - rightPadding;
+            if (!isStartTime && time.Hour == 0)
+            {
+                yHour = HourHeight * 24;
+            }
+
+            var width = CollectionViewContentSize.Width - rightPadding - (sideMargin * 2);
             var height = hourSupplementaryLabelHeight;
-            var x = 0;
+            var x = sideMargin;
             var y = yHour + yMins - height / 2;
 
             return new CGRect(x, y, width, height);
@@ -351,6 +402,18 @@ namespace Toggl.iOS.Views.Calendar
         {
             date = dateTimeOffset.ToLocalTime().Date;
             InvalidateLayout();
+        }
+
+        private void cacheSupplementaryItemAttributes(NSString kind, NSIndexPath indexPath, UICollectionViewLayoutAttributes attributes)
+        {
+            if (supplementaryViewLayoutAttributes.ContainsKey(kind))
+            {
+                supplementaryViewLayoutAttributes[kind][indexPath] = attributes;
+            }
+            else
+            {
+                supplementaryViewLayoutAttributes[kind] = new Dictionary<NSIndexPath, UICollectionViewLayoutAttributes> { [indexPath] = attributes };
+            }
         }
     }
 }

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Immutable;
 using Android.Graphics;
 using Toggl.Shared;
-using System.Globalization;
 using System.Linq;
 using Toggl.Core.UI.Helper;
 using Toggl.Droid.Extensions;
@@ -15,7 +14,6 @@ namespace Toggl.Droid.Views.Calendar
         private float timeSliceStartX;
         private float timeSlicesTopPadding;
         private float verticalLineLeftMargin;
-        private float hoursDistanceFromTimeLine;
         private TimeFormat timeOfDayFormat = TimeFormat.TwelveHoursFormat;
         private ImmutableArray<string> hours = ImmutableArray<string>.Empty;
         private ImmutableArray<float> timeLinesYs = ImmutableArray<float>.Empty;
@@ -25,32 +23,28 @@ namespace Toggl.Droid.Views.Calendar
 
         partial void initBackgroundBackingFields()
         {
-            timeSliceStartX = 60.DpToPixels(Context);
             timeSlicesTopPadding = 0;
-            verticalLineLeftMargin = 68.DpToPixels(Context);
-            hoursDistanceFromTimeLine = 12.DpToPixels(Context);
-            hoursX = timeSliceStartX - hoursDistanceFromTimeLine;
+            timeSliceStartX = Context.GetDimen(Resource.Dimension.calendarHourLineStartMargin);
+            verticalLineLeftMargin = Context.GetDimen(Resource.Dimension.calendarVerticalLineDividerStartMargin);
+            hoursX = Context.GetDimen(Resource.Dimension.calendarHoursStartMargin);
             hours = createHours();
 
             linesPaint = new Paint(PaintFlags.AntiAlias)
             {
                 Color = Context.SafeGetColor(Resource.Color.separator),
-                StrokeWidth = 1.DpToPixels(Context)
+                StrokeWidth = Context.GetDimen(Resource.Dimension.calendarHourLinesHeight)
             };
 
             hoursLabelPaint = new Paint(PaintFlags.AntiAlias)
             {
                 Color = Context.SafeGetColor(Resource.Color.reportsLabel),
                 TextAlign = Paint.Align.Right,
-                TextSize = 12.SpToPixels(Context)
+                TextSize = Context.GetDimen(Resource.Dimension.calendarHoursTextSize)
             };
         }
 
-        partial void processBackgroundOnLayout(bool changed, int left, int top, int right, int bottom)
-        {
-            if (!changed) 
-                return;
-            
+        partial void processBackgroundOnLayout()
+        {            
             timeLinesYs = createTimeLinesYPositions();
             hoursYs = timeLinesYs.Select(lineY => lineY + hoursLabelPaint.Descent()).ToImmutableArray();
         }
@@ -66,7 +60,8 @@ namespace Toggl.Droid.Views.Calendar
             {
                 var hourTop = hourLabelYsToDraw[hour] + linesPaint.Ascent();
                 var hourBottom = hourLabelYsToDraw[hour] + linesPaint.Descent();
-                if (!(hourBottom > scrollOffset) || !(hourTop - scrollOffset < Height)) continue;
+                if (!(hourBottom > scrollOffset) || !(hourTop - scrollOffset < Height))
+                    continue;
 
                 canvas.DrawLine(timeSliceStartX, timeLinesYsToDraw[hour], Width, timeLinesYsToDraw[hour], linesPaint);
                 canvas.DrawText(hoursToDraw[hour], hoursX, hourLabelYsToDraw[hour], hoursLabelPaint);
