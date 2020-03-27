@@ -424,7 +424,7 @@ Mettez en marche le chronomètre et vos enregistrements les plus utilisés s'aff
         <value>Vous avez changé d'espace de travail.</value>
     </data>
     <data name="WorkspaceChangedAlertMessage" xml:space="preserve">
-        <value>Votre projet et entrée seront alloué à l´espace de travail sélectionné</value>
+        <value>Votre projet et vos entrées seront alloué à l'espace de travail sélectionné</value>
     </data>
     <data name="Reports" xml:space="preserve">
         <value>Rapports</value>
@@ -602,7 +602,7 @@ Mettez en marche le chronomètre et vos enregistrements les plus utilisés s'aff
         <value>Notifications</value>
     </data>
     <data name="NotificationsRunningTimer" xml:space="preserve">
-        <value>Le chronomètre en cours d´exécution</value>
+        <value>Le chronomètre est en cours d´exécution</value>
     </data>
     <data name="NotificationsStoppedTimer" xml:space="preserve">
         <value>Le chronomètre est arrêté</value>
@@ -737,7 +737,7 @@ Mettez en marche le chronomètre et vos enregistrements les plus utilisés s'aff
         <value>Vous n'avez pas de compte?</value>
     </data>
     <data name="YouHaveCreatedYourFirstTimeEntry" xml:space="preserve">
-        <value>Vous avez créé votre entrée pour la première fois</value>
+        <value>Vous avez créé votre première entrée</value>
     </data>
     <data name="TapToEditIt" xml:space="preserve">
         <value>Appuyez pour le modifier</value>
@@ -1214,7 +1214,7 @@ Ouvrez l'application pour suivre le temps.</value>
         <value>Permettre l'accès</value>
     </data>
     <data name="PrivateProjectHint" xml:space="preserve">
-        <value>Les projets privés sont accessibles qu'aux membres du projet</value>
+        <value>Les projets privés ne sont accessibles qu'aux membres du projet</value>
     </data>
     <data name="Username" xml:space="preserve">
         <value>Identifiant</value>
