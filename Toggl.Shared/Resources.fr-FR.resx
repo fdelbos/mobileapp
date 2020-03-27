@@ -229,7 +229,7 @@ Veuillez réessayer.</value>
     </data>
     <data name="LogEmptyStateText" xml:space="preserve">
         <value>Vous n'avez plus enregistré votre temps depuis un moment. 
-Mettez en marche le chronomètre et ici s´affichent vos enregistrements les plus utilisés.</value>
+Mettez en marche le chronomètre et vos enregistrements les plus utilisés s'afficheront ici.</value>
     </data>
     <data name="DifferentWorkspaceAlertTitle" xml:space="preserve">
         <value>Vous avez sélectionné un projet dans un autre espace de travail.</value>
