@@ -796,7 +796,7 @@ Veuillez mettre à jour votre application pour continuer.</value>
         <value>Total</value>
     </data>
     <data name="ClockedHours" xml:space="preserve">
-        <value>Heures cadencées</value>
+        <value>Heures comptabilisées</value>
     </data>
     <data name="FirstDayOfTheWeek" xml:space="preserve">
         <value>Premier jour de la semaine</value>
