@@ -960,7 +960,7 @@ PS. Notre équipe de support client fonctionne actuellement en anglais uniquemen
 Ouvrez l'application pour suivre hors ligne.</value>
     </data>
     <data name="WidgetNoRunningTimeEntryError" xml:space="preserve">
-        <value>Aucune entrée de durée d'exécution trouvée. 
+        <value>Aucune entrée en cours d'exécution. 
 Ouvrez l'application pour en démarrer une nouvelle.</value>
     </data>
     <data name="WidgetGenericError" xml:space="preserve">
@@ -1146,5 +1146,32 @@ Ouvrez l'application pour suivre le temps.</value>
     </data>
     <data name="LoginToShowSuggestions" xml:space="preserve">
         <value>Connectez-vous pour afficher les suggestions</value>
+    </data>
+    <data name="Sync" xml:space="preserve">
+        <value>Synchroniser</value>
+    </data>
+    <data name="SearchObject" xml:space="preserve">
+        <value>Chercher {0}</value>
+    </data>
+    <data name="SelectCalendars" xml:space="preserve">
+        <value>Sélectionner des calendriers</value>
+    </data>
+    <data name="NoRunningTimeEntry" xml:space="preserve">
+        <value>Aucune entrée en cours d'exécution</value>
+    </data>
+    <data name="Next" xml:space="preserve">
+        <value>Suivant</value>
+    </data>
+    <data name="Previous" xml:space="preserve">
+        <value>Précédent</value>
+    </data>
+    <data name="ContinueWithEmail" xml:space="preserve">
+        <value>Continuer avec Email</value>
+    </data>
+    <data name="ContinueWithGoogle" xml:space="preserve">
+        <value>Continuer avec Google</value>
+    </data>
+    <data name="RatingViewPositiveCallToActionDescriptionIos" xml:space="preserve">
+        <value>Pourriez-vous évaluer Toggl dans l'App Store? Votre avis fera vraiment la différence.</value>
     </data>
 </root>
