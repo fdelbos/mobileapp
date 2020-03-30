@@ -11,7 +11,7 @@ using Toggl.Shared.Extensions;
 
 namespace Toggl.Droid.Activities
 {
-    [Activity(Theme = "@style/AppTheme.Onboarding",
+    [Activity(Theme = "@style/Theme.Splash",
         ScreenOrientation = ScreenOrientation.Portrait,
         ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
     public partial class OnboardingActivity : ReactiveActivity<OnboardingViewModel>
@@ -43,7 +43,7 @@ namespace Toggl.Droid.Activities
 
             ViewModel.IsLoading
                 .Do(setAnimationStatus)
-                .Subscribe(loadingViewIndicator.Rx().IsVisible())
+                .Subscribe(loadingViewViews.Rx().IsVisible())
                 .DisposedBy(DisposeBag);
         }
 
