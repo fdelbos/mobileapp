@@ -127,7 +127,7 @@
         <value>Inscrivez-vous gratuitement</value>
     </data>
     <data name="LoginForgotPassword" xml:space="preserve">
-        <value>Mot de passe oublié? </value>
+        <value>Mot de passe oublié?</value>
     </data>
     <data name="LoginGetHelpLoggingIn" xml:space="preserve">
         <value>Obtenir de l'aide pour vous connecter</value>
@@ -418,7 +418,7 @@ Mettez en marche le chronomètre et vos enregistrements les plus utilisés s'aff
         <value>Vous avez changé d'espace de travail.</value>
     </data>
     <data name="WorkspaceChangedAlertMessage" xml:space="preserve">
-        <value>Votre projet et vos entrées seront alloué à l'espace de travail sélectionné</value>
+        <value>Votre projet et vos entrées seront alloué à l'espace de travail sélectionné.</value>
     </data>
     <data name="Reports" xml:space="preserve">
         <value>Rapports</value>
@@ -789,7 +789,7 @@ Utilisez-les pour classer votre temps.</value>
     </data>
     <data name="EmptyTagText" xml:space="preserve">
         <value>Vos labels s´afficheront ici. 
-    Utilisez-les pour ajouter des labels à vos entrées de temps</value>
+Utilisez-les pour ajouter des labels à vos entrées de temps.</value>
     </data>
     <data name="GroupTimeEntries" xml:space="preserve">
         <value>Regroupez les entrées de temps similaires</value>
@@ -914,13 +914,13 @@ PS. Notre équipe de support client fonctionne actuellement en anglais uniquemen
         <value>Ne plus montrer</value>
     </data>
     <data name="SiriClipboardHintLabel" xml:space="preserve">
-        <value>Lorsque vous exécutez ce raccourci, la description sera collée à partir du Presse-papiers.</value>
+        <value>Lorsque vous exécutez ce raccourci, la description sera collée à partir du Presse-papiers</value>
     </data>
     <data name="SiriTrackEntrySuggestedInvocationPhrase" xml:space="preserve">
         <value>Suivi {0}</value>
     </data>
     <data name="SiriShowReportSuggestedInvocationPhrase" xml:space="preserve">
-        <value>Montrer l´heure</value>
+        <value>Montrer l´heure de {0}</value>
     </data>
     <data name="SiriStartTimerConfirmationMessage" xml:space="preserve">
         <value>Commencer le suivi {0}?</value>
@@ -1037,7 +1037,7 @@ Ouvrez l'application pour suivre le temps.</value>
         <value>Réessayez</value>
     </data>
     <data name="OutdatedAppTryTogglCom" xml:space="preserve">
-        <value>essayer toggl.com </value>
+        <value>essayer toggl.com</value>
     </data>
     <data name="RatingTitle" xml:space="preserve">
         <value>Vous aimez Toggl?</value>
@@ -1094,7 +1094,7 @@ Ouvrez l'application pour suivre le temps.</value>
         <value>Connecter des calendriers</value>
     </data>
     <data name="LinkCalendarsMessage" xml:space="preserve">
-        <value>Affichez vos événements d'agenda dans Toggl et enregistrez-les d'une simple touche.</value>
+        <value>Affichez vos événements d'agenda dans Toggl et enregistrez-les d'une simple touche</value>
     </data>
     <data name="AllowAccess" xml:space="preserve">
         <value>Permettre l'accès</value>
