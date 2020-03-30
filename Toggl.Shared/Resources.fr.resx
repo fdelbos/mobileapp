@@ -351,9 +351,6 @@ Mettez en marche le chronomètre et vos enregistrements les plus utilisés s'aff
     <data name="ReportPeriod" xml:space="preserve">
         <value>Période du rapport</value>
     </data>
-    <data name="Siri" xml:space="preserve">
-        <value>Siri</value>
-    </data>
     <data name="SiriReportPeriodInstruction" xml:space="preserve">
         <value>Demandez Siri d'afficher un rapport pour cette période</value>
     </data>
@@ -865,9 +862,6 @@ PS. Notre équipe de support client fonctionne actuellement en anglais uniquemen
     <data name="AddProjectBubbleText" xml:space="preserve">
         <value>Ajouter un projet et des tags à la volée</value>
     </data>
-    <data name="ReviewTheTerms" xml:space="preserve">
-        <value>Consultez les conditions</value>
-    </data>
     <data name="IAgree" xml:space="preserve">
         <value>je suis d'accord</value>
     </data>
@@ -897,21 +891,6 @@ PS. Notre équipe de support client fonctionne actuellement en anglais uniquemen
     </data>
     <data name="NumberOfTasksSingular" xml:space="preserve">
         <value>{0} Tâche</value>
-    </data>
-    <data name="TwelveHoursFormat">
-        <value>h tt</value>
-    </data>
-    <data name="TwentyFourHoursFormat">
-        <value>HH:mm</value>
-    </data>
-    <data name="EditingTwelveHoursFormat">
-        <value>h:mm tt</value>
-    </data>
-    <data name="EditingTwentyFourHoursFormat">
-        <value>HH:mm</value>
-    </data>
-    <data name="CalendarToolbarDateFormat">
-        <value>dddd, MMM d</value>
     </data>
     <data name="SiriShortcuts" xml:space="preserve">
         <value>Raccourcis Siri</value>
