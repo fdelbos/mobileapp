@@ -1171,8 +1171,8 @@ Ouvrez l'application pour suivre le temps.</value>
     <data name="ContinueWithGoogle" xml:space="preserve">
         <value>Continuer avec Google</value>
     </data>
-    <data name="RatingViewPositiveCallToActionDescriptionIos" xml:space="preserve">
-        <value>Pourriez-vous évaluer Toggl dans l'App Store? Votre avis fera vraiment la différence.</value>
+    <data name="RatingViewPositiveCallToActionDescription" xml:space="preserve">
+        <value>Pourriez-vous évaluer Toggl sur {0}? Votre avis fera vraiment la différence.</value>
     </data>
     <data name="SignUp" xml:space="preserve">
         <value>Inscription</value>
@@ -1255,5 +1255,13 @@ que vous l'utiliserez</value>
     </data>
     <data name="SetPassword" xml:space="preserve">
         <value>Saisir un mot de passe</value>
+    </data>
+    <data name="LoginWelcomeMessage" xml:space="preserve">
+        <value>Bon Retour!</value>
+    </data>
+    <data name="SignUpWelcomeMessage" xml:space="preserve">
+        <value>Bienvenue sur Toggl!
+Quelques préparatifs avant que
+vous puissiez suivre votre temps</value>
     </data>
 </root>
