@@ -183,7 +183,7 @@ Veuillez réessayer.</value>
         <value>sec</value>
     </data>
     <data name="SuggestionsHeader" xml:space="preserve">
-        <value>WORKING ON THESE?</value>
+        <value>TRAVAILLEZ-VOUS LÀ-DESSUS?</value>
     </data>
     <data name="AddDescription" xml:space="preserve">
         <value>Ajouter une description</value>
@@ -863,7 +863,7 @@ PS. Notre équipe de support client fonctionne actuellement en anglais uniquemen
         <value>Ajouter un projet et des tags à la volée</value>
     </data>
     <data name="IAgree" xml:space="preserve">
-        <value>je suis d'accord</value>
+        <value>Je suis d'accord</value>
     </data>
     <data name="TokenResetInstruction" xml:space="preserve">
         <value>Entrez votre mot de passe pour vous reconnecter à votre compte</value>
