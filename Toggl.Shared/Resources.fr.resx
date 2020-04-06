@@ -1176,102 +1176,84 @@ Ouvrez l'application pour suivre le temps.</value>
     </data>
     <data name="SignUp" xml:space="preserve">
         <value>Inscription</value>
-        <comment>Shown on the button to sign up</comment>
     </data>
     <data name="ReviewTheTermsWelcome" xml:space="preserve">
         <value>Bienvenue sur Toggl!
 Veuillez prendre connaissance
-            des informations ci-dessous.</value>
-        <comment>The header of the terms of service / country selection screen</comment>
+des informations ci-dessous.</value>
     </data>
     <data name="Back" xml:space="preserve">
         <value>Retour</value>
-        <comment>Text used in the buttons that navigate to the previous screen</comment>
     </data>
     <data name="StopRunningTimeEntry" xml:space="preserve">
         <value>Arrêter l'entrée cours</value>
-        <comment>Stop the running time entry</comment>
     </data>
     <data name="Loading" xml:space="preserve">
         <value>Chargement</value>
-        <comment>Used to show when the login view is loading.</comment>
     </data>
     <data name="EditRunningTimeEntry" xml:space="preserve">
         <value>Editer l'entrée cours</value>
-        <comment>Edit the running time entry</comment>
     </data>
     <data name="ReportErrorGeneric" xml:space="preserve">
         <value>Quelque chose a mal tourné</value>
     </data>
     <data name="Main" xml:space="preserve">
         <value>Principal</value>
-        <comment>The title of the main tab</comment>
     </data>
     <data name="DateRange" xml:space="preserve">
         <value>Plage de dates</value>
-        <comment>Date range in reports</comment>
     </data>
     <data name="ForgotPasswordSendEmail" xml:space="preserve">
         <value>Envoyer un email</value>
-        <comment>Message shown in the button to get a "reset password link" in forgot password screen</comment>
     </data>
     <data name="ReportErrorOffline" xml:space="preserve">
-        <value>La connexion au réseau a échoué</value>
+        <value>La connexión au réseau a échoué</value>
     </data>
     <data name="InvalidEmailOrPassword" xml:space="preserve">
-        <value>Email ou Mot de passe invalide. Veuillez recommencer.</value>
-        <comment>Error message shown when authentication fails because of invalid e-mail/passwords</comment>
+        <value>Email ou mot de passe invalide. Veuillez recommencer.</value>
     </data>
     <data name="SelectProjectTitle" xml:space="preserve">
         <value>Projets</value>
-        <comment>Title of the select project screen</comment>
     </data>
     <data name="ReviewTheTermsOneMoreThing" xml:space="preserve">
         <value>Encore une chose.
-            Veuilez prendre connaissance des informations ci-dessous.</value>
-        <comment>The header of the terms of service / country selection screen</comment>
+Veuilez prendre connaissance
+des informations ci-dessous.</value>
     </data>
     <data name="SendEmail" xml:space="preserve">
         <value>Envoyer un email</value>
-        <comment>Send email to reset password</comment>
     </data>
     <data name="InvalidPasswordError" xml:space="preserve">
         <value>Le mot de passe doit faire au moins 6 caractères</value>
-        <comment>Displayed when the user tries to login or sign up with an invalid password (less than 6 characters)</comment>
     </data>
     <data name="NoPasswordError" xml:space="preserve">
         <value>Veuillez entrer votre mot de passe</value>
-        <comment>Displayed when the user tries to login or sign up without entering a password</comment>
     </data>
     <data name="HaveAnAccountQuestionMark" xml:space="preserve">
         <value>Avez-vous un compte?</value>
-        <comment>Message shown in the sign up view to link to the login page</comment>
     </data>
     <data name="InvalidEmailError" xml:space="preserve">
         <value>Veuillez entrer une adresse email valide</value>
-        <comment>Displayed when the user tries to login or sign up with an invalid email address</comment>
     </data>
     <data name="NoEmailError" xml:space="preserve">
         <value>Veuillez entrer une adresse email</value>
-        <comment>Displayed when the user tries to login or sign up without entering an email address</comment>
     </data>
     <data name="OnboardingMessagePage3" xml:space="preserve">
-        <value>Fonctione où vous voulez -
+        <value>Fonctione où vous voulez
 smartphone, ordinateur ou web</value>
     </data>
     <data name="OnboardingMessagePage2" xml:space="preserve">
-        <value>Decouvrez où est passé votre temps</value>
+        <value>Decouvrez où est
+passé votre temps</value>
     </data>
     <data name="OnboardingMessagePage1" xml:space="preserve">
-        <value>Une gestion du temps si simple que vous l'utiliserez</value>
-        <comment>Message shown in the onboarding view</comment>
+        <value>Une gestion du temps si simple
+que vous l'utiliserez</value>
     </data>
     <data name="PasswordResetMessage" xml:space="preserve">
         <value>Renseignez votre adresse email pour réinitialiser votre mot de passe</value>
-        <comment>Helper text that appears below the email field in the password reset view</comment>
     </data>
     <data name="SetPassword" xml:space="preserve">
         <value>Saisir un mot de passe</value>
-        <comment>A placeholder for the password input field when user is signing up</comment>
     </data>
 </root>
